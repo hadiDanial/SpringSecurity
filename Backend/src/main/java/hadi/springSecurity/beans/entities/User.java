@@ -1,5 +1,7 @@
 package hadi.springSecurity.beans.entities;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -8,13 +10,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import hadi.springSecurity.beans.embeddables.Credential;
 import hadi.springSecurity.beans.embeddables.Name;
 
 @Entity
 @Table(name = "Users")
-@JsonIgnoreProperties({"password"})
+@JsonIgnoreProperties({"credentials"})
 public class User
 {
 	@Id
@@ -25,19 +30,27 @@ public class User
 	private String email;
 	@Embedded
 	private Name name;
+	@Embedded
+	private Credential credentials;
 	
-	private String password;
-
+	private boolean isEnabled;
+	private boolean isLocked;
+	private LocalDateTime creationDate;
+	private LocalDateTime lastAccessDate;
+	
 	public User() {	}
 
-	public User(long id, String username, String email, Name name, String password)
+	public User(long id, String username, String email, Name name, String password, int credentialsExpireAfter)
 	{
 		super();
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.name = name;
-		this.password = password;
+		this.credentials = new Credential(password, LocalDateTime.now().plusDays(credentialsExpireAfter));
+		this.creationDate = LocalDateTime.now();
+		this.isLocked = false;
+		this.isEnabled = true;
 	}
 
 	public String getUsername()
@@ -70,19 +83,59 @@ public class User
 		this.name = name;
 	}
 
-	public String getPassword()
+	public Credential getCredentials()
 	{
-		return password;
+		return credentials;
 	}
 
-	public void setPassword(String password)
+	public void setCredentials(Credential credentials)
 	{
-		this.password = password;
+		this.credentials = credentials;
 	}
 
 	public long getId()
 	{
 		return id;
+	}
+
+	public boolean isEnabled()
+	{
+		return isEnabled;
+	}
+
+	public void setEnabled(boolean isEnabled)
+	{
+		this.isEnabled = isEnabled;
+	}
+
+	public boolean isLocked()
+	{
+		return isLocked;
+	}
+
+	public void setLocked(boolean isLocked)
+	{
+		this.isLocked = isLocked;
+	}
+
+	public LocalDateTime getCreationDate()
+	{
+		return creationDate;
+	}
+
+	public void setCreationDate(LocalDateTime creationDate)
+	{
+		this.creationDate = creationDate;
+	}
+
+	public LocalDateTime getLastAccessDate()
+	{
+		return lastAccessDate;
+	}
+
+	public void setLastAccessDate(LocalDateTime lastAccessDate)
+	{
+		this.lastAccessDate = lastAccessDate;
 	}
 
 	@Override
@@ -93,7 +146,6 @@ public class User
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
@@ -121,12 +173,6 @@ public class User
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
-			return false;
-		if (password == null)
-		{
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
 			return false;
 		if (username == null)
 		{
