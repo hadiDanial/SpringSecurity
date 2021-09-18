@@ -40,14 +40,13 @@ public class User
 	
 	public User() {	}
 
-	public User(long id, String username, String email, Name name, String password, int credentialsExpireAfter)
+	public User(String username, String email, Name name, Credential credentials)
 	{
 		super();
-		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.name = name;
-		this.credentials = new Credential(password, LocalDateTime.now().plusDays(credentialsExpireAfter));
+		this.credentials = credentials;
 		this.creationDate = LocalDateTime.now();
 		this.isLocked = false;
 		this.isEnabled = true;
