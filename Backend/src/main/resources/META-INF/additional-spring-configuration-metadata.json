@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "credentials.expires-in",
+  "type": "java.lang.Integer",
+  "description": "How many days the credentials are valid for before they need to be reset."
+}]}
