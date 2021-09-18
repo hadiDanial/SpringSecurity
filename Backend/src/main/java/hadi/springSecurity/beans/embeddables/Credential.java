@@ -10,6 +10,8 @@ public class Credential
 	private String password;
 	private LocalDateTime credentialExpirationDate;
 	
+	public Credential() { }
+
 	public Credential(String password, LocalDateTime credentialExpirationDate)
 	{
 		super();
