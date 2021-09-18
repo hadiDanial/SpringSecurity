@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import hadi.springSecurity.beans.embeddables.Credential;
@@ -16,13 +18,15 @@ import hadi.springSecurity.repositories.UserRepository;
 public class UserBL
 {
 	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 	private final Properties properties;
 	@Autowired
-	public UserBL(UserRepository userRepository, Properties properties)
+	public UserBL(UserRepository userRepository, PasswordEncoder passwordEncoder, Properties properties)
 	{
 		super();
 		this.properties = properties;
 		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 	
 	
@@ -82,7 +86,7 @@ public class UserBL
 	}
 
 
-	private User findUserByUsername(String username)
+	public User findUserByUsername(String username)
 	{
 		Optional<User> optionalUser = userRepository.findUserByUsername(username);
 		User user = optionalUser.orElse(null);
@@ -92,7 +96,7 @@ public class UserBL
 
 	private Credential generateCredentials(String password)
 	{
-		String hashedPassword = password; // Use encoder
+		String hashedPassword = passwordEncoder.encode(password);
 		return new Credential(hashedPassword, LocalDateTime.now().plusDays(properties.getCredentialExpirationDays()));
 	}
 	
@@ -110,6 +114,12 @@ public class UserBL
 			name = new Name(firstName, middleName, lastName);
 		}
 		return name;
+	}
+
+
+	public boolean loginDemo()
+	{
+		return findUserByUsername("John") != null;
 	}
 	
 }
