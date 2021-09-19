@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.beans.factory.annotation.Value;
 
@@ -26,6 +27,7 @@ public class User
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
 	private long id;
+	@Column(unique=true)
 	private String username;
 	private String email;
 	@Embedded
