@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from 'src/app/services/userService/user.service';
 
 @Component({
   selector: 'app-user-login',
@@ -17,5 +17,9 @@ export class UserLoginComponent implements OnInit
   login()
   {
     this.userService.login();
+  }
+  getAllUsers()
+  {
+    this.userService.getAllUsers();
   }
 }
