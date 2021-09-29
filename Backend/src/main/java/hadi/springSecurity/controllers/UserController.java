@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import hadi.springSecurity.BL.UserBL;
 import hadi.springSecurity.models.entities.User;
+import hadi.springSecurity.services.UserService;
 
 @RestController
 @RequestMapping(path = "/user")
 @CrossOrigin
 public class UserController
 {
-	private final UserBL userBL;
+	private final UserService userBL;
 	
 	@Autowired
-	public UserController(UserBL userBL)
+	public UserController(UserService userBL)
 	{
 		this.userBL = userBL;
 	}

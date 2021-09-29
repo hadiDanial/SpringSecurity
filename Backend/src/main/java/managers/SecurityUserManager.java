@@ -7,34 +7,34 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Component;
 
-import hadi.springSecurity.BL.UserBL;
 import hadi.springSecurity.models.security.SecurityUser;
+import hadi.springSecurity.services.UserService;
 
 @Component
 public class SecurityUserManager implements UserDetailsManager
 {
-	private final UserBL userBL;
+	private final UserService userService;
 	private final PasswordEncoder passwordEncoder;
 
 	@Autowired
-	public SecurityUserManager(UserBL userBL, PasswordEncoder passwordEncoder)
+	public SecurityUserManager(UserService userService, PasswordEncoder passwordEncoder)
 	{
 		super();
-		this.userBL = userBL;
+		this.userService = userService;
 		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
 	{
-		SecurityUser user = new SecurityUser(userBL.findUserByUsername(username));
+		SecurityUser user = new SecurityUser(userService.findUserByUsername(username));
 		return user;
 	}
 
 	@Override
 	public void createUser(UserDetails user)
 	{
-		userBL.createUser(user.getUsername(), "", user.getPassword(), "", "", "");
+		userService.createUser(user.getUsername(), "", user.getPassword(), "", "", "");
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class SecurityUserManager implements UserDetailsManager
 	@Override
 	public void deleteUser(String username)
 	{
-		userBL.deleteUser(username);
+		userService.deleteUser(username);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class SecurityUserManager implements UserDetailsManager
 	@Override
 	public boolean userExists(String username)
 	{
-		return userBL.userExists(username);
+		return userService.userExists(username);
 	}
 
 }

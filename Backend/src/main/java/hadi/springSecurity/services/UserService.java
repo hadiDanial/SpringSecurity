@@ -1,4 +1,4 @@
-package hadi.springSecurity.BL;
+package hadi.springSecurity.services;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -17,14 +17,14 @@ import hadi.springSecurity.models.entities.User;
 import hadi.springSecurity.repositories.UserRepository;
 
 @Service
-public class UserBL
+public class UserService
 {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final Properties properties;
 
 	@Autowired
-	public UserBL(UserRepository userRepository, PasswordEncoder passwordEncoder, Properties properties)
+	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, Properties properties)
 	{
 		super();
 		this.properties = properties;

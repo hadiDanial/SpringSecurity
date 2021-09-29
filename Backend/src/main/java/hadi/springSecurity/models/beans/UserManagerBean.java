@@ -5,20 +5,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import hadi.springSecurity.BL.UserBL;
+import hadi.springSecurity.services.UserService;
 import managers.SecurityUserManager;
 
 @Configuration
 public class UserManagerBean
 {
-	private final UserBL userBL;
+	private final UserService userService;
 	private final PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	public UserManagerBean(UserBL userBL, PasswordEncoder passwordEncoder)
+	public UserManagerBean(UserService userService, PasswordEncoder passwordEncoder)
 	{
 		super();
-		this.userBL = userBL;
+		this.userService = userService;
 		this.passwordEncoder = passwordEncoder;
 	}
 
@@ -26,6 +26,6 @@ public class UserManagerBean
 	@Bean
 	public SecurityUserManager securityUserManager()
 	{
-		return new SecurityUserManager(userBL, passwordEncoder);
+		return new SecurityUserManager(userService, passwordEncoder);
 	}
 }
