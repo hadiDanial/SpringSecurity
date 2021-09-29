@@ -1,4 +1,4 @@
-package hadi.springSecurity.beans.embeddables;
+package hadi.springSecurity.models.embeddables;
 
 import javax.persistence.Embeddable;
 

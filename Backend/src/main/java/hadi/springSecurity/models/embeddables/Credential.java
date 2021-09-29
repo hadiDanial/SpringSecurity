@@ -1,6 +1,6 @@
-package hadi.springSecurity.beans.embeddables;
+package hadi.springSecurity.models.embeddables;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import javax.persistence.Embeddable;
 
@@ -8,11 +8,11 @@ import javax.persistence.Embeddable;
 public class Credential
 {
 	private String password;
-	private LocalDateTime credentialExpirationDate;
+	private Instant credentialExpirationDate;
 	
 	public Credential() { }
 
-	public Credential(String password, LocalDateTime credentialExpirationDate)
+	public Credential(String password, Instant credentialExpirationDate)
 	{
 		super();
 		this.password = password;
@@ -21,7 +21,7 @@ public class Credential
 	
 	public boolean isNonExpired()
 	{
-		return !LocalDateTime.now().isAfter(credentialExpirationDate);
+		return !Instant.now().isAfter(credentialExpirationDate);
 	}
 	
 	public String getPassword()
@@ -34,12 +34,12 @@ public class Credential
 		this.password = password;
 	}
 	
-	public LocalDateTime getCredentialExpirationDate()
+	public Instant getCredentialExpirationDate()
 	{
 		return credentialExpirationDate;
 	}
 	
-	public void setCredentialExpirationDate(LocalDateTime credentialExpirationDate)
+	public void setCredentialExpirationDate(Instant credentialExpirationDate)
 	{
 		this.credentialExpirationDate = credentialExpirationDate;
 	}

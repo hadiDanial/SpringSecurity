@@ -1,6 +1,7 @@
 package hadi.springSecurity.BL;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,10 +10,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import hadi.springSecurity.beans.embeddables.Credential;
-import hadi.springSecurity.beans.embeddables.Name;
-import hadi.springSecurity.beans.entities.User;
 import hadi.springSecurity.configuration.Properties;
+import hadi.springSecurity.models.embeddables.Credential;
+import hadi.springSecurity.models.embeddables.Name;
+import hadi.springSecurity.models.entities.User;
 import hadi.springSecurity.repositories.UserRepository;
 
 @Service
@@ -100,7 +101,7 @@ public class UserBL
 	private Credential generateCredentials(String password)
 	{
 		String hashedPassword = passwordEncoder.encode(password);
-		return new Credential(hashedPassword, LocalDateTime.now().plusDays(properties.getCredentialExpirationDays()));
+		return new Credential(hashedPassword, Instant.now().plus(properties.getCredentialExpirationDays(), ChronoUnit.DAYS));
 	}
 
 	private Name generateName(String firstName, String middleName, String lastName)

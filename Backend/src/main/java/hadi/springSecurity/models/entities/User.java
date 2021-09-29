@@ -1,6 +1,6 @@
-package hadi.springSecurity.beans.entities;
+package hadi.springSecurity.models.entities;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -15,8 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import hadi.springSecurity.beans.embeddables.Credential;
-import hadi.springSecurity.beans.embeddables.Name;
+import hadi.springSecurity.models.embeddables.Credential;
+import hadi.springSecurity.models.embeddables.Name;
 
 @Entity
 @Table(name = "Users")
@@ -37,8 +37,8 @@ public class User
 	
 	private boolean isEnabled;
 	private boolean isLocked;
-	private LocalDateTime creationDate;
-	private LocalDateTime lastAccessDate;
+	private Instant creationDate;
+	private Instant lastAccessDate;
 	
 	public User() {	}
 
@@ -49,7 +49,7 @@ public class User
 		this.email = email;
 		this.name = name;
 		this.credentials = credentials;
-		this.creationDate = LocalDateTime.now();
+		this.creationDate = Instant.now();
 		this.isLocked = false;
 		this.isEnabled = true;
 	}
@@ -119,22 +119,22 @@ public class User
 		this.isLocked = isLocked;
 	}
 
-	public LocalDateTime getCreationDate()
+	public Instant getCreationDate()
 	{
 		return creationDate;
 	}
 
-	public void setCreationDate(LocalDateTime creationDate)
+	public void setCreationDate(Instant creationDate)
 	{
 		this.creationDate = creationDate;
 	}
 
-	public LocalDateTime getLastAccessDate()
+	public Instant getLastAccessDate()
 	{
 		return lastAccessDate;
 	}
 
-	public void setLastAccessDate(LocalDateTime lastAccessDate)
+	public void setLastAccessDate(Instant lastAccessDate)
 	{
 		this.lastAccessDate = lastAccessDate;
 	}

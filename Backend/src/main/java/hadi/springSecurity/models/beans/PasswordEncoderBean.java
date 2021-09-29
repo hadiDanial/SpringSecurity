@@ -1,4 +1,4 @@
-package hadi.springSecurity.beans;
+package hadi.springSecurity.models.beans;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
