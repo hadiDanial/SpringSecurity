@@ -1,11 +1,11 @@
-package hadi.springSecurity.security.model;
+package hadi.springSecurity.models.security;
 
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import hadi.springSecurity.beans.entities.User;
+import hadi.springSecurity.models.entities.User;
 
 public class SecurityUser implements UserDetails
 {
