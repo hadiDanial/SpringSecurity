@@ -11,12 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class Properties //implements ApplicationListener<ContextRefreshedEvent> 
 {
-	@Value("${credentials.expires-in}")
+	@Value("${auth.credentials.expire-in-days}")
 	private int credentialExpirationDays;
+	@Value("${auth.token-valid-mins}")
+	private int tokenValidMins;
 
 	public int getCredentialExpirationDays()
 	{
 		return credentialExpirationDays;
 	}
-	
+
+	public int getTokenValidMins()
+	{
+		return tokenValidMins;
+	}
 }
