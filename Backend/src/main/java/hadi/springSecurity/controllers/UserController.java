@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import hadi.springSecurity.BL.UserBL;
-import hadi.springSecurity.beans.entities.User;
+import hadi.springSecurity.models.entities.User;
 
 @RestController
 @RequestMapping(path = "/user")
@@ -28,12 +28,6 @@ public class UserController
 	public String hello()
 	{
 		return "Hello!";
-	}
-	
-	@GetMapping("/loginDemo")
-	public boolean loginDemo()
-	{
-		return userBL.loginDemo();
 	}
 	
 	@GetMapping("/getAllUsers")
