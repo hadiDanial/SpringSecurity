@@ -9,8 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import hadi.springSecurity.exceptions.TokenException;
+import hadi.springSecurity.models.entities.Token;
 import hadi.springSecurity.models.requests.LoginRequest;
-import hadi.springSecurity.models.responses.AuthenticationResponse;
+import hadi.springSecurity.models.requests.ValidateTokenRequest;
+import hadi.springSecurity.models.responses.LoginResponse;
+import hadi.springSecurity.models.responses.TokenResponse;
 import hadi.springSecurity.services.AuthorizationService;
 
 @RestController
@@ -27,22 +31,66 @@ public class AuthorizationController
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest loginRequest)
+	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) // Body
 	{
-		ResponseEntity<AuthenticationResponse> response;
-		AuthenticationResponse authResponse;
+		LoginResponse loginResponse;
+		ResponseEntity<LoginResponse> response;
+		Token authResponse;
 		try
 		{
 			authResponse = authService.login(loginRequest);
+			loginResponse = new LoginResponse(authResponse, "Login successful");
 		} 
 		catch (BadCredentialsException e)
 		{
-			response = new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			loginResponse = new LoginResponse(null, e.getMessage());
+			response = new ResponseEntity<>(loginResponse, HttpStatus.FORBIDDEN);
 			return response;
 		}
-
-		response = new ResponseEntity<>(authResponse, HttpStatus.OK);
+		response = new ResponseEntity<>(loginResponse, HttpStatus.OK);
 
 		return response;
+	}
+	
+	@PostMapping("/logout")
+	public ResponseEntity<Void> logout(String refreshToken) // Params
+	{
+		try
+		{
+			authService.logout(refreshToken);
+			return ResponseEntity.ok(null);
+		} catch (Exception e)
+		{
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+	}
+
+	@PostMapping("/refreshAuthToken")
+	public ResponseEntity<String> refreshAuthToken(String refreshToken) // Params
+	{
+		try
+		{
+			String authToken = authService.refreshAuthToken(refreshToken);
+			return ResponseEntity.ok(authToken);
+		} catch (Exception e)
+		{
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+	}
+	
+	@PostMapping("/validate")
+	public ResponseEntity<TokenResponse> validate(@RequestBody ValidateTokenRequest validateTokenRequest)
+	{
+		TokenResponse response;
+		try
+		{
+			response = authService.validate(validateTokenRequest);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (TokenException e)
+		{
+			response = new TokenResponse();
+			response.setMessage(e.getMessage());
+			return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+		}
 	}
 }
