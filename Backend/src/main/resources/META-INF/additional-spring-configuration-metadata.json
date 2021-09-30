@@ -5,8 +5,18 @@
     "description": "How many days the credentials are valid for before they need to be reset."
   },
   {
-    "name": "auth.token-valid-mins",
+    "name": "auth.token-lifetime-mins",
     "type": "java.lang.Integer",
     "description": "Number of minutes an authorization token will remain valid."
+  },
+  {
+    "name": "auth.refresh-token-lifetime-mins",
+    "type": "java.lang.Integer",
+    "description": "Number of minutes a refresh authorization token will remain valid."
+  },
+  {
+    "name": "jwt.secret",
+    "type": "java.lang.String",
+    "description": "Jwt secret"
   }
 ]}
