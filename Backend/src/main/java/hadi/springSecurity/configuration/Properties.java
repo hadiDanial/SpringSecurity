@@ -1,15 +1,12 @@
 package hadi.springSecurity.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 @PropertySource("classpath:application.properties")
 @Component
-public class Properties //implements ApplicationListener<ContextRefreshedEvent> 
+public class Properties
 {
 	@Value("${auth.credentials.expire-in-days}")
 	private int credentialExpirationDays;
@@ -18,7 +15,9 @@ public class Properties //implements ApplicationListener<ContextRefreshedEvent>
 	@Value("${auth.refresh-token-lifetime-mins}")
 	private int refreshTokenLifetime;
 	@Value("${jwt.secret}")
-	private String secret;
+	private String jwtSecret;
+	@Value("${jwt.issuer}")
+	private String jwtIssuer;
 	
 	public int getCredentialExpirationDays()
 	{
@@ -35,8 +34,15 @@ public class Properties //implements ApplicationListener<ContextRefreshedEvent>
 		return refreshTokenLifetime;
 	}
 
-	public String getSecret()
+	public String getJwtSecret()
 	{
-		return secret;
+		return jwtSecret;
 	}
+
+	public String getJwtIssuer()
+	{
+		return jwtIssuer;
+	}
+	
+	
 }
