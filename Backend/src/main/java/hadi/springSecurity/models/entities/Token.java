@@ -1,22 +1,35 @@
-package hadi.springSecurity.models.responses;
+package hadi.springSecurity.models.entities;
 
 import java.time.Instant;
 
-public class AuthenticationResponse
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "tokens")
+public class Token
 {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
 	private String authenticationToken;
 	private String refreshToken;
 	private String username;
 	private Instant expiresAt;
 	
-	public AuthenticationResponse()
+	public Token()
 	{
 		super();
 	}
 
-	public AuthenticationResponse(String authenticationToken, String refreshToken, String username, Instant expiresAt)
+	public Token(Long id, String authenticationToken, String refreshToken, String username, Instant expiresAt)
 	{
 		super();
+		this.id = id;
 		this.authenticationToken = authenticationToken;
 		this.refreshToken = refreshToken;
 		this.username = username;
@@ -62,6 +75,9 @@ public class AuthenticationResponse
 	{
 		this.expiresAt = expiresAt;
 	}
-	
-	
+
+	public Long getId()
+	{
+		return id;
+	}
 }
