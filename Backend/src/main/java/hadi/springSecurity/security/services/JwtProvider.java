@@ -5,12 +5,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import hadi.springSecurity.configuration.Properties;
-import hadi.springSecurity.models.entities.User;
-import hadi.springSecurity.models.responses.AuthenticationResponse;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -32,23 +32,49 @@ public class JwtProvider
 		return Jwts.builder()
 			.setSubject(username)
 			.setExpiration(date)
-			.signWith(SignatureAlgorithm.HS512, properties.getSecret())
+			.setIssuedAt(Date.from(Instant.now()))
+			.setIssuer(properties.getJwtIssuer())
+			.signWith(SignatureAlgorithm.HS512, properties.getJwtSecret())
 			.compact();
 	}
 
-	public AuthenticationResponse generateAuthResponse(User user)
+	public Date generateTokenExpirationDate(int lifetime)
 	{
-		AuthenticationResponse response = new AuthenticationResponse();
-		Instant tokenExpiration = Instant.now().plus(properties.getTokenLifetime(), ChronoUnit.MINUTES);
-		Instant refreshTokenExpiration = Instant.now().plus(properties.getRefreshTokenLifetime(), ChronoUnit.MINUTES);
-		Date tokenExpirationDate = Date.from(tokenExpiration);
-		Date refreshTokenExpirationDate = Date.from(refreshTokenExpiration);
-		response.setAuthenticationToken(generateToken(user.getUsername(), tokenExpirationDate));
-		response.setRefreshToken(generateToken(user.getUsername(), refreshTokenExpirationDate));
-		response.setExpiresAt(tokenExpiration);
-		response.setUsername(user.getUsername());
-		return response;
+		Instant tokenExpiration = Instant.now().plus(lifetime, ChronoUnit.MINUTES);
+		return Date.from(tokenExpiration);
 	}
 
-
+	public String getUsernameFromToken(String token)
+	{
+		Jws<Claims> jws;
+		try {
+			jws = Jwts.parser().setSigningKey(properties.getJwtSecret())
+					.parseClaimsJws(token);
+			System.out.println("JWS Subject: " + jws.getBody().getSubject());
+			System.out.println("Issued by: " + jws.getBody().getIssuer());
+			System.out.println("Issued at: " + jws.getBody().getIssuedAt());
+			System.out.println("Expires: " + jws.getBody().getExpiration());
+			return jws.getBody().getSubject();
+		}
+		catch(JwtException e)
+		{
+			throw new JwtException("Can't parse JWT (getUsernameFromToken)");
+		}
+	}
+	
+	public boolean isTokenValid(String token)
+	{
+		Jws<Claims> jws;
+		try {
+			jws = Jwts.parser().setSigningKey(properties.getJwtSecret())
+					.parseClaimsJws(token);
+			
+			return jws.getBody().getIssuer().equals(properties.getJwtIssuer()) 
+					&&	Instant.now().isBefore(jws.getBody().getExpiration().toInstant());
+		}
+		catch(JwtException e)
+		{
+			throw new JwtException("Can't parse JWT (isTokenValid)");
+		}
+	}
 }
