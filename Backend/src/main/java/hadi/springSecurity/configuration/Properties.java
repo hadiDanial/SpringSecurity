@@ -13,16 +13,30 @@ public class Properties //implements ApplicationListener<ContextRefreshedEvent>
 {
 	@Value("${auth.credentials.expire-in-days}")
 	private int credentialExpirationDays;
-	@Value("${auth.token-valid-mins}")
-	private int tokenValidMins;
-
+	@Value("${auth.token-lifetime-mins}")
+	private int tokenLifetime;
+	@Value("${auth.refresh-token-lifetime-mins}")
+	private int refreshTokenLifetime;
+	@Value("${jwt.secret}")
+	private String secret;
+	
 	public int getCredentialExpirationDays()
 	{
 		return credentialExpirationDays;
 	}
 
-	public int getTokenValidMins()
+	public int getTokenLifetime()
 	{
-		return tokenValidMins;
+		return tokenLifetime;
+	}
+	
+	public int getRefreshTokenLifetime()
+	{
+		return refreshTokenLifetime;
+	}
+
+	public String getSecret()
+	{
+		return secret;
 	}
 }
