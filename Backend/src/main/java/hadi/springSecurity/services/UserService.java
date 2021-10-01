@@ -6,18 +6,21 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
 import hadi.springSecurity.configuration.Properties;
 import hadi.springSecurity.models.embeddables.Credential;
 import hadi.springSecurity.models.embeddables.Name;
 import hadi.springSecurity.models.entities.User;
+import hadi.springSecurity.models.security.SecurityUser;
 import hadi.springSecurity.repositories.UserRepository;
 
 @Service
-public class UserService
+public class UserService implements UserDetailsManager
 {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
@@ -32,7 +35,7 @@ public class UserService
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	public User createUser(String username, String email, String password, String firstName, String middleName,
+	public User createNewUser(String username, String email, String password, String firstName, String middleName,
 			String lastName)
 	{
 		Name name = generateName(firstName, middleName, lastName);
@@ -94,7 +97,7 @@ public class UserService
 	public User findUserByUsername(String username)
 	{
 		Optional<User> optionalUser = userRepository.findUserByUsername(username);
-		User user = optionalUser.orElse(null);
+		User user = optionalUser.orElseThrow(()-> new UsernameNotFoundException(username + " not found."));
 		return user;
 	}
 
@@ -117,41 +120,52 @@ public class UserService
 		return name;
 	}
 
-	/**
-	 * Sets the user as disabled
-	 * 
-	 * @param username
-	 * @return
-	 */
-	public boolean deleteUser(String username)
-	{
-		User user = findUserByUsername(username);
-		try
-		{
-			user.setEnabled(false);
-			userRepository.save(user);
-			return true;
-		}
-		catch (Exception e)
-		{
-			return false;
-		}
-	}
 
 	public boolean userExists(String username)
 	{
 		return userRepository.existsByUsername(username);
 	}
 
-	
-	public boolean loginDemo()
-	{
-		return findUserByUsername("John") != null;
-	}
-
 	public List<User> getAllUsers()
 	{
 		return userRepository.findAll();
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
+	{
+		return new SecurityUser(findUserByUsername(username));
+	}
+
+	@Override
+	public void createUser(UserDetails user)
+	{
+		createNewUser(user.getUsername(), null, user.getPassword(), null, null, null);
+	}
+
+	@Override
+	public void updateUser(UserDetails user)
+	{
+	}
+
+	@Override
+	public void deleteUser(String username)
+	{
+		try
+		{
+			User user = findUserByUsername(username);
+			user.setEnabled(false);
+			userRepository.save(user);
+		}
+		catch (Exception e)
+		{
+			throw new UsernameNotFoundException("Failed to delete " + username);
+		}
+	}
+
+	@Override
+	public void changePassword(String oldPassword, String newPassword)
+	{
 	}
 
 }
