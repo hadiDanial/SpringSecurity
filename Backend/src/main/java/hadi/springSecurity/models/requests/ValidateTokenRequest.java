@@ -2,7 +2,7 @@ package hadi.springSecurity.models.requests;
 
 public class ValidateTokenRequest
 {
-	private String authenticationToken;
+	private String accessToken;
 	private String refreshToken;
 	
 	public ValidateTokenRequest()
@@ -10,21 +10,21 @@ public class ValidateTokenRequest
 		super();
 	}
 	
-	public ValidateTokenRequest(String authenticationToken, String refreshToken)
+	public ValidateTokenRequest(String accessToken, String refreshToken)
 	{
 		super();
-		this.authenticationToken = authenticationToken;
+		this.accessToken = accessToken;
 		this.refreshToken = refreshToken;
 	}
 
-	public String getAuthenticationToken()
+	public String getAccessToken()
 	{
-		return authenticationToken;
+		return accessToken;
 	}
 
-	public void setAuthenticationToken(String authenticationToken)
+	public void setAccessToken(String accessToken)
 	{
-		this.authenticationToken = authenticationToken;
+		this.accessToken = accessToken;
 	}
 
 	public String getRefreshToken()
