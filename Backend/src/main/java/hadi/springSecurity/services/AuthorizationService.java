@@ -15,6 +15,7 @@ import hadi.springSecurity.models.requests.LoginRequest;
 import hadi.springSecurity.models.requests.ValidateTokenRequest;
 import hadi.springSecurity.models.responses.LoginResponse;
 import hadi.springSecurity.models.responses.TokenResponse;
+import io.jsonwebtoken.JwtException;
 
 @Service
 public class AuthorizationService
@@ -61,15 +62,30 @@ public class AuthorizationService
 	
 	public TokenResponse validate(ValidateTokenRequest validateTokenRequest)
 	{
-		if(tokenService.isValidAuthToken(validateTokenRequest.getRefreshToken()) 
-				&& tokenService.isValidAuthToken(validateTokenRequest.getAccessToken()))
+		boolean isValidAccessToken, isValidRefreshToken;
+		try
 		{
-			return new TokenResponse(validateTokenRequest.getAccessToken(), validateTokenRequest.getRefreshToken(), "Success", true);
+			isValidRefreshToken = tokenService.isValidAuthToken(validateTokenRequest.getRefreshToken());
+		} 
+		catch (JwtException e)
+		{
+			throw new TokenException("Please log in again.");
 		}
-		else if(tokenService.isValidAuthToken(validateTokenRequest.getRefreshToken()))
+		try
 		{
-			Token token = tokenService.updateAccessToken(validateTokenRequest.getRefreshToken());
-			return new TokenResponse(token.getAccessToken(), token.getRefreshToken(), "Success", true); 
+			isValidAccessToken = tokenService.isValidAuthToken(validateTokenRequest.getAccessToken());
+			if(isValidRefreshToken && isValidAccessToken)
+			{
+				return new TokenResponse(validateTokenRequest.getAccessToken(), validateTokenRequest.getRefreshToken(), "Success, access token", true);
+			}
+		} 
+		catch (JwtException e)
+		{
+			if(isValidRefreshToken)
+			{
+				Token token = tokenService.updateAccessToken(validateTokenRequest.getRefreshToken());
+				return new TokenResponse(token.getAccessToken(), token.getRefreshToken(), "Success, refresh token", true); 				
+			}
 		}
 		throw new TokenException("Please log in again.");
 	}
