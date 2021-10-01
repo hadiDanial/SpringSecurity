@@ -22,6 +22,7 @@ public class Role
 	@Column(name = "role_id")
 	private Long id;
 	private String roleName;
+	@Column(unique = true)
 	private String roleIdentifier;
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
@@ -37,6 +38,13 @@ public class Role
 	{
 	}
 
+	public Role(String roleName)
+	{
+		super();
+		this.roleName = roleName;
+		this.roleIdentifier = roleName.toUpperCase();
+	}
+	
 	public Role(Long id, String roleName, List<Authority> authorities)
 	{
 		super();
@@ -85,4 +93,62 @@ public class Role
 	{
 		this.roleIdentifier = roleIdentifier;
 	}
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((authorities == null) ? 0 : authorities.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((roleIdentifier == null) ? 0 : roleIdentifier.hashCode());
+		result = prime * result + ((roleName == null) ? 0 : roleName.hashCode());
+		result = prime * result + ((users == null) ? 0 : users.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Role other = (Role) obj;
+		if (authorities == null)
+		{
+			if (other.authorities != null)
+				return false;
+		} else if (!authorities.equals(other.authorities))
+			return false;
+		if (id == null)
+		{
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (roleIdentifier == null)
+		{
+			if (other.roleIdentifier != null)
+				return false;
+		} else if (!roleIdentifier.equals(other.roleIdentifier))
+			return false;
+		if (roleName == null)
+		{
+			if (other.roleName != null)
+				return false;
+		} else if (!roleName.equals(other.roleName))
+			return false;
+		if (users == null)
+		{
+			if (other.users != null)
+				return false;
+		} else if (!users.equals(other.users))
+			return false;
+		return true;
+	}
+	
+	
 }

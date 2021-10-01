@@ -19,6 +19,7 @@ public class Authority
 	@Column(name = "authority_id")
 	private Long id;
 	private String authorityName;
+	@Column(unique = true)
 	private String authorityIdentifier;
 	@ManyToMany(mappedBy="authorities")
 	private List<Role> roles;
@@ -27,6 +28,13 @@ public class Authority
 	{
 	}
 	
+	public Authority(String authorityName)
+	{
+		super();
+		this.authorityName = authorityName;
+		this.authorityIdentifier = authorityName.toUpperCase();
+	}
+
 	public Authority(Long id, String authorityName, List<Role> roles)
 	{
 		super();
@@ -75,4 +83,48 @@ public class Authority
 	{
 		this.authorityIdentifier = authorityIdentifier;
 	}
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((authorityIdentifier == null) ? 0 : authorityIdentifier.hashCode());
+		result = prime * result + ((authorityName == null) ? 0 : authorityName.hashCode());
+		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Authority other = (Authority) obj;
+		if (authorityIdentifier == null)
+		{
+			if (other.authorityIdentifier != null)
+				return false;
+		} else if (!authorityIdentifier.equals(other.authorityIdentifier))
+			return false;
+		if (authorityName == null)
+		{
+			if (other.authorityName != null)
+				return false;
+		} else if (!authorityName.equals(other.authorityName))
+			return false;
+		if (roles == null)
+		{
+			if (other.roles != null)
+				return false;
+		} else if (!roles.equals(other.roles))
+			return false;
+		return true;
+	}
+	
+	
 }
