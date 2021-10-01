@@ -34,7 +34,7 @@ public class SecurityUserManager implements UserDetailsManager
 	@Override
 	public void createUser(UserDetails user)
 	{
-		userService.createUser(user.getUsername(), "", user.getPassword(), "", "", "");
+		userService.createNewUser(user.getUsername(), "", user.getPassword(), "", "", "");
 	}
 
 	@Override
