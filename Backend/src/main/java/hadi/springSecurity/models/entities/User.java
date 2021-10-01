@@ -1,13 +1,18 @@
 package hadi.springSecurity.models.entities;
 
 import java.time.Instant;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -37,6 +42,13 @@ public class User
 	private Instant creationDate;
 	private Instant lastAccessDate;
 	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "user_roles",
+			joinColumns = @JoinColumn(name = "user_id"), 
+			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private List<Role> roles;
+	
 	public User() {	}
 
 	public User(String username, String email, Name name, Credential credentials)
@@ -50,6 +62,23 @@ public class User
 		this.isLocked = false;
 		this.isEnabled = true;
 	}
+
+	public User(long id, String username, String email, Name name, Credential credentials, boolean isEnabled,
+			boolean isLocked, Instant creationDate, Instant lastAccessDate, List<Role> roles)
+	{
+		super();
+		this.id = id;
+		this.username = username;
+		this.email = email;
+		this.name = name;
+		this.credentials = credentials;
+		this.isEnabled = isEnabled;
+		this.isLocked = isLocked;
+		this.creationDate = creationDate;
+		this.lastAccessDate = lastAccessDate;
+		this.roles = roles;
+	}
+
 
 	public String getUsername()
 	{
@@ -136,14 +165,31 @@ public class User
 		this.lastAccessDate = lastAccessDate;
 	}
 
+	public List<Role> getRoles()
+	{
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles)
+	{
+		this.roles = roles;
+	}
+
+
 	@Override
 	public int hashCode()
 	{
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
+		result = prime * result + ((credentials == null) ? 0 : credentials.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + (isEnabled ? 1231 : 1237);
+		result = prime * result + (isLocked ? 1231 : 1237);
+		result = prime * result + ((lastAccessDate == null) ? 0 : lastAccessDate.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
@@ -158,6 +204,18 @@ public class User
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
+		if (creationDate == null)
+		{
+			if (other.creationDate != null)
+				return false;
+		} else if (!creationDate.equals(other.creationDate))
+			return false;
+		if (credentials == null)
+		{
+			if (other.credentials != null)
+				return false;
+		} else if (!credentials.equals(other.credentials))
+			return false;
 		if (email == null)
 		{
 			if (other.email != null)
@@ -166,11 +224,27 @@ public class User
 			return false;
 		if (id != other.id)
 			return false;
+		if (isEnabled != other.isEnabled)
+			return false;
+		if (isLocked != other.isLocked)
+			return false;
+		if (lastAccessDate == null)
+		{
+			if (other.lastAccessDate != null)
+				return false;
+		} else if (!lastAccessDate.equals(other.lastAccessDate))
+			return false;
 		if (name == null)
 		{
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
+			return false;
+		if (roles == null)
+		{
+			if (other.roles != null)
+				return false;
+		} else if (!roles.equals(other.roles))
 			return false;
 		if (username == null)
 		{
