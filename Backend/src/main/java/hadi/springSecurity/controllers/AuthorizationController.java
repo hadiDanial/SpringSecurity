@@ -35,15 +35,13 @@ public class AuthorizationController
 	{
 		LoginResponse loginResponse;
 		ResponseEntity<LoginResponse> response;
-		Token authResponse;
 		try
 		{
-			authResponse = authService.login(loginRequest);
-			loginResponse = new LoginResponse(authResponse, "Login successful");
+			loginResponse = authService.login(loginRequest);
 		} 
 		catch (BadCredentialsException e)
 		{
-			loginResponse = new LoginResponse(null, e.getMessage());
+			loginResponse = new LoginResponse(null, null, e.getMessage());
 			response = new ResponseEntity<>(loginResponse, HttpStatus.FORBIDDEN);
 			return response;
 		}
@@ -65,19 +63,19 @@ public class AuthorizationController
 		}
 	}
 
-	@PostMapping("/refreshAuthToken")
-	public ResponseEntity<String> refreshAuthToken(String refreshToken) // Params
-	{
-		try
-		{
-			String authToken = authService.refreshAuthToken(refreshToken);
-			return ResponseEntity.ok(authToken);
-		} catch (Exception e)
-		{
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-		}
-	}
-	
+//	@PostMapping("/refreshAccessToken")
+//	public ResponseEntity<String> refreshAccessToken(String refreshToken) // Params
+//	{
+//		try
+//		{
+//			String authToken = authService.refreshAccessToken(refreshToken);
+//			return ResponseEntity.ok(authToken);
+//		} catch (Exception e)
+//		{
+//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//		}
+//	}
+//	
 	@PostMapping("/validate")
 	public ResponseEntity<TokenResponse> validate(@RequestBody ValidateTokenRequest validateTokenRequest)
 	{
