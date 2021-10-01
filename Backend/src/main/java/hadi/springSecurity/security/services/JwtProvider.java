@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hadi.springSecurity.configuration.Properties;
+import hadi.springSecurity.exceptions.TokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -64,6 +65,9 @@ public class JwtProvider
 	
 	public boolean isTokenValid(String token)
 	{
+		if(token == null || token.isEmpty()) {
+			throw new TokenException("Token is empty or null.");
+		}
 		Jws<Claims> jws;
 		try {
 			jws = Jwts.parser().setSigningKey(properties.getJwtSecret())
