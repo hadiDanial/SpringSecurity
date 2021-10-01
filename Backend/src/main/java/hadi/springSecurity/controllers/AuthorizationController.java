@@ -63,19 +63,6 @@ public class AuthorizationController
 		}
 	}
 
-//	@PostMapping("/refreshAccessToken")
-//	public ResponseEntity<String> refreshAccessToken(String refreshToken) // Params
-//	{
-//		try
-//		{
-//			String authToken = authService.refreshAccessToken(refreshToken);
-//			return ResponseEntity.ok(authToken);
-//		} catch (Exception e)
-//		{
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//		}
-//	}
-//	
 	@PostMapping("/validate")
 	public ResponseEntity<TokenResponse> validate(@RequestBody ValidateTokenRequest validateTokenRequest)
 	{
@@ -88,6 +75,7 @@ public class AuthorizationController
 		{
 			response = new TokenResponse();
 			response.setMessage(e.getMessage());
+			response.setSuccess(false);
 			return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 		}
 	}
