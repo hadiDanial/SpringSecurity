@@ -16,7 +16,7 @@ public class Token
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private String authenticationToken;
+	private String accessToken;
 	private String refreshToken;
 	private String username;
 	private Instant expiresAt;
@@ -26,24 +26,24 @@ public class Token
 		super();
 	}
 
-	public Token(Long id, String authenticationToken, String refreshToken, String username, Instant expiresAt)
+	public Token(Long id, String accessToken, String refreshToken, String username, Instant expiresAt)
 	{
 		super();
 		this.id = id;
-		this.authenticationToken = authenticationToken;
+		this.accessToken = accessToken;
 		this.refreshToken = refreshToken;
 		this.username = username;
 		this.expiresAt = expiresAt;
 	}
 
-	public String getAuthenticationToken()
+	public String getAccessToken()
 	{
-		return authenticationToken;
+		return accessToken;
 	}
 
-	public void setAuthenticationToken(String authenticationToken)
+	public void setAccessToken(String accessToken)
 	{
-		this.authenticationToken = authenticationToken;
+		this.accessToken = accessToken;
 	}
 
 	public String getRefreshToken()

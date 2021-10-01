@@ -57,7 +57,7 @@ public class TokenService
 		Token token = new Token();
 		Date tokenExpirationDate = jwtProvider.generateTokenExpirationDate(properties.getTokenLifetime());
 		Date refreshTokenExpirationDate = jwtProvider.generateTokenExpirationDate(properties.getRefreshTokenLifetime());
-		token.setAuthenticationToken(jwtProvider.generateToken(user.getUsername(), tokenExpirationDate));
+		token.setAccessToken(jwtProvider.generateToken(user.getUsername(), tokenExpirationDate));
 		token.setRefreshToken(jwtProvider.generateToken(user.getUsername(), refreshTokenExpirationDate));
 		token.setExpiresAt(tokenExpirationDate.toInstant());
 		token.setUsername(user.getUsername());
@@ -65,11 +65,11 @@ public class TokenService
 		return token;
 	}
 
-	public Token generateNewAuthToken(String refreshToken)
+	private Token generateNewAccessToken(String refreshToken)
 	{
 		Token token = findTokenByRefreshToken(refreshToken);
 		Date tokenExpirationDate = jwtProvider.generateTokenExpirationDate(properties.getTokenLifetime());
-		token.setAuthenticationToken(
+		token.setAccessToken(
 				jwtProvider.generateToken(jwtProvider.getUsernameFromToken(refreshToken), tokenExpirationDate));
 		tokenRepository.save(token);
 		return token;
@@ -93,6 +93,16 @@ public class TokenService
 	{
 		Token token = findTokenByRefreshToken(refreshToken);
 		tokenRepository.delete(token);
+	}
+
+	public boolean isValidAuthToken(String authenticationToken)
+	{
+		return jwtProvider.isTokenValid(authenticationToken);
+	}
+
+	public Token updateAccessToken(String refreshToken)
+	{
+		return generateNewAccessToken(refreshToken);
 	}
 
 }

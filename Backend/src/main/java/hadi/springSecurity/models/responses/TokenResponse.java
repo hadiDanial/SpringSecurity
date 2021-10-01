@@ -2,28 +2,42 @@ package hadi.springSecurity.models.responses;
 
 public class TokenResponse
 {
-	private String authenticationToken;
+	private String accessToken;
+	private String refreshToken;
 	private String message;
+	private boolean success;
 	
 	public TokenResponse()
 	{
 	}
 
-	public TokenResponse(String authenticationToken, String message)
+	public TokenResponse(String accessToken, String refreshToken, String message, boolean success)
 	{
 		super();
-		this.authenticationToken = authenticationToken;
+		this.accessToken = accessToken;
+		this.refreshToken = refreshToken;
 		this.message = message;
+		this.success = success;
 	}
 
-	public String getAuthenticationToken()
+	public String getAccessToken()
 	{
-		return authenticationToken;
+		return accessToken;
 	}
 
-	public void setAuthenticationToken(String authenticationToken)
+	public void setAccessToken(String accessToken)
 	{
-		this.authenticationToken = authenticationToken;
+		this.accessToken = accessToken;
+	}
+
+	public String getRefreshToken()
+	{
+		return refreshToken;
+	}
+
+	public void setRefreshToken(String refreshToken)
+	{
+		this.refreshToken = refreshToken;
 	}
 
 	public String getMessage()
@@ -34,6 +48,16 @@ public class TokenResponse
 	public void setMessage(String message)
 	{
 		this.message = message;
+	}
+
+	public boolean isSuccess()
+	{
+		return success;
+	}
+
+	public void setSuccess(boolean success)
+	{
+		this.success = success;
 	}
 	
 	
