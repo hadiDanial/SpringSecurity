@@ -2,21 +2,19 @@ package hadi.springSecurity.services;
 
 import java.time.Instant;
 
-import javax.el.MethodNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import hadi.springSecurity.configuration.Properties;
+import hadi.springSecurity.exceptions.TokenException;
 import hadi.springSecurity.models.entities.Token;
 import hadi.springSecurity.models.entities.User;
 import hadi.springSecurity.models.requests.LoginRequest;
 import hadi.springSecurity.models.requests.ValidateTokenRequest;
+import hadi.springSecurity.models.responses.LoginResponse;
 import hadi.springSecurity.models.responses.TokenResponse;
-import hadi.springSecurity.security.services.JwtProvider;
 
 @Service
 public class AuthorizationService
@@ -37,7 +35,7 @@ public class AuthorizationService
 		this.tokenService = tokenService;
 	}
 
-	public Token login(LoginRequest loginRequest)
+	public LoginResponse login(LoginRequest loginRequest)
 	{
 //		authManager.authenticate(null)
 		User user = userService.findUserByUsername(loginRequest.getUsername());
@@ -47,8 +45,9 @@ public class AuthorizationService
 		}
 		if(passwordEncoder.matches(loginRequest.getPassword(), user.getCredentials().getPassword()))
 		{
-			Token response = tokenService.generateToken(user);
+			Token token = tokenService.generateToken(user);
 			user.setLastAccessDate(Instant.now());
+			LoginResponse response = new LoginResponse(token,user, "Logged in successfully");
 			return response;
 		}
 		throw new BadCredentialsException("Login failed, bad credentials for " + loginRequest.getUsername() + ".");
@@ -59,15 +58,19 @@ public class AuthorizationService
 		tokenService.deleteToken(refreshToken);
 	}
 
-	public String refreshAuthToken(String refreshToken)
-	{
-		// TODO Auto-generated method stub
-		throw new MethodNotFoundException();
-	}
-
+	
 	public TokenResponse validate(ValidateTokenRequest validateTokenRequest)
 	{
-		//"Session expired, please log in again..." "Invalid credentials, log in again..."
-		return null;
+		if(tokenService.isValidAuthToken(validateTokenRequest.getRefreshToken()) 
+				&& tokenService.isValidAuthToken(validateTokenRequest.getAccessToken()))
+		{
+			return new TokenResponse(validateTokenRequest.getAccessToken(), validateTokenRequest.getRefreshToken(), "Success", true);
+		}
+		else if(tokenService.isValidAuthToken(validateTokenRequest.getRefreshToken()))
+		{
+			Token token = tokenService.updateAccessToken(validateTokenRequest.getRefreshToken());
+			return new TokenResponse(token.getAccessToken(), token.getRefreshToken(), "Success", true); 
+		}
+		throw new TokenException("Please log in again.");
 	}
 }
