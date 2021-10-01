@@ -51,10 +51,10 @@ public class JwtProvider
 		try {
 			jws = Jwts.parser().setSigningKey(properties.getJwtSecret())
 					.parseClaimsJws(token);
-			System.out.println("JWS Subject: " + jws.getBody().getSubject());
-			System.out.println("Issued by: " + jws.getBody().getIssuer());
-			System.out.println("Issued at: " + jws.getBody().getIssuedAt());
-			System.out.println("Expires: " + jws.getBody().getExpiration());
+//			System.out.println("JWS Subject: " + jws.getBody().getSubject());
+//			System.out.println("Issued by: " + jws.getBody().getIssuer());
+//			System.out.println("Issued at: " + jws.getBody().getIssuedAt());
+//			System.out.println("Expires: " + jws.getBody().getExpiration());
 			return jws.getBody().getSubject();
 		}
 		catch(JwtException e)
@@ -78,7 +78,7 @@ public class JwtProvider
 		}
 		catch(JwtException e)
 		{
-			throw new JwtException("Can't parse JWT (isTokenValid)");
+			throw new JwtException("Invalid token, can't parse JWT.");
 		}
 	}
 }
