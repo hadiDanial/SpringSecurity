@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,25 +16,32 @@ import hadi.springSecurity.models.requests.LoginRequest;
 import hadi.springSecurity.models.requests.ValidateTokenRequest;
 import hadi.springSecurity.models.responses.LoginResponse;
 import hadi.springSecurity.models.responses.TokenResponse;
-import hadi.springSecurity.services.AuthorizationService;
+import hadi.springSecurity.services.AuthenticationService;
 
 @RestController
 @RequestMapping(path = "/auth")
 public class AuthorizationController
 {
-	private final AuthorizationService authService;
+	private final AuthenticationService authService;
 
 	@Autowired
-	public AuthorizationController(AuthorizationService authService)
+	public AuthorizationController(AuthenticationService authService)
 	{
 		super();
 		this.authService = authService;
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) // Body
+	public ResponseEntity<LoginResponse> login(@RequestHeader("username") String username,
+			@RequestHeader("password") String password) // Header
+//	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) // Body
 	{
+		if(username == null || password == null)
+		{			
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 		LoginResponse loginResponse;
+		LoginRequest loginRequest = new LoginRequest(username, password);
 		ResponseEntity<LoginResponse> response;
 		try
 		{
