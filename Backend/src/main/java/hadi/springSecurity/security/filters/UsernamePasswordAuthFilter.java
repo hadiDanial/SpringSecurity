@@ -11,23 +11,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import hadi.springSecurity.security.authentications.UsernamePasswordAuthentication;
 
-@Component
-public class UsernamePasswordAuthenticationFilter extends OncePerRequestFilter
+public class UsernamePasswordAuthFilter extends OncePerRequestFilter
 {
-    private final AuthenticationManager authenticationManager;
-	
-    @Autowired
-    @Lazy
-	public UsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager)
+	private final AuthenticationManager authenticationManager;
+
+	@Autowired
+	@Lazy
+	public UsernamePasswordAuthFilter(AuthenticationManager authenticationManager)
 	{
 		this.authenticationManager = authenticationManager;
 	}
-
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -35,12 +33,25 @@ public class UsernamePasswordAuthenticationFilter extends OncePerRequestFilter
 	{
 		var username = request.getHeader("username");
 		var password = request.getHeader("password");
-		Authentication a = new UsernamePasswordAuthentication(username, password);
-        a = authenticationManager.authenticate(a);
+		if(username != null && password != null)
+		{
+			try
+			{
+				UsernamePasswordAuthentication a = new UsernamePasswordAuthentication(username, password, null);
+				a = (UsernamePasswordAuthentication) authenticationManager.authenticate(a);							
+			} catch (AuthenticationException e)
+			{
+				response.setStatus(401);
+			}
+		}
+		filterChain.doFilter(request, response);
+//		response.setHeader(ALREADY_FILTERED_SUFFIX, ALREADY_FILTERED_SUFFIX);
 	}
-	
+
 	@Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return !request.getServletPath().equals("/login");
-    }
+	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException
+	{
+		return !request.getServletPath().equals("/auth/login");
+	}
+
 }
