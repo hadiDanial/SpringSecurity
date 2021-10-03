@@ -18,73 +18,81 @@ import hadi.springSecurity.models.responses.TokenResponse;
 import io.jsonwebtoken.JwtException;
 
 @Service
-public class AuthorizationService
+public class AuthenticationService
 {
 	private final UserService userService;
 	private final TokenService tokenService;
 	private final PasswordEncoder passwordEncoder;
-	private final AuthenticationManager authManager;
 
 	@Autowired
-	public AuthorizationService(AuthenticationManager authManager, 
-								UserService userService, TokenService tokenService, PasswordEncoder passwordEncoder)
+	public AuthenticationService(UserService userService, TokenService tokenService, PasswordEncoder passwordEncoder)
 	{
 		super();
 		this.userService = userService;
 		this.passwordEncoder = passwordEncoder;
-		this.authManager = authManager;
 		this.tokenService = tokenService;
 	}
 
 	public LoginResponse login(LoginRequest loginRequest)
 	{
-//		authManager.authenticate(null)
+		User user = isValidUser(loginRequest);
+		Token token = tokenService.generateToken(user);
+		user.setLastAccessDate(Instant.now());
+		LoginResponse response = new LoginResponse(token, user, "Logged in successfully");
+		return response;
+	}
+
+	/**
+	 * Checks if the Login Request is valid, and returns the user.
+	 * A request is valid if the username exists and the password matches.
+	 * @param loginRequest
+	 * @return If the request is valid, returns the user, otherwise throws a
+	 *         <code>BadCredentialsException</code>.
+	 */
+	public User isValidUser(LoginRequest loginRequest) throws BadCredentialsException
+	{
 		User user = userService.findUserByUsername(loginRequest.getUsername());
-		if(user == null)
+		if (user == null)
 		{
 			throw new BadCredentialsException("Login failed, " + loginRequest.getUsername() + " doesn't exist.");
 		}
-		if(passwordEncoder.matches(loginRequest.getPassword(), user.getCredentials().getPassword()))
+		if (passwordEncoder.matches(loginRequest.getPassword(), user.getCredentials().getPassword()))
 		{
-			Token token = tokenService.generateToken(user);
-			user.setLastAccessDate(Instant.now());
-			LoginResponse response = new LoginResponse(token,user, "Logged in successfully");
-			return response;
+			return user;
 		}
 		throw new BadCredentialsException("Login failed, bad credentials for " + loginRequest.getUsername() + ".");
 	}
-	
+
 	public void logout(String refreshToken)
 	{
 		tokenService.deleteToken(refreshToken);
 	}
 
-	
 	public TokenResponse validate(ValidateTokenRequest validateTokenRequest)
 	{
 		boolean isValidAccessToken, isValidRefreshToken;
 		try
 		{
 			isValidRefreshToken = tokenService.isValidAuthToken(validateTokenRequest.getRefreshToken());
-		} 
-		catch (JwtException e)
+		} catch (JwtException e)
 		{
 			throw new TokenException("Please log in again.");
 		}
 		try
 		{
 			isValidAccessToken = tokenService.isValidAuthToken(validateTokenRequest.getAccessToken());
-			if(isValidRefreshToken && isValidAccessToken)
+			if (isValidRefreshToken && isValidAccessToken)
 			{
-				return new TokenResponse(validateTokenRequest.getAccessToken(), validateTokenRequest.getRefreshToken(), "Success, access token", true);
+				return new TokenResponse(validateTokenRequest.getAccessToken(), validateTokenRequest.getRefreshToken(),
+						"Success, access token", true);
 			}
-		} 
-		catch (JwtException e)
+		} catch (JwtException e)
 		{
-			if(isValidRefreshToken)
+			if (isValidRefreshToken)
 			{
 				Token token = tokenService.updateAccessToken(validateTokenRequest.getRefreshToken());
-				return new TokenResponse(token.getAccessToken(), token.getRefreshToken(), "Success, refresh token", true); 				
+				return new TokenResponse(token.getAccessToken(), token.getRefreshToken(), "Success, refresh token",
+						true);
 			}
 		}
 		throw new TokenException("Please log in again.");
