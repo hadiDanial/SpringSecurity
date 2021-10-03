@@ -90,8 +90,7 @@ public class Authority
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((authorityIdentifier == null) ? 0 : authorityIdentifier.hashCode());
-		result = prime * result + ((authorityName == null) ? 0 : authorityName.hashCode());
-		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -111,20 +110,22 @@ public class Authority
 				return false;
 		} else if (!authorityIdentifier.equals(other.authorityIdentifier))
 			return false;
-		if (authorityName == null)
+		if (id == null)
 		{
-			if (other.authorityName != null)
+			if (other.id != null)
 				return false;
-		} else if (!authorityName.equals(other.authorityName))
-			return false;
-		if (roles == null)
-		{
-			if (other.roles != null)
-				return false;
-		} else if (!roles.equals(other.roles))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "Authority [id=" + id + ", authorityName=" + authorityName + ", authorityIdentifier="
+				+ authorityIdentifier + "]";
+	}
+
 	
 	
 }

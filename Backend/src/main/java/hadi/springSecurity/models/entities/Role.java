@@ -99,11 +99,8 @@ public class Role
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((authorities == null) ? 0 : authorities.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((roleIdentifier == null) ? 0 : roleIdentifier.hashCode());
-		result = prime * result + ((roleName == null) ? 0 : roleName.hashCode());
-		result = prime * result + ((users == null) ? 0 : users.hashCode());
 		return result;
 	}
 
@@ -117,12 +114,6 @@ public class Role
 		if (getClass() != obj.getClass())
 			return false;
 		Role other = (Role) obj;
-		if (authorities == null)
-		{
-			if (other.authorities != null)
-				return false;
-		} else if (!authorities.equals(other.authorities))
-			return false;
 		if (id == null)
 		{
 			if (other.id != null)
@@ -135,19 +126,13 @@ public class Role
 				return false;
 		} else if (!roleIdentifier.equals(other.roleIdentifier))
 			return false;
-		if (roleName == null)
-		{
-			if (other.roleName != null)
-				return false;
-		} else if (!roleName.equals(other.roleName))
-			return false;
-		if (users == null)
-		{
-			if (other.users != null)
-				return false;
-		} else if (!users.equals(other.users))
-			return false;
 		return true;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Role [id=" + id + ", roleName=" + roleName + ", roleIdentifier=" + roleIdentifier + "]";
 	}
 	
 	
