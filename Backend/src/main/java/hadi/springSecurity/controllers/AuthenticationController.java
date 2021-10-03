@@ -1,6 +1,7 @@
 package hadi.springSecurity.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,12 +21,12 @@ import hadi.springSecurity.services.AuthenticationService;
 
 @RestController
 @RequestMapping(path = "/auth")
-public class AuthorizationController
+public class AuthenticationController
 {
 	private final AuthenticationService authService;
 
 	@Autowired
-	public AuthorizationController(AuthenticationService authService)
+	public AuthenticationController(AuthenticationService authService)
 	{
 		super();
 		this.authService = authService;
