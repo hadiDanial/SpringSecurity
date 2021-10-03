@@ -27,6 +27,17 @@ public class SecurityUser implements UserDetails
 	public Collection<? extends GrantedAuthority> getAuthorities()
 	{
 		List<GrantedAuthority> authorities = new ArrayList<>();
+		List<Role> roles;
+		try
+		{
+			roles = user.getRoles();
+			if(roles == null || roles.size() == 0)
+				return null;
+			
+		} catch (NullPointerException e)
+		{
+			return null;
+		}
 		for(Role role : user.getRoles())
 		{
 			authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleIdentifier()));
