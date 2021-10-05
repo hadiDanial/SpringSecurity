@@ -6,11 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import hadi.springSecurity.models.entities.User;
+import hadi.springSecurity.models.responses.MessageBoolResponse;
+import hadi.springSecurity.services.RoleService;
 import hadi.springSecurity.services.UserService;
 
 @RestController
@@ -18,18 +23,11 @@ import hadi.springSecurity.services.UserService;
 @CrossOrigin
 public class UserController
 {
-	private final UserService userBL;
-	
+	private final UserService userService;
 	@Autowired
-	public UserController(UserService userBL)
+	public UserController(UserService userService)
 	{
-		this.userBL = userBL;
-	}
-	
-	@GetMapping("/hello")
-	public String hello()
-	{
-		return "Hello!";
+		this.userService = userService;
 	}
 	
 	@GetMapping("/getAllUsers")
@@ -37,7 +35,7 @@ public class UserController
 	{
 		try
 		{
-			List<User> users = userBL.getAllUsers();
+			List<User> users = userService.getAllUsers();
 			return new ResponseEntity<List<User>>(users, HttpStatus.OK);
 		} 
 		catch (Exception e)
@@ -45,4 +43,31 @@ public class UserController
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@PostMapping("/addRoleToUser")
+	public ResponseEntity<MessageBoolResponse> addRoleToUser(@RequestBody User user, String role)
+	{
+		MessageBoolResponse response = userService.addRoleToUser(user, role);
+		return returnResponseWithCode(response);
+	}
+	
+	@DeleteMapping("/removeRoleFromUser")
+	public ResponseEntity<MessageBoolResponse> removeRoleFromUser(@RequestBody User user, String role)
+	{
+		MessageBoolResponse response = userService.removeRoleFromUser(user, role);
+		return returnResponseWithCode(response);
+	}
+
+	private ResponseEntity<MessageBoolResponse> returnResponseWithCode(MessageBoolResponse response)
+	{
+		if(response.isResult())
+		{
+			return new ResponseEntity<MessageBoolResponse>(response, HttpStatus.OK);
+		}
+		else 
+		{
+			return new ResponseEntity<MessageBoolResponse>(response, HttpStatus.CONFLICT);			
+		}
+	}
+
 }
