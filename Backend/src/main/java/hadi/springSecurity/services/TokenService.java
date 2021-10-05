@@ -1,6 +1,8 @@
 package hadi.springSecurity.services;
 
+import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,15 +56,28 @@ public class TokenService
 
 	public Token generateToken(User user)
 	{
+		clearOutdatedTokensForUser(user);
 		Token token = new Token();
 		Date tokenExpirationDate = jwtProvider.generateTokenExpirationDate(properties.getTokenLifetime());
 		Date refreshTokenExpirationDate = jwtProvider.generateTokenExpirationDate(properties.getRefreshTokenLifetime());
 		token.setAccessToken(jwtProvider.generateToken(user.getUsername(), tokenExpirationDate));
 		token.setRefreshToken(jwtProvider.generateToken(user.getUsername(), refreshTokenExpirationDate));
-		token.setExpiresAt(tokenExpirationDate.toInstant());
+		token.setExpiresAt(refreshTokenExpirationDate.toInstant());
 		token.setUsername(user.getUsername());
 		tokenRepository.save(token);
 		return token;
+	}
+
+	private void clearOutdatedTokensForUser(User user)
+	{
+		List<Token> oldTokens = tokenRepository.findAllByUsername(user.getUsername());
+		for(Token token : oldTokens)
+		{
+			if(token.getExpiresAt().isBefore(Instant.now()))
+			{
+				tokenRepository.delete(token);
+			}
+		}
 	}
 
 	private Token generateNewAccessToken(String refreshToken)
@@ -103,6 +118,11 @@ public class TokenService
 	public Token updateAccessToken(String refreshToken)
 	{
 		return generateNewAccessToken(refreshToken);
+	}
+	
+	public String getUsernameFromToken(String token)
+	{
+		return jwtProvider.getUsernameFromToken(token);
 	}
 
 }
