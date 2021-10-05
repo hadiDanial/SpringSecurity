@@ -15,6 +15,7 @@ import hadi.springSecurity.models.requests.LoginRequest;
 import hadi.springSecurity.models.requests.ValidateTokenRequest;
 import hadi.springSecurity.models.responses.LoginResponse;
 import hadi.springSecurity.models.responses.TokenResponse;
+import hadi.springSecurity.security.services.JwtProvider;
 import io.jsonwebtoken.JwtException;
 
 @Service
@@ -73,14 +74,14 @@ public class AuthenticationService
 		boolean isValidAccessToken, isValidRefreshToken;
 		try
 		{
-			isValidRefreshToken = tokenService.isValidAuthToken(validateTokenRequest.getRefreshToken());
+			isValidRefreshToken = isValidAuthToken(validateTokenRequest.getRefreshToken());
 		} catch (JwtException e)
 		{
 			throw new TokenException("Please log in again.");
 		}
 		try
 		{
-			isValidAccessToken = tokenService.isValidAuthToken(validateTokenRequest.getAccessToken());
+			isValidAccessToken = isValidAuthToken(validateTokenRequest.getAccessToken());
 			if (isValidRefreshToken && isValidAccessToken)
 			{
 				return new TokenResponse(validateTokenRequest.getAccessToken(), validateTokenRequest.getRefreshToken(),
@@ -96,5 +97,17 @@ public class AuthenticationService
 			}
 		}
 		throw new TokenException("Please log in again.");
+	}
+
+	public boolean isValidAuthToken(String token)
+	{
+		return tokenService.isValidAuthToken(token);
+	}
+
+	public User getUserFromToken(String refreshToken)
+	{
+		String username = tokenService.getUsernameFromToken(refreshToken);
+		User user = userService.findUserByUsername(username);
+		return user;
 	}
 }
