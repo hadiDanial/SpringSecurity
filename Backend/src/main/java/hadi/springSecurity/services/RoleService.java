@@ -1,5 +1,7 @@
 package hadi.springSecurity.services;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +55,16 @@ public class RoleService
 			return new MessageBoolResponse("Authority "+ authorityName +" added successfully.", true);
 		}
 	}
-
+	public List<MessageBoolResponse> addAuthoritiesToRole(List<String> authorityNames, String roleName)
+	{
+		List<MessageBoolResponse> responses = new ArrayList<>();
+		for (String authority : authorityNames)
+		{
+			responses.add(addAuthorityToRole(authority, roleName));
+		}
+		return responses;
+	}
+	
 	public MessageBoolResponse addAuthorityToRole(String authorityName, String roleName)
 	{
 		MessageBoolResponse response;
@@ -64,7 +75,7 @@ public class RoleService
 			List<Authority> authorities = role.getAuthorities();
 			if(authorities.contains(authority))
 			{
-				throw new RoleException("Role already has authority.");
+				throw new RoleException("Role " + roleName + " already has authority " + authorityName + ".");
 			}
 			authorities.add(authority);
 			role.setAuthorities(authorities);
@@ -102,13 +113,13 @@ public class RoleService
 		return response;
 	}
 
-	private Role findRoleByName(String roleName) throws RoleException
+	public Role findRoleByName(String roleName) throws RoleException
 	{
 		return roleRepository.findByRoleIdentifier(roleName.toUpperCase())
 				.orElseThrow(()-> new RoleException("Role not found."));
 	}
 
-	private Authority findAuthorityByName(String authorityName) throws RoleException
+	public Authority findAuthorityByName(String authorityName) throws RoleException
 	{
 		return authorityRepository.findByAuthorityIdentifier(authorityName.toUpperCase())
 				.orElseThrow(()-> new RoleException("Authority not found."));
