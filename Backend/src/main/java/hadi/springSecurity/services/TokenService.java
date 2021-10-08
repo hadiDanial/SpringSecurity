@@ -13,6 +13,7 @@ import hadi.springSecurity.models.entities.Token;
 import hadi.springSecurity.models.entities.User;
 import hadi.springSecurity.repositories.TokenRepository;
 import hadi.springSecurity.security.services.JwtProvider;
+import io.jsonwebtoken.JwtException;
 
 @Service
 public class TokenService
@@ -110,9 +111,9 @@ public class TokenService
 		tokenRepository.delete(token);
 	}
 
-	public boolean isValidAuthToken(String authenticationToken)
+	public boolean isValidAuthToken(String authenticationToken) throws JwtException, TokenException
 	{
-		return jwtProvider.isTokenValid(authenticationToken);
+		return tokenRepository.existsByAccessToken(authenticationToken) && jwtProvider.isTokenValid(authenticationToken);
 	}
 
 	public Token updateAccessToken(String refreshToken)

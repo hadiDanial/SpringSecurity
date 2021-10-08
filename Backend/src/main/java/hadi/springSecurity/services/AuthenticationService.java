@@ -99,7 +99,7 @@ public class AuthenticationService
 		throw new TokenException("Please log in again.");
 	}
 
-	public boolean isValidAuthToken(String token)
+	public boolean isValidAuthToken(String token) throws JwtException, TokenException
 	{
 		return tokenService.isValidAuthToken(token);
 	}
