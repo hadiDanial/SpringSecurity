@@ -188,14 +188,15 @@ public class UserService implements UserDetailsManager
 		{
 			return new MessageBoolResponse("Role " + roleName + " doesn't exist.", false);
 		}
-		List<Role> userRoles = user.getRoles();
+		User u = userRepository.findById(user.getId()).get();
+		List<Role> userRoles = u.getRoles();
 		if(userRoles.contains(role))
 		{
 			return new MessageBoolResponse("User " + user.getUsername() +" already has role " + roleName + ".", false);
 		}
 		userRoles.add(role);
-		user.setRoles(userRoles);
-		userRepository.save(user);
+		u.setRoles(userRoles);
+		userRepository.save(u);
 		return new MessageBoolResponse("Role " + roleName + " added to " + user.getUsername() + " successfully.", true);
 	}
 	
@@ -209,12 +210,13 @@ public class UserService implements UserDetailsManager
 		{
 			return new MessageBoolResponse("Role " + roleName + " doesn't exist.", false);
 		}
-		List<Role> userRoles = user.getRoles();
+		User u = userRepository.findById(user.getId()).get();
+		List<Role> userRoles = u.getRoles();
 		if(userRoles.contains(role))
 		{
 			userRoles.remove(role);
-			user.setRoles(userRoles);
-			userRepository.save(user);
+			u.setRoles(userRoles);
+			userRepository.save(u);
 			return new MessageBoolResponse("Role " + roleName + " removed from " + user.getUsername() + " successfully.", true);
 		}
 		return new MessageBoolResponse("User " + user.getUsername() +" doesn't have role " + roleName + ".", false);
