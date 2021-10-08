@@ -28,11 +28,11 @@ public class JwtProvider
 		this.properties = properties;
 	}
 
-	public String generateToken(String username, Date date)
+	public String generateToken(String username, Date expirationDate)
 	{
 		return Jwts.builder()
 			.setSubject(username)
-			.setExpiration(date)
+			.setExpiration(expirationDate)
 			.setIssuedAt(Date.from(Instant.now()))
 			.setIssuer(properties.getJwtIssuer())
 			.signWith(SignatureAlgorithm.HS512, properties.getJwtSecret())
