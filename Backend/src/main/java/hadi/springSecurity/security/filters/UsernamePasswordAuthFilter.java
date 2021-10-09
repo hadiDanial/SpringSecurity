@@ -6,12 +6,15 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import hadi.springSecurity.security.authentications.UsernamePasswordAuthentication;
@@ -38,7 +41,11 @@ public class UsernamePasswordAuthFilter extends OncePerRequestFilter
 			try
 			{
 				UsernamePasswordAuthentication a = new UsernamePasswordAuthentication(username, password, null);
-				a = (UsernamePasswordAuthentication) authenticationManager.authenticate(a);							
+				a = (UsernamePasswordAuthentication) authenticationManager.authenticate(a);			
+				SecurityContext securityContext = SecurityContextHolder.getContext();
+				securityContext.setAuthentication(a);
+				HttpSession session = request.getSession();
+				session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
 			} catch (AuthenticationException e)
 			{
 				response.setStatus(401);
