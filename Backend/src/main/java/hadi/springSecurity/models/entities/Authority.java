@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="authorities")
 public class Authority
@@ -21,6 +23,8 @@ public class Authority
 	private String authorityName;
 	@Column(unique = true)
 	private String authorityIdentifier;
+	
+	@JsonIgnore
 	@ManyToMany(mappedBy="authorities")
 	private List<Role> roles;
 	

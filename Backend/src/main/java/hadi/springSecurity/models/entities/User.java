@@ -22,7 +22,7 @@ import hadi.springSecurity.models.embeddables.Name;
 
 @Entity
 @Table(name = "Users")
-@JsonIgnoreProperties({"credentials"})
+@JsonIgnoreProperties({"credentials", "lastLoginDate", "lastAccessDate"})
 public class User
 {
 	@Id
@@ -40,6 +40,7 @@ public class User
 	private boolean isEnabled;
 	private boolean isLocked;
 	private Instant creationDate;
+	private Instant lastLoginDate;
 	private Instant lastAccessDate;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -75,7 +76,7 @@ public class User
 		this.isEnabled = isEnabled;
 		this.isLocked = isLocked;
 		this.creationDate = creationDate;
-		this.lastAccessDate = lastAccessDate;
+		this.lastLoginDate = lastAccessDate;
 		this.roles = roles;
 	}
 
@@ -155,6 +156,16 @@ public class User
 		this.creationDate = creationDate;
 	}
 
+	public Instant getLastLoginDate()
+	{
+		return lastLoginDate;
+	}
+
+	public void setLastLoginDate(Instant lastAccessDate)
+	{
+		this.lastLoginDate = lastAccessDate;
+	}
+
 	public Instant getLastAccessDate()
 	{
 		return lastAccessDate;
@@ -187,7 +198,7 @@ public class User
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + (isEnabled ? 1231 : 1237);
 		result = prime * result + (isLocked ? 1231 : 1237);
-		result = prime * result + ((lastAccessDate == null) ? 0 : lastAccessDate.hashCode());
+		result = prime * result + ((lastLoginDate == null) ? 0 : lastLoginDate.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
@@ -228,11 +239,11 @@ public class User
 			return false;
 		if (isLocked != other.isLocked)
 			return false;
-		if (lastAccessDate == null)
+		if (lastLoginDate == null)
 		{
-			if (other.lastAccessDate != null)
+			if (other.lastLoginDate != null)
 				return false;
-		} else if (!lastAccessDate.equals(other.lastAccessDate))
+		} else if (!lastLoginDate.equals(other.lastLoginDate))
 			return false;
 		if (name == null)
 		{
