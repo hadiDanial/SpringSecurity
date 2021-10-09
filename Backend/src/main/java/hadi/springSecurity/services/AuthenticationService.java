@@ -37,9 +37,9 @@ public class AuthenticationService
 	public LoginResponse login(LoginRequest loginRequest)
 	{
 		User user = isValidUser(loginRequest);
+		userService.updateLastLoginDate(user);
 		Token token = tokenService.generateToken(user);
-		user.setLastAccessDate(Instant.now());
-		LoginResponse response = new LoginResponse(token, user, "Logged in successfully");
+		LoginResponse response = new LoginResponse(token, user, "Logged in successfully.");
 		return response;
 	}
 

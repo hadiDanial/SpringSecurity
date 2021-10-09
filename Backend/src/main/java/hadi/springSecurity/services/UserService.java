@@ -17,6 +17,7 @@ import hadi.springSecurity.exceptions.RoleException;
 import hadi.springSecurity.models.embeddables.Credential;
 import hadi.springSecurity.models.embeddables.Name;
 import hadi.springSecurity.models.entities.Role;
+import hadi.springSecurity.models.entities.Token;
 import hadi.springSecurity.models.entities.User;
 import hadi.springSecurity.models.responses.MessageBoolResponse;
 import hadi.springSecurity.models.security.SecurityUser;
@@ -220,5 +221,17 @@ public class UserService implements UserDetailsManager
 			return new MessageBoolResponse("Role " + roleName + " removed from " + user.getUsername() + " successfully.", true);
 		}
 		return new MessageBoolResponse("User " + user.getUsername() +" doesn't have role " + roleName + ".", false);
+	}
+
+	public void updateLastAccessDate(User user)
+	{
+		user.setLastAccessDate(Instant.now());
+		userRepository.save(user);
+	}
+
+	public void updateLastLoginDate(User user)
+	{
+		user.setLastLoginDate(Instant.now());
+		userRepository.save(user);
 	}
 }
