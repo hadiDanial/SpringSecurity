@@ -3,6 +3,7 @@ package hadi.springSecurity.services;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,7 +63,7 @@ public class TokenService
 		Date tokenExpirationDate = jwtProvider.generateTokenExpirationDate(properties.getTokenLifetime());
 		Date refreshTokenExpirationDate = jwtProvider.generateTokenExpirationDate(properties.getRefreshTokenLifetime());
 		token.setAccessToken(jwtProvider.generateToken(user.getUsername(), tokenExpirationDate));
-		token.setRefreshToken(jwtProvider.generateToken(user.getUsername(), refreshTokenExpirationDate));
+		token.setRefreshToken(UUID.randomUUID().toString());
 		token.setExpiresAt(refreshTokenExpirationDate.toInstant());
 		token.setUsername(user.getUsername());
 		tokenRepository.save(token);
