@@ -126,7 +126,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter
  	@Bean
  	public TokenAuthProvider tokenAuthProvider()
  	{
- 		return new TokenAuthProvider(authenticationService);
+ 		return new TokenAuthProvider(authenticationService, userService);
  	}
  	@Bean
  	public TokenAuthFilter tokenAuthFilter() throws Exception
