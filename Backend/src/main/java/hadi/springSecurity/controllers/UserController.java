@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,6 +70,12 @@ public class UserController
 		{
 			return new ResponseEntity<MessageBoolResponse>(response, HttpStatus.CONFLICT);			
 		}
+	}
+	
+	@GetMapping("/hello")
+	public String hello()
+	{
+		return "Hello, " + SecurityContextHolder.getContext().getAuthentication().getName() + "!";
 	}
 
 }
