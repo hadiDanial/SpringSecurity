@@ -23,6 +23,16 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfiguration
 {
+//	@Bean
+//	public Docket api()
+//	{
+//		return new Docket(DocumentationType.SWAGGER_2)
+//				.select()
+//				.apis(RequestHandlerSelectors.any())
+//				.paths(PathSelectors.any())
+//				.build();
+//		
+//	}
 	@Bean
 	public Docket api()
 	{
@@ -43,7 +53,7 @@ public class SwaggerConfiguration
 			      "Spring Security Test Project",
 			      "1.0",
 			      "",
-			      new Contact("Hadi Danial", "www.hadidanial.com", "hadidanial97@gmail.com"),
+			      new Contact("Hadi Danial", "https://hadidanial.com", "hadidanial97@gmail.com"),
 			      "None",
 			      "None",
 			      Collections.emptyList());
@@ -51,7 +61,7 @@ public class SwaggerConfiguration
 
 	private ApiKey apiKey()
 	{
-		return new ApiKey("JWT", "Authorization", "header");
+		return new ApiKey("JWT", "swagger", "header");
 	}
 	
 	private SecurityContext securityContext() { 
