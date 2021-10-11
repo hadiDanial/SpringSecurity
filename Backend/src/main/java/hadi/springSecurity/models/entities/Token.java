@@ -9,9 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "tokens")
+@JsonIgnoreProperties({"id", "createdAt", "updatedAt", "expiresAt"})
 public class Token
 {
 	@Id
@@ -22,11 +24,14 @@ public class Token
 	private String accessToken;
 	private String refreshToken;
 	private String username;
+	private Instant createdAt;
+	private Instant updatedAt;
 	private Instant expiresAt;
 	
 	public Token()
 	{
 		super();
+		this.createdAt = Instant.now();
 	}
 
 	public Token(Long id, String accessToken, String refreshToken, String username, Instant expiresAt)
@@ -37,6 +42,7 @@ public class Token
 		this.refreshToken = refreshToken;
 		this.username = username;
 		this.expiresAt = expiresAt;
+		this.createdAt = Instant.now();
 	}
 
 	public String getAccessToken()
@@ -77,6 +83,26 @@ public class Token
 	public void setExpiresAt(Instant expiresAt)
 	{
 		this.expiresAt = expiresAt;
+	}
+	
+	public Instant getCreatedAt()
+	{
+		return createdAt;
+	}
+
+	public void setCreatedAt(Instant createdAt)
+	{
+		this.createdAt = createdAt;
+	}
+
+	public Instant getUpdatedAt()
+	{
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Instant updatedAt)
+	{
+		this.updatedAt = updatedAt;
 	}
 
 	public Long getId()
