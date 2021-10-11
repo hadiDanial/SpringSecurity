@@ -22,7 +22,7 @@ import hadi.springSecurity.models.embeddables.Name;
 
 @Entity
 @Table(name = "Users")
-@JsonIgnoreProperties({"credentials", "lastLoginDate", "lastAccessDate"})
+@JsonIgnoreProperties({"credentials", "lastLoginDate", "lastAccessDate", "isEnabled", "isLocked"})
 public class User
 {
 	@Id
