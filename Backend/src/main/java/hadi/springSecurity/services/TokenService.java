@@ -127,4 +127,24 @@ public class TokenService
 		return jwtProvider.getUsernameFromToken(token);
 	}
 
+	/**
+	 * Checks if the token is not expired. Deletes it if it is expired.
+	 * @param refreshToken
+	 */
+	public boolean isNotExpired(String refreshToken)
+	{
+		Token token = tokenRepository.findByRefreshToken(refreshToken).get();
+		if(token == null)
+			return false; 
+		if(token.getExpiresAt().isBefore(Instant.now()))
+		{
+			tokenRepository.delete(token);
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
 }
