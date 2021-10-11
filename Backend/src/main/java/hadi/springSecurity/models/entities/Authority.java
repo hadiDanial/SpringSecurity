@@ -11,9 +11,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="authorities")
+@JsonIgnoreProperties(value = {"id", "roles"})
 public class Authority
 {
 	@Id
