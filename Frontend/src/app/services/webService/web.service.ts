@@ -15,10 +15,20 @@ export class WebService
   readonly ROOT_URL = "http://localhost:8084/"
 
   constructor(private httpClient: HttpClient, private dataService: DataService) { }
-  token: string = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJKb2huIiwiZXhwIjoxNjM0MDY5ODkxLCJpYXQiOjE2MzQwNjgwOTEsImlzcyI6IkhhZGkifQ.-dNwCDnuT7gmM_Ksx504w0DiM_YC1Ik96k8BnZDz-fsQzV41tRPD-IsQGlSLoPTZ0Jv29vlGo8ceqsiCKHItRQ";
+  token: string = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJKb2huIiwiZXhwIjoxNjM0MDczODY5LCJpYXQiOjE2MzQwNzIwNjksImlzcyI6IkhhZGkifQ.6UcP-hEK57gEs6urC3K4DSCpZ2HNoamzoxXZ5JWLEMLOsfynNGB5Q7iHvieIPwhFmAjB7cfxseaPJa1CIBAFgg';
 
+  public get<T>(apiRoute: string, headerParams?: Map<string, string>, urlParams?:Map<string, string>) : Observable<T>
+  {
+    let urlParamsString = (urlParams == undefined) ? "" : this.generateURLParams(urlParams);
+    let options = {
+      headers: this.generateHttpHeadersWithParams(headerParams),
+      options: null,
+      
+    };
+    return this.httpClient.get<T>(`${this.ROOT_URL + apiRoute + urlParamsString}`, options).pipe(catchError(this.handleError));
+  }
 
-  public post<T>(apiRoute: string, bodyParams?: Map<string, any>, headerParams?: Map<string, any>, urlParams?:Map<string, string>) : Observable<T>
+  public post<T>(apiRoute: string, bodyParams?: Map<string, any>, headerParams?: Map<string, string>, urlParams?:Map<string, string>) : Observable<T>
   {
     let urlParamsString = (urlParams == undefined) ? "" : this.generateURLParams(urlParams);
     let options = {
@@ -43,6 +53,21 @@ export class WebService
     } 
     return httpHeaders;
   }
+
+  generateHttpHeadersWithParams(params?: Map<string, string>): HttpHeaders
+  {
+    let httpHeaders = this.generateHttpHeaders();
+    if(params == undefined)
+    {
+      return httpHeaders;
+    }
+    for (let [key, value] of params)
+    {
+      httpHeaders = httpHeaders.append(key, value);      
+    }
+    return httpHeaders;
+  }
+
   getAccessToken()
   {
     return this.token;
