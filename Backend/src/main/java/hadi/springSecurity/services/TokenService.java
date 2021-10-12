@@ -114,7 +114,19 @@ public class TokenService
 
 	public boolean isValidAuthToken(String authenticationToken) throws JwtException, TokenException
 	{
-		return tokenRepository.existsByAccessToken(authenticationToken) && jwtProvider.isTokenValid(authenticationToken);
+		if(tokenRepository.existsByAccessToken(authenticationToken))
+		{
+			Token t = tokenRepository.findByAccessToken(authenticationToken).get();
+			if(t.getExpiresAt().isBefore(Instant.now()))
+			{
+				return false;
+			}
+			return  jwtProvider.isTokenValid(authenticationToken);
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	public Token updateAccessToken(String refreshToken)
