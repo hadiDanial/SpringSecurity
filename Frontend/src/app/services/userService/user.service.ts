@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { WebService } from './../webService/web.service';
-import { User } from '../../models/User';
+import { LoginResponse } from 'src/app/models/responses/LoginResponse';
+import { LoginRequest } from 'src/app/models/requests/LoginRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -9,19 +10,17 @@ import { User } from '../../models/User';
 export class UserService {
   
   constructor(private webService: WebService) { }
-  static httpHeaders = new HttpHeaders({
-    "Content-Type": "application/json",
-    'Accept': 'application/json'
-  });
-  
-  URL = "http://localhost:8084/"
+
   login()
   {    
-    this.webService.get<boolean>("user/loginDemo", new Map<string, any>()).subscribe(()=>{})
+    let map = new Map();
+    map.set("username","John");
+    map.set("password","MagicalDaddy69");
+    this.webService.post<LoginResponse>("auth/login", undefined, map).subscribe((response)=>{console.log(response)})
   }
   getAllUsers()
   {
-    this.webService.get<boolean>("user/getAllUsers", new Map<string, any>()).subscribe(()=>{})
+    // this.webService.get<boolean>("user/getAllUsers", new Map<string, any>()).subscribe(()=>{})
   }
 
 }
