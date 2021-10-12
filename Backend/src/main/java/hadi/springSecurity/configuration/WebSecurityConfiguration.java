@@ -83,7 +83,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter
 			.addFilterAt(usernamePasswordAuthFilter, BasicAuthenticationFilter.class);
 		
 		http.csrf().disable(); // lesson 9 // focus on CORS
-//		http.cors();
+		http.cors().disable();
 		http.httpBasic();
 		http.authorizeRequests()
 						.antMatchers(AUTH_WHITELIST).permitAll()	
@@ -93,16 +93,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter
 //						.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 //			            .and().formLogin().disable();
 
-		http.cors(c -> {
-			CorsConfigurationSource cs = r -> {
-				CorsConfiguration cc = new CorsConfiguration();
-				cc.setAllowedOrigins(List.of("*"));
-				cc.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-				return cc;
-			};
-
-			c.configurationSource(cs);
-		});
+//		http.cors(c -> {
+//			CorsConfigurationSource cs = r -> {
+//				CorsConfiguration cc = new CorsConfiguration();
+//				cc.setAllowedOrigins(List.of("*"));
+//				cc.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+//				return cc;
+//			};
+//
+//			c.configurationSource(cs);
+//		});
 	}
 
 	
