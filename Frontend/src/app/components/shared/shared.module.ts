@@ -11,12 +11,14 @@ import { MatListModule } from '@angular/material/list';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from 'src/app/app-routing.module';
+import { ContentComponent } from './content/content.component';
 
 
 @NgModule({
   declarations: [
     LoginComponent,
-    NavigationComponent
+    NavigationComponent,
+    ContentComponent
   ],
   imports: [
     CommonModule,
