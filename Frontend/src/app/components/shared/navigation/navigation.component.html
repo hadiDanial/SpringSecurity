@@ -5,9 +5,9 @@
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#">Link 1</a>
-      <a mat-list-item href="#">Link 2</a>
-      <a mat-list-item href="#">Link 3</a>
+      <a routerLink="home" mat-list-item href="#">Home</a>
+      <a routerLink="search" mat-list-item href="#">Search</a>
+      <a routerLink="login" mat-list-item href="#">Login</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -23,7 +23,6 @@
       <span>Frontend</span>
     </mat-toolbar>
     <!-- <app-drag-and-drop></app-drag-and-drop> -->
-    <router-outlet name="mainRouter"></router-outlet>
-
+    <app-content></app-content>
   </mat-sidenav-content>
 </mat-sidenav-container>
