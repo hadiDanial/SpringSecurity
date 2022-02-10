@@ -17,6 +17,7 @@ import { UserModule } from './components/user/user.module';
 import { SharedModule } from './components/shared/shared.module';
 import { AdminModule } from './components/admin/admin.module';
 import { ManagerModule } from './components/manager/manager.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { ManagerModule } from './components/manager/manager.module';
     AdminModule,
     ManagerModule,
   ],
+  exports: [RouterModule],
   providers: [],
   bootstrap: [AppComponent]
 })

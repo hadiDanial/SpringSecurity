@@ -7,10 +7,12 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+   // outlet: "mainRouter"
   },
   {
     path: 'login',
     component: UserLoginComponent,
+   // outlet: "mainRouter"
   },
   {
     path: '',
