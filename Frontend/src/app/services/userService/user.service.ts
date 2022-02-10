@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { WebService } from './../webService/web.service';
 import { LoginResponse } from 'src/app/models/responses/LoginResponse';
 import { LoginRequest } from 'src/app/models/requests/LoginRequest';
+import { User } from 'src/app/models/entities/User';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class UserService {
   }
   getAllUsers()
   {
-    // this.webService.get<boolean>("user/getAllUsers", new Map<string, any>()).subscribe(()=>{})
+    this.webService.get<User[]>("user/getAllUsers", new Map<string, any>()).subscribe((users)=>{console.log(users)})
   }
 
 }
