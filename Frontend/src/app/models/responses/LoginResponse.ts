@@ -5,13 +5,13 @@ export class LoginResponse
 {
     private _token: Token;
     private _user: User;
-    private message: string;
+    private _message: string;
 
-    constructor(token: Token, user: User, $message: string)
+    constructor(token: Token, user: User, message: string)
     {
         this._token = token;
         this._user = user;
-        this.message = $message;
+        this._message = message;
     }
 
     public get token(): Token
@@ -24,9 +24,9 @@ export class LoginResponse
         return this._user;
     }
 
-    public get $message(): string
+    public get message(): string
     {
-        return this.message;
+        return this._message;
     }
 
     public set token(value: Token)
@@ -39,8 +39,8 @@ export class LoginResponse
         this._user = value;
     }
 
-    public set $message(value: string)
+    public set message(value: string)
     {
-        this.message = value;
+        this._message = value;
     }
 }
