@@ -12,7 +12,6 @@ export class WebService
   readonly ROOT_URL = "http://localhost:8084/"
 
   constructor(private httpClient: HttpClient, private dataService: DataService) { }
-  token: string = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJKb2huIiwiZXhwIjoxNjM0MDczODY5LCJpYXQiOjE2MzQwNzIwNjksImlzcyI6IkhhZGkifQ.6UcP-hEK57gEs6urC3K4DSCpZ2HNoamzoxXZ5JWLEMLOsfynNGB5Q7iHvieIPwhFmAjB7cfxseaPJa1CIBAFgg';
 
   public get<T>(apiRoute: string, headerParams?: Map<string, string>, urlParams?:Map<string, string>) : Observable<T>
   {
@@ -68,11 +67,6 @@ export class WebService
       httpHeaders = httpHeaders.append(key, value);      
     }
     return httpHeaders;
-  }
-
-  getAccessToken()
-  {
-    return this.token;
   }
 
   generateURLParams(urlParams: Map<string, string>)
