@@ -47,4 +47,9 @@ export class Name
     {
         this._middleName = value;
     }
+
+    public toString():string
+    {
+        return this.firstName + " " + ((this.middleName!= undefined)? " " + this.middleName + " " : "") + this.lastName;
+    }
 }
