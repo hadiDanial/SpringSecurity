@@ -2,9 +2,6 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { User } from 'src/app/models/entities/User';
-import { LoginRequest } from 'src/app/models/requests/LoginRequest';
-import { AuthService } from '../authService/auth.service';
 import { DataService } from '../dataService/data.service';
 
 @Injectable({
@@ -32,25 +29,30 @@ export class WebService
   {
     let urlParamsString = (urlParams == undefined) ? "" : this.generateURLParams(urlParams);
     let options = {
-      headers: this.generateHttpHeaders(),
+      headers: this.generateHttpHeaders(headerParams),
       options: null
     };
-    return this.httpClient.post<T>(`${this.ROOT_URL + apiRoute + urlParamsString}`, bodyParams, options).pipe(catchError(this.handleError)); 
+    return this.httpClient.post<T>(`${this.ROOT_URL + apiRoute + urlParamsString}`, bodyParams, options);//.pipe(catchError(this.handleError)); 
   }
 
-  generateHttpHeaders(): HttpHeaders
+  generateHttpHeaders(headerParams?:Map<string, string>): HttpHeaders
   {
     let httpHeaders = new HttpHeaders({
       "Content-Type": "application/json",
       'Accept': 'application/json',
-      'username':'John',
-      'password':'MagicalDaddy69'
     });
-    let token =  this.getAccessToken();
-    if(token != "")
+    if(headerParams != undefined)
     {
-      httpHeaders = httpHeaders.append("accessToken", token);
-    } 
+      headerParams.forEach((value:string, key:string) => {
+        httpHeaders = httpHeaders.append(key, value);        
+      });
+    }
+    console.log(httpHeaders);
+    //let token =  this.getAccessToken();
+    // if(token != "")
+    // {
+    //   httpHeaders = httpHeaders.append("accessToken", token);
+    // } 
     return httpHeaders;
   }
 
