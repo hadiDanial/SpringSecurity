@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "tokens")
-@JsonIgnoreProperties({"id", "createdAt", "updatedAt", "expiresAt"})
+@JsonIgnoreProperties({"id", "createdAt", "updatedAt"})
 public class Token
 {
 	@Id
