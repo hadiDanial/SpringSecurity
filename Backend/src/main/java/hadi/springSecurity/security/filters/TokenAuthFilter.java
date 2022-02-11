@@ -36,7 +36,7 @@ public class TokenAuthFilter extends OncePerRequestFilter
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException
 	{	
-			var accessToken = request.getHeader("accessToken");
+			var accessToken = request.getHeader("Authorization");
 //			var refreshToken = request.getHeader("refreshToken"); 
 			if(accessToken != null) // && refreshToken != null)
 			{

@@ -98,7 +98,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter
 				CorsConfiguration cc = new CorsConfiguration();
 				cc.setAllowedOrigins(List.of("*"));
 				cc.setAllowedMethods(List.of("OPTIONS","GET", "POST", "PUT", "DELETE"));
-				cc.setAllowedHeaders(List.of("Content-Type", "accessToken","Accept", "username", "password"));
+				cc.setAllowedHeaders(List.of("Content-Type", "Authorization","Accept", "username", "password"));
 				return cc;
 			};
 
