@@ -18,6 +18,8 @@ public class Properties
 	private String jwtSecret;
 	@Value("${jwt.issuer}")
 	private String jwtIssuer;
+	@Value("${auth.max-concurrent-logins}")
+	private int maxConcurrentLogins;
 	
 	public int getCredentialExpirationDays()
 	{
@@ -42,6 +44,11 @@ public class Properties
 	public String getJwtIssuer()
 	{
 		return jwtIssuer;
+	}
+
+	public int getMaxConcurrentLogins()
+	{
+		return maxConcurrentLogins;
 	}
 	
 	

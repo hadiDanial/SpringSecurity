@@ -23,5 +23,10 @@
     "name": "jwt.issuer",
     "type": "java.lang.String",
     "description": "Name of the issuer of the JWT."
+  },
+  {
+    "name": "auth.max-concurrent-logins",
+    "type": "java.lang.String",
+    "description": "Maximum number of logins allowed at the same time."
   }
 ]}
