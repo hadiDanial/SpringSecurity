@@ -8,17 +8,22 @@ import { WebService } from '../webService/web.service';
 })
 export class AuthService {
   
-  readonly PATH_URL = "/auth";
-  
+  readonly PATH_URL = "auth";
   constructor(private webService: WebService) { }
+  loginResponse : LoginResponse | undefined;
   
   public login(loginRequest: LoginRequest)
   {
+    // if(this.loginResponse != undefined)
+    //   return;
+    localStorage.clear();
     let map = new Map<string, any>();
     map.set("loginRequest", loginRequest);
     this.webService.post<LoginResponse>(this.PATH_URL + "/login", map).subscribe(response=>
       {
-        
+        console.log("Login message: " + response.$message);
+        this.loginResponse = response;
+        localStorage.setItem("token",response.token.accessToken);
       });
     }
 

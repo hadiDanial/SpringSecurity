@@ -4,20 +4,19 @@ import { WebService } from './../webService/web.service';
 import { LoginResponse } from 'src/app/models/responses/LoginResponse';
 import { LoginRequest } from 'src/app/models/requests/LoginRequest';
 import { User } from 'src/app/models/entities/User';
+import { AuthService } from '../authService/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  
-  constructor(private webService: WebService) { }
 
-  login()
+  constructor(private webService: WebService, private authService: AuthService) { }
+
+  login(username:string, password:string)
   {    
-    let map = new Map();
-    map.set("username","John");
-    map.set("password","MagicalDaddy69");
-    this.webService.post<LoginResponse>("auth/login", undefined, map).subscribe((response)=>{console.log(response)})
+    let req = new LoginRequest(username, password);
+    this.authService.login(req);
   }
   getAllUsers()
   {
