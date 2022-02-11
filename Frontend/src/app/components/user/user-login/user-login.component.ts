@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/models/entities/User';
@@ -11,7 +11,7 @@ import { UserService } from 'src/app/services/userService/user.service';
   templateUrl: './user-login.component.html',
   styleUrls: ['./user-login.component.scss']
 })
-export class UserLoginComponent implements OnInit
+export class UserLoginComponent implements OnInit, OnDestroy
 {
   password:string="";
   username:string="";
@@ -33,6 +33,7 @@ export class UserLoginComponent implements OnInit
       {
         this.currentUser = currentUser;
         let equals = this.currentUser.equals(User.getDefaultUser());
+        this.isLoggedIn = (!currentUser.equals(User.getDefaultUser()));
         if(!this.isLoggedIn && this.triedToLogin)
         {
           if(equals) // Error
@@ -60,6 +61,10 @@ export class UserLoginComponent implements OnInit
         console.log("Is logged in: " + this.isLoggedIn);
       })
   }
+  ngOnDestroy(): void
+  {
+    this.userSubscription.unsubscribe();
+  }
 
   updateUsername(username: any)  
   {
@@ -76,9 +81,13 @@ export class UserLoginComponent implements OnInit
     let req = new LoginRequest(this.username, this.password);
     this.triedToLogin = true;
     this.authService.login(req);
-
-
   }
+
+  logout()
+  {
+    this.authService.logout();
+  }
+
   getAllUsers()
   {
     this.userService.getAllUsers();

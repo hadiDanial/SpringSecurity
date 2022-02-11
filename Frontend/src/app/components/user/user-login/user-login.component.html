@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="!isLoggedIn">
 
     <form action="login" method="post">
         <legend>Sign in</legend>
@@ -12,3 +12,4 @@
 </div>
 
 <Button (click)="getAllUsers()">GetAllUsers</Button>
+<Button (click)="logout()">Sign out</Button>
