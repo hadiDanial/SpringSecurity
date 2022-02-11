@@ -22,8 +22,8 @@ import { ManagerModule } from './components/manager/manager.module';
 import { RouterModule } from '@angular/router';
 import { MarkdownPipe } from './pipes/markdownPipe/markdown.pipe';
 import { httpInterceptorProviders } from './interceptors';
+import { CommonModule } from '@angular/common';  
 
-//import { AuthInterceptor } from './interceptors/auth.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +33,7 @@ import { httpInterceptorProviders } from './interceptors';
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
