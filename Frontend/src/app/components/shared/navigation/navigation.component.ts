@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { UserService } from 'src/app/services/userService/user.service';
+import { User } from 'src/app/models/entities/User';
 
 @Component({
   selector: 'app-navigation',
@@ -9,13 +11,21 @@ import { map, shareReplay } from 'rxjs/operators';
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent {
-
+  userSubscription: Subscription = new Subscription();
+  currentUser : User = User.getDefaultUser();
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches),
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
-
+  constructor(private breakpointObserver: BreakpointObserver, private userService: UserService) {}
+  ngOnInit(): void
+  {
+    this.userSubscription = this.userService.currentUser.subscribe(currentUser => 
+      {
+        this.currentUser = currentUser;
+      });
+  }
+  
 }
