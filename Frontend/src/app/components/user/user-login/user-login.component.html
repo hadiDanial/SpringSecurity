@@ -1,10 +1,14 @@
-<form action="login" method="post">
-    <legend>Sign in</legend>
-    <label for="username">Username:</label>
-    <input matInput placeholder="Username" (change)="updateUsername($event)" type="text" name="username">
-    <label for="password">Password:</label>
-    <input matInput placeholder="Password" (change)="updatePassword($event)" type="password" name="password">
-</form>
-<Button (click)="login()">Login</Button>
+<div>
+
+    <form action="login" method="post">
+        <legend>Sign in</legend>
+        <label>{{currentMessage}}</label><br>
+        <label for="username">Username:</label>
+        <input matInput placeholder="Username" (change)="updateUsername($event)" type="text" name="username">
+        <label for="password">Password:</label>
+        <input matInput placeholder="Password" (change)="updatePassword($event)" type="password" name="password">
+    </form>
+    <Button (click)="login()">Login</Button>
+</div>
 
 <Button (click)="getAllUsers()">GetAllUsers</Button>
