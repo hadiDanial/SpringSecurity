@@ -1,6 +1,7 @@
 package hadi.springSecurity.services;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,6 +9,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import hadi.springSecurity.configuration.Properties;
 import hadi.springSecurity.exceptions.TokenException;
 import hadi.springSecurity.models.entities.Token;
 import hadi.springSecurity.models.entities.User;
@@ -24,14 +26,17 @@ public class AuthenticationService
 	private final UserService userService;
 	private final TokenService tokenService;
 	private final PasswordEncoder passwordEncoder;
+	private final Properties properties;
 
 	@Autowired
-	public AuthenticationService(UserService userService, TokenService tokenService, PasswordEncoder passwordEncoder)
+	public AuthenticationService(UserService userService, TokenService tokenService, 
+								 PasswordEncoder passwordEncoder, Properties properties)
 	{
 		super();
 		this.userService = userService;
 		this.passwordEncoder = passwordEncoder;
 		this.tokenService = tokenService;
+		this.properties = properties;
 	}
 
 	public LoginResponse login(LoginRequest loginRequest)
@@ -39,6 +44,12 @@ public class AuthenticationService
 		User user = isValidUser(loginRequest);
 		userService.updateLastLoginDate(user);
 		Token token = tokenService.generateToken(user);
+		List<Token> userTokens = tokenService.findAllByUsername(user.getUsername());
+		while(userTokens.size() > properties.getMaxConcurrentLogins())
+		{
+			tokenService.deleteToken(userTokens.get(0));
+			userTokens.remove(0);
+		}
 		LoginResponse response = new LoginResponse(token, user, "Logged in successfully.");
 		return response;
 	}
