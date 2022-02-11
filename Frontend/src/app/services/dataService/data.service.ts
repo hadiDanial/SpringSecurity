@@ -8,9 +8,5 @@ import { Name } from 'src/app/models/other/Name';
 export class DataService {
 
   constructor() { }
-  getActiveUser(): User
-  {
-    let user = new User("John", "MagicalDaddy69", new Name("John", "Constantine"));
-    return user;
-  }
+
 }
