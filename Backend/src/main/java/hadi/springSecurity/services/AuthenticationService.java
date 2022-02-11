@@ -77,7 +77,7 @@ public class AuthenticationService
 
 	public void logout(String refreshToken)
 	{
-		tokenService.deleteToken(refreshToken);
+		tokenService.deleteTokenByAccessToken(refreshToken);
 	}
 
 	public TokenResponse validate(ValidateTokenRequest validateTokenRequest)
@@ -115,9 +115,20 @@ public class AuthenticationService
 		return tokenService.isValidAuthToken(token);
 	}
 
-	public User getUserFromToken(String refreshToken)
+	public User getUserFromRefreshToken(String refreshToken)
 	{
-		String username = tokenService.getUsernameFromToken(refreshToken);
+		Token token = tokenService.findTokenByRefreshToken(refreshToken);
+		if(token != null)
+		{
+			String username = token.getUsername();
+			User user = userService.findUserByUsername(username);
+			return user;			
+		}
+		return null;
+	}
+	public User getUserFromAccessToken(String accessToken)
+	{
+		String username = tokenService.getUsernameFromToken(accessToken);
 		User user = userService.findUserByUsername(username);
 		return user;
 	}

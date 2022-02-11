@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hadi.springSecurity.exceptions.TokenException;
 import hadi.springSecurity.models.entities.Token;
+import hadi.springSecurity.models.entities.User;
 import hadi.springSecurity.models.requests.LoginRequest;
 import hadi.springSecurity.models.requests.ValidateTokenRequest;
 import hadi.springSecurity.models.responses.LoginResponse;
@@ -36,8 +38,7 @@ public class AuthenticationController
 
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> login(@RequestHeader("username") String username,
-			@RequestHeader("password") String password) // Header
-//	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) // Body
+			@RequestHeader("password") String password)
 	{
 		if(username == null || password == null)
 		{			
@@ -61,12 +62,25 @@ public class AuthenticationController
 		return response;
 	}
 	
+	@GetMapping("/getUserByToken")
+	public ResponseEntity<User> getUserByToken(@RequestHeader("Authorization") String Authorization)
+	{
+		if(Authorization == null)
+		{			
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		User user = authService.getUserFromAccessToken(Authorization);
+		if(user != null)
+			return new ResponseEntity<User>(user, HttpStatus.OK);
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+	}
+	
 	@PostMapping("/logout")
-	public ResponseEntity<Void> logout(String refreshToken) // Params
+	public ResponseEntity<Void> logout(@RequestHeader("Authorization") String Authorization) 
 	{
 		try
 		{
-			authService.logout(refreshToken);
+			authService.logout(Authorization);
 			return ResponseEntity.ok(null);
 		} catch (Exception e)
 		{

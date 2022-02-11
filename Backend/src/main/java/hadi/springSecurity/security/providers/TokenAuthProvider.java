@@ -41,7 +41,7 @@ public class TokenAuthProvider implements AuthenticationProvider
 //			authenticationService.isValidAuthToken(refreshToken);
 			if(authenticationService.isValidAuthToken(accessToken))
 			{
-				User user = authenticationService.getUserFromToken(accessToken);
+				User user = authenticationService.getUserFromAccessToken(accessToken);
 				SecurityUser securityUser = new SecurityUser(user);
 				if(!securityUser.isAccountNonLocked())
 				{

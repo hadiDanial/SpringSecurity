@@ -93,23 +93,34 @@ public class TokenService
 		return token;
 	}
 
-	private Token findTokenByRefreshToken(String refreshToken)
+	public Token findTokenByRefreshToken(String refreshToken)
 	{
 		Token token = tokenRepository.findByRefreshToken(refreshToken)
 				.orElseThrow(() -> new TokenException("Token not found by refresh token"));
 		return token;
 	}
+	public Token findTokenByAccessToken(String accessToken)
+	{
+		Token token = tokenRepository.findByAccessToken(accessToken)
+				.orElseThrow(() -> new TokenException("Token not found by access token"));
+		return token;
+	}
 
-	private Token findTokenByUsername(String username)
+	public Token findTokenByUsername(String username)
 	{
 		Token token = tokenRepository.findByUsername(username)
 				.orElseThrow(() -> new TokenException("Token not found by username"));
 		return token;
 	}
 
-	public void deleteToken(String refreshToken)
+	public void deleteTokenByRefreshToken(String refreshToken)
 	{
 		Token token = findTokenByRefreshToken(refreshToken);
+		tokenRepository.delete(token);
+	}
+	public void deleteTokenByAccessToken(String accessToken)
+	{
+		Token token = findTokenByAccessToken(accessToken);
 		tokenRepository.delete(token);
 	}
 
