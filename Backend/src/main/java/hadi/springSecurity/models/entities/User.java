@@ -193,14 +193,9 @@ public class User
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
-		result = prime * result + ((credentials == null) ? 0 : credentials.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + (isEnabled ? 1231 : 1237);
-		result = prime * result + (isLocked ? 1231 : 1237);
-		result = prime * result + ((lastLoginDate == null) ? 0 : lastLoginDate.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
