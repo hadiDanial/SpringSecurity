@@ -48,7 +48,8 @@ public class UsernamePasswordAuthFilter extends OncePerRequestFilter
 				session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
 			} catch (AuthenticationException e)
 			{
-				response.addHeader("message", e.getMessage());
+				response.addHeader("Message", e.getMessage());
+				//response.addHeader("Access-Control-Expose-Headers", "accept, authorization, content-type, x-requested-with, jwt");
 				response.setStatus(401);
 			}
 		}
