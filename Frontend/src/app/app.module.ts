@@ -20,11 +20,13 @@ import { SharedModule } from './components/shared/shared.module';
 import { AdminModule } from './components/admin/admin.module';
 import { ManagerModule } from './components/manager/manager.module';
 import { RouterModule } from '@angular/router';
+import { MarkdownPipe } from './pipes/markdownPipe/markdown.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
+    MarkdownPipe,
     
   ],
   imports: [
