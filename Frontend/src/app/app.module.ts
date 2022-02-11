@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -21,7 +21,9 @@ import { AdminModule } from './components/admin/admin.module';
 import { ManagerModule } from './components/manager/manager.module';
 import { RouterModule } from '@angular/router';
 import { MarkdownPipe } from './pipes/markdownPipe/markdown.pipe';
+import { httpInterceptorProviders } from './interceptors';
 
+//import { AuthInterceptor } from './interceptors/auth.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,6 +49,7 @@ import { MarkdownPipe } from './pipes/markdownPipe/markdown.pipe';
     UserModule,
     AdminModule,
     ManagerModule,
+    
   ],
   exports: [
     RouterModule,
@@ -57,8 +60,11 @@ import { MarkdownPipe } from './pipes/markdownPipe/markdown.pipe';
     MatListModule,
     MatInputModule,
     MatFormFieldModule,
+    
     ],
-  providers: [],
+  providers: [
+    httpInterceptorProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
