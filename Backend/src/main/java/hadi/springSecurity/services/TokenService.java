@@ -1,6 +1,7 @@
 package hadi.springSecurity.services;
 
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -157,6 +158,24 @@ public class TokenService
 		{
 			return true;
 		}
+	}
+
+	/**
+	 * Return all tokens for any given user, sorted by creation date.
+	 * @param username
+	 * @return
+	 */
+	public List<Token> findAllByUsername(String username)
+	{
+		List<Token> tokens = tokenRepository.findAllByUsername(username);
+		tokens.sort(new Comparator<Token>() {
+			@Override
+			public int compare(Token t1, Token t2)
+			{
+				return t1.getCreatedAt().compareTo(t2.getCreatedAt());
+			}
+		});
+		return tokens;
 	}
 
 }
