@@ -22,7 +22,7 @@ import hadi.springSecurity.services.UserService;
 
 @RestController
 @RequestMapping(path = "/user")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200/")
 public class UserController
 {
 	private final UserService userService;
