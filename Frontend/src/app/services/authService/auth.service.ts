@@ -45,7 +45,6 @@ export class AuthService {
       console.log("Status: " + httpError.status);
       this.userService.changeUser(User.getDefaultUser());
       // TODO: Alert, add generic error handler
-      alert("Failed to login!");
     }, "Failed to log in, try again.")
     }
 
