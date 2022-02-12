@@ -1,10 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/models/entities/User';
 import { LoginRequest } from 'src/app/models/requests/LoginRequest';
 import { AuthService } from 'src/app/services/authService/auth.service';
 import { UserService } from 'src/app/services/userService/user.service';
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-user-login',
@@ -24,7 +25,13 @@ export class UserLoginComponent implements OnInit, OnDestroy
   currentMessage = "";
   userSubscription: Subscription = new Subscription();
   currentUser : User = this.userService.user;
+  firstName = "";
+  lastName = "";
+  email = "";
+  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+  
   constructor(private userService: UserService, private authService:AuthService, private router: Router) { }
+
 
   ngOnInit(): void
   {
@@ -55,10 +62,8 @@ export class UserLoginComponent implements OnInit, OnDestroy
           if(!equals)
           {
             console.log("Not equals");
-            //this.isLoggedIn = true;
           }
         }
-        console.log("Is logged in: " + this.isLoggedIn);
       })
   }
   ngOnDestroy(): void
@@ -90,6 +95,8 @@ export class UserLoginComponent implements OnInit, OnDestroy
 
   getAllUsers()
   {
+    console.log("Name: " + this.firstName + " " + this.lastName + ", E-mail: " + this.email);
+
     this.userService.getAllUsers();
   }
 }

@@ -13,9 +13,26 @@
   
   <tr>
     <td colspan="2">      
-      <app-text-area inputName="blah" placeholder="???"></app-text-area>
+      <app-double-password></app-double-password>
     </td>
   </tr>
   
   </table>
-</form>
+
+    <table class="full-width" cellspacing="0"><tr>
+      <td><mat-form-field class="full-width" appearance="fill">
+        <mat-label>City</mat-label>
+        <input matInput placeholder="Ex. San Francisco">
+      </mat-form-field></td>
+      <td><mat-form-field class="full-width" appearance="fill">
+        <mat-label>State</mat-label>
+        <input matInput placeholder="Ex. California">
+      </mat-form-field></td>
+      <td><mat-form-field class="full-width" appearance="fill">
+        <mat-label>Postal Code</mat-label>
+        <input matInput #postalCode maxlength="5" placeholder="Ex. 94105" value="94043">
+        <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
+      </mat-form-field></td>
+    </tr></table>
+  </form>
+  
