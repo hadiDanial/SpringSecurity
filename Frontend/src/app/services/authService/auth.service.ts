@@ -4,6 +4,7 @@ import { User } from 'src/app/models/entities/User';
 import { Name } from 'src/app/models/other/Name';
 import { LoginRequest } from 'src/app/models/requests/LoginRequest';
 import { LoginResponse } from 'src/app/models/responses/LoginResponse';
+import { AlertService } from '../alertService/alert.service';
 import { UserService } from '../userService/user.service';
 import { WebService } from '../webService/web.service';
 
@@ -11,22 +12,8 @@ import { WebService } from '../webService/web.service';
   providedIn: 'root'
 })
 export class AuthService {
-
-
-  getUserByToken()
-  {
-    this.webService.get<User>(this.PATH_URL+"/getUserByToken").subscribe(user=>{
-      let newUser = this.dataToUser(user);
-      this.userService.changeUser(newUser);
-    }, error=>
-    {
-      alert("Failed to get user by token, clearing storage");
-      this.removeTokenDataFromStorage();
-    });
-  }
-
   readonly PATH_URL = "auth";
-  constructor(private webService: WebService, private userService: UserService) { }
+  constructor(private webService: WebService, private userService: UserService, private alertService:AlertService) { }
   loginResponse : LoginResponse | undefined;
   
   public login(loginRequest: LoginRequest)
@@ -39,9 +26,9 @@ export class AuthService {
     map.set("username", loginRequest.username);
     map.set("password", loginRequest.password);
     let obs = this.webService.post<LoginResponse>(this.PATH_URL + "/login",undefined, map);
-    obs.subscribe(response=>
-      {
-        console.log("Login message: " + response.message);
+    this.alertService.loadingMenu<LoginResponse,HttpErrorResponse>("Logging in...",obs,(response:LoginResponse)=>
+    {
+      console.log("Login message: " + response.message);
         this.loginResponse = response;
         message = response.message;
         console.log(message);
@@ -51,29 +38,41 @@ export class AuthService {
         localStorage.setItem("token",response.token.accessToken);
         localStorage.setItem("refreshToken", response.token.refreshToken);
         localStorage.setItem("tokenExpiration", response.token.expiresAt+'');
-      },
-      error=>
-      {
-        let httpError : (HttpErrorResponse)  = error;
-        let headers = httpError.headers;
-        console.log("Status: " + httpError.status);
-        this.userService.changeUser(User.getDefaultUser());
-        // TODO: Alert, add generic error handler
-        alert("Failed to login!");
-      });
+    }, "Logged in succeessfully.",
+    (error:HttpErrorResponse)=>{
+      let httpError : (HttpErrorResponse)  = error;
+      let headers = httpError.headers;
+      console.log("Status: " + httpError.status);
+      this.userService.changeUser(User.getDefaultUser());
+      // TODO: Alert, add generic error handler
+      alert("Failed to login!");
+    }, "Failed to log in, try again.")
     }
 
+    /**
+     * Get the user data from the server by using the token.
+     */
+    getUserByToken()
+    {
+      this.webService.get<User>(this.PATH_URL+"/getUserByToken").subscribe(user=>{
+        let newUser = this.dataToUser(user);
+        this.userService.changeUser(newUser);
+      }, error=>
+      {
+        alert("Failed to get user by token, clearing storage");
+        this.removeTokenDataFromStorage();
+      });
+    }
+  
 
   public logout()
   {
-    this.webService.post<void>(this.PATH_URL+"/logout").subscribe(()=>{
+    let obs = this.webService.post<void>(this.PATH_URL+"/logout")
+    this.alertService.loadingMenu("Logging out...",obs,()=>{
       this.removeTokenDataFromStorage();
       
-    }, error=>
-    {
-      //this.removeTokenDataFromStorage();
-      alert("Failed to log out!");
-    });
+    },"Logged out successfully", ()=>  { },//this.removeTokenDataFromStorage();  // Probably a bad idea to delete locally without deleting from the server as well...
+    "Failed to log out, please try again.");
   }
   
   private removeTokenDataFromStorage()
