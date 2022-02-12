@@ -1,12 +1,16 @@
 package hadi.springSecurity.models.embeddables;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Size;
 
 @Embeddable
 public class Name
 {
+	@Size(min = 2, max = 16)
 	private String firstName;
+	@Size(min = 0, max = 16)
 	private String middleName;
+	@Size(min = 2, max = 16)
 	private String lastName;
 	
 	
