@@ -20,7 +20,8 @@ import { ContentComponent } from './components/shared/content/content.component'
 import { UserLoginComponent } from './components/user/user-login/user-login.component';
 import { UserSignupComponent } from './components/user/user-signup/user-signup.component';
 import { PasswordComponent } from './components/shared/inputs/forms/password/password.component';
-
+import { DoublePasswordComponent } from './components/shared/inputs/forms/double-password/double-password.component';
+import { matchingPasswordsValidator } from './components/shared/inputs/forms/double-password/matchingPasswordsValidator'
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +33,7 @@ import { PasswordComponent } from './components/shared/inputs/forms/password/pas
     inputImports,
     UserSignupComponent,
     PasswordComponent,
-    
+    DoublePasswordComponent,
   ],
   imports: [
     BrowserModule,
