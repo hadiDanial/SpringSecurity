@@ -58,7 +58,7 @@ export class AuthService {
         this.userService.changeUser(newUser);
       }, error=>
       {
-        alert("Failed to get user by token, clearing storage");
+        this.alertService.alert("Please sign in again.", 2500, true, 'top-end','warning')
         this.removeTokenDataFromStorage();
       });
     }
