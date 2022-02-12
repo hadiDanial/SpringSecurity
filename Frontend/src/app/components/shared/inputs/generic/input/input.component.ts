@@ -33,5 +33,9 @@ export class InputComponent{
   inputFormControl = new FormControl('', [Validators.pattern((this.allowAllCharacters?'.*':'[a-zA-Z ]*')),Validators.minLength(this.min), Validators.maxLength(this.max)]);
 
   constructor() { }
-
+  onValueChanged(val:string)
+  {
+    this.value = val;
+    this.onChange.emit(this.value);
+  }
 }
