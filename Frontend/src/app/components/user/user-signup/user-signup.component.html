@@ -1,0 +1,21 @@
+<form class="standard-form center">
+    <mat-label>Sign Up</mat-label>
+    
+    <table class="full-width" cellspacing="0"><tr>        
+      <td><app-input inputName="First Name" placeholder="Enter First Name..." (onChange)="this.firstName=$event"></app-input></td>
+      <td><app-input inputName="Last Name" placeholder="Enter Last Name..." (onChange)="this.lastName=$event"></app-input></td>
+    </tr>
+  <tr>
+    <td colspan="2">      
+      <app-email (onChange)="this.email=$event"></app-email>
+    </td>
+  </tr>
+  
+  <tr>
+    <td colspan="2">      
+      <app-text-area inputName="blah" placeholder="???"></app-text-area>
+    </td>
+  </tr>
+  
+  </table>
+</form>

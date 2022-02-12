@@ -18,6 +18,8 @@ import { inputImports } from './components/shared/sharedImports';
 import { NavigationComponent } from './components/shared/navigation/navigation.component';
 import { ContentComponent } from './components/shared/content/content.component';
 import { UserLoginComponent } from './components/user/user-login/user-login.component';
+import { UserSignupComponent } from './components/user/user-signup/user-signup.component';
+import { PasswordComponent } from './components/shared/inputs/forms/password/password.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { UserLoginComponent } from './components/user/user-login/user-login.comp
     NavigationComponent,
     ContentComponent,
     UserLoginComponent,
-    inputImports
+    inputImports,
+    UserSignupComponent,
+    PasswordComponent,
     
   ],
   imports: [
