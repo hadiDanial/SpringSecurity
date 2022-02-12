@@ -131,6 +131,7 @@ public class TokenService
 			Token t = tokenRepository.findByAccessToken(authenticationToken).get();
 			if(t.getExpiresAt().isBefore(Instant.now()))
 			{
+				tokenRepository.delete(t);
 				return false;
 			}
 			return  jwtProvider.isTokenValid(authenticationToken);
