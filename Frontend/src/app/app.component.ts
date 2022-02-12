@@ -15,13 +15,11 @@ export class AppComponent implements OnInit, OnDestroy{
   constructor(private userService: UserService, private authService: AuthService){}
   ngOnInit(): void
   {
-    setTimeout(()=> {
-      let token = this.authService.getToken();
-      if(token)
-      {
-        this.authService.getUserByToken();
-      }
-  }, 500);
+    let token = this.authService.getToken();
+    if(token)
+    {
+      this.authService.getUserByToken();
+    }
     this.userSubscription = this.userService.currentUser.subscribe(currentUser => 
       {
         this.currentUser = currentUser;
