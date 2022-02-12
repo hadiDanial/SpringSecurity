@@ -126,13 +126,13 @@ export class AlertService {
        showCancelButton: false,
        didOpen: (login)=>{
          Swal.showLoading();
-         obs.subscribe((result)=>
+         obs.subscribe((result:T)=>
           {
              successCallback(result);
              res = true;
              Swal.hideLoading();
              Swal.close();
-            }, error=>{
+            }, (error:R)=>{
               res = false;
               failureCallback(error);
               Swal.hideLoading();
