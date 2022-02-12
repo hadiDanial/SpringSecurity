@@ -1,18 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HomeComponent } from './pages/home/home.component';
 import { UserModule } from './components/user/user.module';
@@ -23,6 +15,7 @@ import { RouterModule } from '@angular/router';
 import { MarkdownPipe } from './pipes/markdownPipe/markdown.pipe';
 import { httpInterceptorProviders } from './interceptors';
 import { CommonModule } from '@angular/common';  
+import { materialImports } from './materialIndex';
 
 @NgModule({
   declarations: [
@@ -38,31 +31,18 @@ import { CommonModule } from '@angular/common';
     HttpClientModule,
     BrowserAnimationsModule,
     LayoutModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatInputModule,
-    MatFormFieldModule,
     DragDropModule,
     SharedModule,
     UserModule,
     AdminModule,
     ManagerModule,
+    materialImports,
     
   ],
   exports: [
     RouterModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatInputModule,
-    MatFormFieldModule,
-    
-    ],
+    materialImports,  
+  ],
   providers: [
     httpInterceptorProviders
   ],
