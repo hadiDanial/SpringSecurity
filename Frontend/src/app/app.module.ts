@@ -7,8 +7,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HomeComponent } from './pages/home/home.component';
-import { UserModule } from './components/user/user.module';
-import { SharedModule } from './components/shared/shared.module';
 import { AdminModule } from './components/admin/admin.module';
 import { ManagerModule } from './components/manager/manager.module';
 import { RouterModule } from '@angular/router';
@@ -16,12 +14,20 @@ import { MarkdownPipe } from './pipes/markdownPipe/markdown.pipe';
 import { httpInterceptorProviders } from './interceptors';
 import { CommonModule } from '@angular/common';  
 import { materialImports } from './materialIndex';
+import { inputImports } from './components/shared/sharedImports';
+import { NavigationComponent } from './components/shared/navigation/navigation.component';
+import { ContentComponent } from './components/shared/content/content.component';
+import { UserLoginComponent } from './components/user/user-login/user-login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     MarkdownPipe,
+    NavigationComponent,
+    ContentComponent,
+    UserLoginComponent,
+    inputImports
     
   ],
   imports: [
@@ -32,8 +38,6 @@ import { materialImports } from './materialIndex';
     BrowserAnimationsModule,
     LayoutModule,
     DragDropModule,
-    SharedModule,
-    UserModule,
     AdminModule,
     ManagerModule,
     materialImports,
