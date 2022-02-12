@@ -9,7 +9,7 @@ import { ControlContainer, NgForm } from '@angular/forms';
   viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
 })
 
-export class EmailComponent implements OnChanges {
+export class EmailComponent{
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   value: string = "";
   @Input()
@@ -17,13 +17,14 @@ export class EmailComponent implements OnChanges {
   @Output()
   onChange : EventEmitter<string> = new EventEmitter();
   constructor() { }
-  ngOnChanges(changes: SimpleChanges): void
+
+  
+  onEmailChanged()
   {
     if(this.emailFormControl.valid)
     {
+      this.value = this.emailFormControl.value;
       this.onChange.emit(this.value);
-    }
+    }  
   }
-
-
 }
