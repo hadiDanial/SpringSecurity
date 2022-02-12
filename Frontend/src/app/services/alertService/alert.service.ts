@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import swal, { SweetAlertOptions } from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +36,7 @@ export class AlertService {
           }
     } as SweetAlertOptions;
 
-    swal.fire(options).then((result) =>
+    Swal.fire(options).then((result) =>
     {
       if (result.value)
       {
@@ -48,10 +48,10 @@ export class AlertService {
             text: successMessage,
             icon: 'success'
           } as SweetAlertOptions;
-          swal.fire(successOptions);
+          Swal.fire(successOptions);
         }
       }
-      else if (result.dismiss === swal.DismissReason.cancel)
+      else if (result.dismiss === Swal.DismissReason.cancel)
       {
         failureCallback();
         if (!(failureTitle == "" && failureMessage == ""))
@@ -61,7 +61,7 @@ export class AlertService {
             text: failureMessage,
             icon: 'error'
           } as SweetAlertOptions;
-          swal.fire(failureOptions);
+          Swal.fire(failureOptions);
         }
       } else
       {
@@ -89,7 +89,7 @@ export class AlertService {
       timer: timer
     } as SweetAlertOptions;
     
-    swal.fire(options);
+    Swal.fire(options);
   }
   /**
    * 
@@ -109,32 +109,50 @@ export class AlertService {
        timer: timer
      } as SweetAlertOptions;
      
-     swal.fire(options).then((result)=>
+     Swal.fire(options).then((result)=>
      {
 
          successCallback();
        
      });
    }
-   loadingMenu(message: string, obs: Observable<boolean>, successCallback: Function, failureCallback: Function)
+   loadingMenu<T,R>(message: string, obs: Observable<any>, successCallback: Function, successText: string, 
+                                                          failureCallback: Function, failureText: string, resultTimer:number = 2500)
    {
-     swal.fire({
+     let res = false;
+     Swal.fire({
        text: message,
-       allowOutsideClick: false,
        showCloseButton: false,
-       onBeforeOpen: () =>
-       {
-         swal.showLoading()
-         obs.subscribe(() =>
+       showCancelButton: false,
+       didOpen: (login)=>{
+         Swal.showLoading();
+         obs.subscribe((result)=>
+          {
+             successCallback(result);
+             res = true;
+             Swal.hideLoading();
+             Swal.close();
+            }, error=>{
+              res = false;
+              failureCallback(error);
+              Swal.hideLoading();
+              Swal.close();
+          });
+        },
+        allowOutsideClick: ()=>!Swal.isLoading(),     
+       }).then(()=>
          {
-           successCallback();
-         },
-           () =>
+           if(res)
            {
-             failureCallback();
-           })
-       }
-     } as SweetAlertOptions);
+             this.alert(successText,resultTimer,false,'center','success');
+            }
+            else
+            {
+             this.alert(failureText,resultTimer,false,'center','error');
+
+           }
+         }
+       );
    }
  
  }
