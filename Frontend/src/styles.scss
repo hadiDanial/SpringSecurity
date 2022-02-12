@@ -76,7 +76,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   filter:brightness(150%);
   opacity: 0.8;
 }
-
+.smaller{
+  font-size: smaller;
+}
 
 td {
   padding-right: 8px;
