@@ -5,6 +5,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatListModule } from "@angular/material/list";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 /** Angular Material imports */
 export const materialImports = [
@@ -15,4 +16,6 @@ export const materialImports = [
     MatListModule,
     MatInputModule,
     MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
 ];
