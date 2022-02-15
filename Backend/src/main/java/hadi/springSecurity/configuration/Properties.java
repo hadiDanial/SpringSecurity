@@ -20,6 +20,10 @@ public class Properties
 	private String jwtIssuer;
 	@Value("${auth.max-concurrent-logins}")
 	private int maxConcurrentLogins;
+	@Value("${mail.from}")
+	private String mailFrom;
+	@Value("${mail.signature}")
+	private String mailSignature;
 	
 	public int getCredentialExpirationDays()
 	{
@@ -50,6 +54,14 @@ public class Properties
 	{
 		return maxConcurrentLogins;
 	}
-	
-	
+
+	public String getMailFrom()
+	{
+		return mailFrom;
+	}
+
+	public String getMailSignature()
+	{
+		return mailSignature;
+	}
 }
