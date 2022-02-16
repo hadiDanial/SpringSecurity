@@ -10,5 +10,6 @@ import hadi.springSecurity.models.entities.User;
 public interface UserRepository extends JpaRepository<User,Long>
 {
 	Optional<User> findUserByUsername(String username);
+	Optional<User> findUserByUsernameIgnoreCase(String username);
 	boolean existsByUsername(String username);
 }
