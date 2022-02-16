@@ -4,8 +4,11 @@ import java.time.Instant;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,19 +42,35 @@ public class AuthenticationService
 		this.properties = properties;
 	}
 
-	public LoginResponse login(LoginRequest loginRequest)
+	public ResponseEntity<LoginResponse> login(LoginRequest loginRequest)
 	{
-		User user = isValidUser(loginRequest);
-		userService.updateLastLoginDate(user);
-		Token token = tokenService.generateToken(user);
-		List<Token> userTokens = tokenService.findAllByUsername(user.getUsername());
-		while(userTokens.size() > properties.getMaxConcurrentLogins())
-		{
-			tokenService.deleteToken(userTokens.get(0));
-			userTokens.remove(0);
+		ResponseEntity<LoginResponse> response;
+		try {
+			User user = isValidUser(loginRequest);
+			userService.updateLastLoginDate(user);
+			Token token = tokenService.generateToken(user);
+			List<Token> userTokens = tokenService.findAllByUsername(user.getUsername());
+			while(userTokens.size() > properties.getMaxConcurrentLogins())
+			{
+				tokenService.deleteToken(userTokens.get(0));
+				userTokens.remove(0);
+			}
+			LoginResponse loginResponse = new LoginResponse(token, user, "Logged in successfully.");
+			response = new ResponseEntity<>(loginResponse, HttpStatus.OK);
+			return response;			
 		}
-		LoginResponse response = new LoginResponse(token, user, "Logged in successfully.");
-		return response;
+		catch(BadCredentialsException e)
+		{
+			LoginResponse loginResponse = new LoginResponse(null, null, e.getMessage());
+			response = new ResponseEntity<>(loginResponse, HttpStatus.UNAUTHORIZED);
+			return response;
+		}
+		catch(CredentialsExpiredException e)
+		{
+			LoginResponse loginResponse = new LoginResponse(null, null, e.getMessage());
+			response = new ResponseEntity<>(loginResponse, HttpStatus.FORBIDDEN);
+			return response;
+		}
 	}
 
 	/**
@@ -70,7 +89,10 @@ public class AuthenticationService
 		}
 		if (passwordEncoder.matches(loginRequest.getPassword(), user.getCredentials().getPassword()))
 		{
-			return user;
+			if(user.getCredentials().isNonExpired())
+				return user;
+			else
+				throw new CredentialsExpiredException("Credentials for " + loginRequest.getUsername() + " have expired. Please reset your password.");				
 		}
 		throw new BadCredentialsException("Login failed, bad credentials for " + loginRequest.getUsername() + ".");
 	}

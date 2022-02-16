@@ -1,5 +1,9 @@
 package hadi.springSecurity.controllers;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -7,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -14,13 +19,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import hadi.springSecurity.exceptions.TokenException;
+import hadi.springSecurity.models.embeddables.Name;
 import hadi.springSecurity.models.entities.Token;
 import hadi.springSecurity.models.entities.User;
 import hadi.springSecurity.models.requests.LoginRequest;
 import hadi.springSecurity.models.requests.ValidateTokenRequest;
 import hadi.springSecurity.models.responses.LoginResponse;
+import hadi.springSecurity.models.responses.MessageBoolResponse;
 import hadi.springSecurity.models.responses.TokenResponse;
 import hadi.springSecurity.services.AuthenticationService;
+import hadi.springSecurity.services.UserService;
 
 @RestController
 @RequestMapping(path = "/auth")
@@ -28,12 +36,13 @@ import hadi.springSecurity.services.AuthenticationService;
 public class AuthenticationController
 {
 	private final AuthenticationService authService;
-
+	private final UserService userService;
 	@Autowired
-	public AuthenticationController(AuthenticationService authService)
+	public AuthenticationController(AuthenticationService authService, UserService userService)
 	{
 		super();
 		this.authService = authService;
+		this.userService = userService;
 	}
 
 	@PostMapping("/login")
@@ -44,22 +53,10 @@ public class AuthenticationController
 		{			
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
-		LoginResponse loginResponse;
-		LoginRequest loginRequest = new LoginRequest(username, password);
-		ResponseEntity<LoginResponse> response;
-		try
-		{
-			loginResponse = authService.login(loginRequest);
-		} 
-		catch (BadCredentialsException e)
-		{
-			loginResponse = new LoginResponse(null, null, e.getMessage());
-			response = new ResponseEntity<>(loginResponse, HttpStatus.FORBIDDEN);
-			return response;
-		}
-		response = new ResponseEntity<>(loginResponse, HttpStatus.OK);
 
-		return response;
+		LoginRequest loginRequest = new LoginRequest(username, password);
+
+		return authService.login(loginRequest);
 	}
 	
 	@GetMapping("/getUserByToken")
@@ -103,5 +100,24 @@ public class AuthenticationController
 			response.setSuccess(false);
 			return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 		}
+	}
+	
+	@PostMapping("/register")
+	public ResponseEntity<MessageBoolResponse> register(
+			@RequestBody String username, @RequestBody String email,
+			@RequestBody  String firstName, @RequestBody String lastName,
+			@RequestBody(required=false) String middleName,
+			@RequestBody  String password)
+	{
+		//Name name = (map.get("middleName") == null) ? new Name(firstName, lastName) : new Name(firstName,middleName,lastName);
+		System.out.println("test");
+		return new ResponseEntity<MessageBoolResponse>(new MessageBoolResponse(), HttpStatus.OK);
+		//return userService.createNewUser(username, email, password, name);
+	}
+	
+	@PostMapping("/verify/{uuid}")
+	public ResponseEntity<MessageBoolResponse> verify(@PathVariable String uuid)
+	{
+		return userService.verifyUser(uuid);
 	}
 }
