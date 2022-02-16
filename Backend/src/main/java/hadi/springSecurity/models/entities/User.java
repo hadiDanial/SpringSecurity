@@ -14,9 +14,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sun.istack.NotNull;
 
 import hadi.springSecurity.models.embeddables.Credential;
 import hadi.springSecurity.models.embeddables.Name;
@@ -32,7 +35,11 @@ public class User
 	private long id;
 	@Column(unique=true)
 	@Size(min = 3, max = 20)
+	@NotNull
+	@NotBlank
 	private String username;
+	@NotNull
+	@Email
 	private String email;
 	@Embedded
 	private Name name;
@@ -41,6 +48,7 @@ public class User
 	
 	private boolean isEnabled;
 	private boolean isLocked;
+	private boolean isVerified;
 	private Instant creationDate;
 	private Instant lastLoginDate;
 	private Instant lastAccessDate;
@@ -64,6 +72,7 @@ public class User
 		this.creationDate = Instant.now();
 		this.isLocked = false;
 		this.isEnabled = true;
+		this.isVerified = false;
 	}
 
 	public User(long id, String username, String email, Name name, Credential credentials, boolean isEnabled,
@@ -146,6 +155,16 @@ public class User
 	public void setLocked(boolean isLocked)
 	{
 		this.isLocked = isLocked;
+	}
+
+	public boolean isVerified()
+	{
+		return isVerified;
+	}
+
+	public void setVerified(boolean isVerified)
+	{
+		this.isVerified = isVerified;
 	}
 
 	public Instant getCreationDate()
