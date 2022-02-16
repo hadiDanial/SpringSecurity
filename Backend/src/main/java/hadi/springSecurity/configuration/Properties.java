@@ -23,7 +23,9 @@ public class Properties
 	@Value("${mail.from}")
 	private String mailFrom;
 	@Value("${mail.signature}")
-	private String mailSignature;
+	private String mailSignature;	
+	@Value("${app.url}")
+	private String appURL;
 	
 	public int getCredentialExpirationDays()
 	{
@@ -64,4 +66,11 @@ public class Properties
 	{
 		return mailSignature;
 	}
+
+	public String getAppURL()
+	{
+		return appURL;
+	}
+	
+	
 }
