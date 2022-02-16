@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,9 +20,11 @@ import hadi.springSecurity.models.embeddables.Credential;
 import hadi.springSecurity.models.embeddables.Name;
 import hadi.springSecurity.models.entities.Role;
 import hadi.springSecurity.models.entities.Token;
+import hadi.springSecurity.models.entities.UnverifiedUser;
 import hadi.springSecurity.models.entities.User;
 import hadi.springSecurity.models.responses.MessageBoolResponse;
 import hadi.springSecurity.models.security.SecurityUser;
+import hadi.springSecurity.repositories.UnverifiedUserRepository;
 import hadi.springSecurity.repositories.UserRepository;
 
 @Service
@@ -28,36 +32,70 @@ public class UserService implements UserDetailsManager
 {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final UnverifiedUserRepository unverifiedRepository;
 	private final Properties properties;
 	private final RoleService roleService;
+	private final EmailService emailService;
 
 	@Autowired
-	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, Properties properties, RoleService roleService)
+	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UnverifiedUserRepository unverifiedRepository,
+			Properties properties, RoleService roleService, EmailService emailService)
 	{
 		super();
 		this.properties = properties;
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.roleService = roleService;
+		this.unverifiedRepository = unverifiedRepository;
+		this.emailService = emailService;
 	}
 
-	public User createNewUser(String username, String email, String password, String firstName, String middleName,
-			String lastName)
+	public ResponseEntity<MessageBoolResponse> createNewUser(String username, String email, String password, Name name)
 	{
-		Name name = generateName(firstName, middleName, lastName);
 		Credential credentials = generateCredentials(password);
 		User user = new User(username, email, name, credentials);
+		MessageBoolResponse response = new MessageBoolResponse();
 		try
 		{
 			userRepository.save(user);
-			return findUserByUsername(user.getUsername());
+			UnverifiedUser unverified = new UnverifiedUser(username);
+			unverifiedRepository.save(unverified);
+			emailService.sendSimpleMail(user.getEmail(), "Verify your account - Hadi's Security App",
+					"Please go to " + properties.getAppURL() + "user/verify/"+unverified.getVerificationUUID() + " to verify your account.\nThank you for joining us!");
+			response.setMessage("User " + user.getUsername() + " created successfully. Please check your inbox and verify your e-mail address.");
+			response.setResult(true);
+			return new ResponseEntity<MessageBoolResponse>(response, HttpStatus.OK);
 		} catch (Exception e)
 		{
-			e.printStackTrace();
-			return null;
+			response.setMessage("Failed to register " + user.getUsername() + ": " + e.getMessage());
+			response.setResult(false);
+			return new ResponseEntity<MessageBoolResponse>(response, HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
-
+	public ResponseEntity<MessageBoolResponse> verifyUser(String verificationUUID)
+	{
+		UnverifiedUser unverified = unverifiedRepository.findUnverifiedUserByVerificationUUID(verificationUUID).get();
+		// TODO: Add expiration to the UUID, if the time limit has passed, the user will need to request another verification code?
+		MessageBoolResponse response;
+		if(unverified != null)
+		{
+			String username = unverified.getUsername();
+			User user = findUserByUsername(username);
+			user.setVerified(true);
+			userRepository.save(user);
+			unverifiedRepository.delete(unverified);
+			response = new MessageBoolResponse("User " + username + " was verified successfully. Welcome aboard!", true);
+			emailService.sendSimpleMail(user.getEmail(), "Account Verified!", "Thank you for verifying your account! Enjoy your stay ;)");
+			return new ResponseEntity<MessageBoolResponse>(response, HttpStatus.OK);
+		}
+		else
+		{
+			response = new MessageBoolResponse("Verification error.", false);
+			return new ResponseEntity<MessageBoolResponse>(response, HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
 	public boolean updatePassword(String username, String password)
 	{
 		User user = findUserByUsername(username);
@@ -107,7 +145,7 @@ public class UserService implements UserDetailsManager
 	 */
 	public User findUserByUsername(String username) throws UsernameNotFoundException
 	{
-		Optional<User> optionalUser = userRepository.findUserByUsername(username);
+		Optional<User> optionalUser = userRepository.findUserByUsernameIgnoreCase(username);
 		User user = optionalUser.orElseThrow(()-> new UsernameNotFoundException(username + " not found."));
 		return user;
 	}
@@ -151,7 +189,7 @@ public class UserService implements UserDetailsManager
 	@Override
 	public void createUser(UserDetails user)
 	{
-		createNewUser(user.getUsername(), null, user.getPassword(), null, null, null);
+		createNewUser(user.getUsername(), null, user.getPassword(), null);
 	}
 
 	@Override

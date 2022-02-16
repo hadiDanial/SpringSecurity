@@ -10,6 +10,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import hadi.springSecurity.models.embeddables.Name;
 import hadi.springSecurity.models.entities.User;
 import hadi.springSecurity.services.RoleService;
 import hadi.springSecurity.services.UserService;
@@ -64,7 +65,8 @@ public class StartupConfig implements ApplicationListener<ContextRefreshedEvent>
 			userService.findUserByUsername("John");
 		} catch (UsernameNotFoundException e)
 		{
-			User john = userService.createNewUser("John", "johnnyboy@gmail.com", "MagicalDaddy69", "John", null, "Constantine");
+			userService.createNewUser("John", "johnnyboy@gmail.com", "MagicalDaddy69", new Name("John", "Constantine"));
+			User john = userService.findUserByUsername("John");
 			userService.addRoleToUser(john, "Admin");
 		}
 		try
@@ -72,7 +74,8 @@ public class StartupConfig implements ApplicationListener<ContextRefreshedEvent>
 			userService.findUserByUsername("Bill");
 		} catch (UsernameNotFoundException e)
 		{
-			User bill = userService.createNewUser("Bill", "bill@gmail.com", "12345", "Bill", "The", "Drill");
+			userService.createNewUser("Bill", "bill@gmail.com", "12345", new Name("Bill", "The", "Drill"));
+			User bill =userService.findUserByUsername("Bill");
 			userService.addRoleToUser(bill, "User");
 		}
 	}
