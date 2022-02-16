@@ -1,38 +1,29 @@
-<form class="standard-form center">
+<form class="standard-form center" (ngSubmit)="onSubmit()">
     <mat-label>Sign Up</mat-label>
     
     <table class="full-width" cellspacing="0"><tr>        
-      <td><app-input inputName="First Name" placeholder="Enter First Name..." (onChange)="this.firstName=$event"></app-input></td>
-      <td><app-input inputName="Last Name" placeholder="Enter Last Name..." (onChange)="this.lastName=$event"></app-input></td>
+      <td><app-input [control]="getFormControl('firstName')" inputName="First Name" placeholder="Enter First Name..."></app-input></td>
+      <td><app-input [control]="getFormControl('lastName')" inputName="Last Name" placeholder="Enter Last Name..."></app-input></td>
     </tr>
   <tr>
     <td colspan="2">      
-      <app-email (onChange)="this.email=$event"></app-email>
+      <app-email [control]="getFormControl('email')"></app-email>
     </td>
   </tr>
   
   <tr>
     <td colspan="2">      
-      <app-double-password></app-double-password>
+      <app-double-password [doublePasswordGroup]="getGroupControl('doublePasswordGroup')"></app-double-password>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td class="right-align-text">
+      <button mat-raised-button color="primary" type="submit" [disabled]="!this.form.valid">Register</button>
     </td>
   </tr>
   
   </table>
 
-    <table class="full-width" cellspacing="0"><tr>
-      <td><mat-form-field class="full-width" appearance="fill">
-        <mat-label>City</mat-label>
-        <input matInput placeholder="Ex. San Francisco">
-      </mat-form-field></td>
-      <td><mat-form-field class="full-width" appearance="fill">
-        <mat-label>State</mat-label>
-        <input matInput placeholder="Ex. California">
-      </mat-form-field></td>
-      <td><mat-form-field class="full-width" appearance="fill">
-        <mat-label>Postal Code</mat-label>
-        <input matInput #postalCode maxlength="5" placeholder="Ex. 94105" value="94043">
-        <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
-      </mat-form-field></td>
-    </tr></table>
   </form>
   
