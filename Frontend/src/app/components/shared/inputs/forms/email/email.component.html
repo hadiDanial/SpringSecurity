@@ -1,10 +1,10 @@
 <mat-form-field class="full-width" appearance="fill">
     <mat-label>Email</mat-label>
-    <input type="email" matInput [formControl]="emailFormControl" [placeholder]="placeholder" (ngModelChange)="onEmailChanged()">
-    <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+    <input type="email" matInput [formControl]="control" [placeholder]="placeholder">
+    <mat-error *ngIf="control.hasError('email') && !control.hasError('required')">
       Please enter a valid email address
     </mat-error>
-    <mat-error *ngIf="emailFormControl.hasError('required')">
+    <mat-error *ngIf="control.hasError('required')">
       Email is <strong>required</strong>
     </mat-error>
 </mat-form-field>

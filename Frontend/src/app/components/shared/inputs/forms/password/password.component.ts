@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { ControlContainer, FormControl, NgForm, Validators } from '@angular/forms';
+import { AbstractControl, ControlContainer, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-password',
@@ -11,9 +11,7 @@ import { ControlContainer, FormControl, NgForm, Validators } from '@angular/form
 export class PasswordComponent{
 
   constructor() { }
-  @Input()
-  formControlName: string = "";
-
+ 
   @Input()
   inputName: string = "";
   @Input()
@@ -24,15 +22,16 @@ export class PasswordComponent{
   max : number = 20;
   @Input()
   required = true;
+  @Input()
+  control: FormControl =  new FormControl();
   @Output()
   onChange : EventEmitter<string> = new EventEmitter();
   isPassword = true;
   type = "password";
   value : string = "";
   hasClickedInside = false;
-  inputFormControl = new FormControl('', [Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(.+?[#?!@$%^&*-]*).{'+this.min+','+this.max+'}$'),Validators.minLength(this.min), Validators.maxLength(this.max)]);
 
-
+  
   @HostListener("document:click")
   clickedOut() {
     if(!this.hasClickedInside){
@@ -47,7 +46,7 @@ export class PasswordComponent{
     this.hasClickedInside=true;
   }
   onPasswordChanged(password:string){
-    if(this.inputFormControl.valid)
+    if(this.control.valid)
     {
       this.value=password;
       this.onChange.emit(this.value);

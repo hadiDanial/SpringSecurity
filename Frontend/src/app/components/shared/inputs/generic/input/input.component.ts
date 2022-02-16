@@ -22,20 +22,13 @@ export class InputComponent{
   min : number = 2;
   @Input()
   max : number = 30;
-  @Input()
-  allowAllCharacters = false;
-  @Input()
-  required = true;
-  @Output()
-  onChange : EventEmitter<string> = new EventEmitter();
+
+
 
   value : string = "";
-  inputFormControl = new FormControl('', [Validators.pattern((this.allowAllCharacters?'.*':'[a-zA-Z ]*')),Validators.minLength(this.min), Validators.maxLength(this.max)]);
+  @Input()
+  control = new FormControl();
 
   constructor() { }
-  onValueChanged(val:string)
-  {
-    this.value = val;
-    this.onChange.emit(this.value);
-  }
+
 }

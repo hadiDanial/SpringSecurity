@@ -10,21 +10,21 @@ import { ControlContainer, NgForm } from '@angular/forms';
 })
 
 export class EmailComponent{
-  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+  @Input()
+  control = new FormControl();
   value: string = "";
   @Input()
   placeholder: string = "example@gmail.com"
-  @Output()
-  onChange : EventEmitter<string> = new EventEmitter();
+
   constructor() { }
 
   
-  onEmailChanged()
-  {
-    if(this.emailFormControl.valid)
-    {
-      this.value = this.emailFormControl.value;
-      this.onChange.emit(this.value);
-    }  
-  }
+  // onEmailChanged()
+  // {
+  //   if(this.control.valid)
+  //   {
+  //     this.value = this.control.value;
+  //     this.onChange.emit(this.value);
+  //   }  
+  // }
 }

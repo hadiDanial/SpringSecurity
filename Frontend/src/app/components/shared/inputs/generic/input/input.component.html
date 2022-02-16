@@ -1,14 +1,14 @@
 <mat-form-field class="full-width" appearance="fill">
     <mat-label>{{inputName}}</mat-label>
-    <input matInput [readonly]="readonly" [required]="required" [type]="type" [max]="max" [min]="min" 
-    (ngModelChange)="onValueChanged($event)" [placeholder]="placeholder" [formControl]="inputFormControl"><!--[(ngModel)]="value"-->
-    <mat-error *ngIf="(inputFormControl.errors?.minlength) || (inputFormControl.errors?.maxlength)">
+    <input matInput [readonly]="readonly" [type]="type" [max]="max" [min]="min" 
+    [placeholder]="placeholder" [formControl]="control">
+    <mat-error *ngIf="(control.errors?.minlength) || (control.errors?.maxlength)">
         {{inputName}} must be {{min}}-{{max}} characters.
       </mat-error>
-      <mat-error *ngIf="inputFormControl.hasError('required')">
+      <mat-error *ngIf="control.hasError('required')">
         {{inputName}} is <strong>required</strong>.
       </mat-error>
-      <mat-error *ngIf="inputFormControl.hasError('pattern')">
+      <mat-error *ngIf="control.hasError('pattern')">
         Input must only contain letters.
       </mat-error>
 </mat-form-field>
