@@ -46,7 +46,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter
             "/v3/api-docs/**",
             "/swagger-ui/**",
             // other public endpoints of your API may be appended to this array
-            "/auth/**"
+            "/auth/**",
+            "/user/register",
+            "/user/register/**",
+            "/user/verify/**"
     };
 	
 	@Autowired
