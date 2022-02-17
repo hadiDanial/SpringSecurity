@@ -59,7 +59,7 @@ public class TokenAuthFilter extends OncePerRequestFilter
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException
 	{
-		return request.getServletPath().equals("/auth/login") 
-			|| request.getServletPath().equals("/auth/validate")
+		return request.getServletPath().startsWith("/auth") 
+			|| request.getServletPath().startsWith("/user/register");
 	}
 }
