@@ -9,6 +9,9 @@
         {{inputName}} is <strong>required</strong>.
       </mat-error>
       <mat-error *ngIf="control.hasError('pattern')">
-        Input must only contain letters.
+        {{patternErrorMessage}}
+      </mat-error>
+      <mat-error *ngIf="control.hasError('keyAlreadyExists')">
+        {{inputName}} already exists. Please choose another.
       </mat-error>
 </mat-form-field>

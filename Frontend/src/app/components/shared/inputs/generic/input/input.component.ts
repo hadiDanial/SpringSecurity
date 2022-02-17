@@ -17,6 +17,8 @@ export class InputComponent{
   @Input()
   type: string = "text";
   @Input()
+  patternErrorMessage: string = "Required pattern error.";
+  @Input()
   readonly:boolean = false;
   @Input()
   min : number = 2;
