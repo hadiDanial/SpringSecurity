@@ -101,23 +101,4 @@ public class AuthenticationController
 			return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 		}
 	}
-	
-	@PostMapping("/register")
-	public ResponseEntity<MessageBoolResponse> register(
-			@RequestBody String username, @RequestBody String email,
-			@RequestBody  String firstName, @RequestBody String lastName,
-			@RequestBody(required=false) String middleName,
-			@RequestBody  String password)
-	{
-		//Name name = (map.get("middleName") == null) ? new Name(firstName, lastName) : new Name(firstName,middleName,lastName);
-		System.out.println("test");
-		return new ResponseEntity<MessageBoolResponse>(new MessageBoolResponse(), HttpStatus.OK);
-		//return userService.createNewUser(username, email, password, name);
-	}
-	
-	@PostMapping("/verify/{uuid}")
-	public ResponseEntity<MessageBoolResponse> verify(@PathVariable String uuid)
-	{
-		return userService.verifyUser(uuid);
-	}
 }

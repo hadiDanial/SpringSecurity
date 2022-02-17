@@ -40,6 +40,7 @@ public class UserService implements UserDetailsManager
 	@Autowired
 	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UnverifiedUserRepository unverifiedRepository,
 			Properties properties, RoleService roleService, EmailService emailService)
+	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
 	{
 		super();
 		this.properties = properties;
