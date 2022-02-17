@@ -29,7 +29,7 @@ export class AuthService {
     this.alertService.loadingMenu<LoginResponse,HttpErrorResponse>("Logging in...",obs,(response:LoginResponse)=>
     {
       console.log("Login message: " + response.message);
-        this.loginResponse = response;
+        this.loginResponse = new LoginResponse(response.token, response.user, response.message);
         message = response.message;
         console.log(message);
         let user = response.user;
@@ -38,7 +38,7 @@ export class AuthService {
         localStorage.setItem("token",response.token.accessToken);
         localStorage.setItem("refreshToken", response.token.refreshToken);
         localStorage.setItem("tokenExpiration", response.token.expiresAt+'');
-    }, "Logged in succeessfully.",
+    }, "Logged in succeessfully." ,
     (error:HttpErrorResponse)=>{
       let httpError : (HttpErrorResponse)  = error;
       let headers = httpError.headers;
