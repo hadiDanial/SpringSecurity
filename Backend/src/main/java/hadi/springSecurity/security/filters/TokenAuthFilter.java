@@ -61,6 +61,5 @@ public class TokenAuthFilter extends OncePerRequestFilter
 	{
 		return request.getServletPath().equals("/auth/login") 
 			|| request.getServletPath().equals("/auth/validate")
-			|| request.getServletPath().contains("/user/register");
 	}
 }
