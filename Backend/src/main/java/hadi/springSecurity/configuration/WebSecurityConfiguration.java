@@ -48,8 +48,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter
             // other public endpoints of your API may be appended to this array
             "/auth/**",
             "/user/register",
-            "/user/register/**",
-            "/user/verify/**"
+            "/user/register/**"
     };
 	
 	@Autowired
@@ -84,16 +83,19 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter
 		http
 		.addFilterBefore(tokenAuthFilter, BasicAuthenticationFilter.class)
 			.addFilterAt(usernamePasswordAuthFilter, BasicAuthenticationFilter.class);
+		http
+        .headers()
+        .xssProtection()
+        .and()
+        .contentSecurityPolicy("script-src 'self'");
 		
-		http.csrf().disable(); // lesson 9 // focus on CORS
-//		http.cors();
+		http.csrf().disable(); 
 		http.httpBasic();
 		http.authorizeRequests()
-						.antMatchers(AUTH_WHITELIST).permitAll()	
-//						.antMatchers("/user/**").permitAll()
-						.anyRequest().authenticated();
-//						.and()
-//						.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+						.antMatchers(AUTH_WHITELIST).permitAll()
+						.anyRequest().authenticated()
+						.and()
+						.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 //			            .and().formLogin().disable();
 
 		http.cors(c -> {
