@@ -1,29 +1,44 @@
 <form class="standard-form center" (ngSubmit)="onSubmit()">
-    <mat-label>Sign Up</mat-label>
-    
-    <table class="full-width" cellspacing="0"><tr>        
-      <td><app-input [control]="getFormControl('firstName')" inputName="First Name" placeholder="Enter First Name..."></app-input></td>
-      <td><app-input [control]="getFormControl('lastName')" inputName="Last Name" placeholder="Enter Last Name..."></app-input></td>
+  <mat-label>Sign Up</mat-label>
+
+  <table class="full-width" cellspacing="0">
+    <tr>
+      <td>
+        <app-input [patternErrorMessage]="disallowedNameMessage" [control]="getFormControl('firstName')"
+          inputName="First Name" placeholder="Enter First Name..."></app-input>
+      </td>
+      <td>
+        <app-input [patternErrorMessage]="disallowedNameMessage" [control]="getFormControl('lastName')"
+          inputName="Last Name" placeholder="Enter Last Name..."></app-input>
+      </td>
     </tr>
-  <tr>
-    <td colspan="2">      
-      <app-email [control]="getFormControl('email')"></app-email>
-    </td>
-  </tr>
-  
-  <tr>
-    <td colspan="2">      
-      <app-double-password [doublePasswordGroup]="getGroupControl('doublePasswordGroup')"></app-double-password>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td class="right-align-text">
-      <button mat-raised-button color="primary" type="submit" [disabled]="!this.form.valid">Register</button>
-    </td>
-  </tr>
-  
+    <br>
+    <tr>
+      <td colspan="2">
+        <app-input [patternErrorMessage]="disallowedUsernameMessage" [control]="getFormControl('username')"
+          inputName="Username" placeholder="Enter a unique username..."></app-input>
+      </td>
+
+    </tr>
+    <br>
+    <tr>
+      <td colspan="2">
+        <app-email [control]="getFormControl('email')"></app-email>
+      </td>
+    </tr>
+    <br>
+    <tr>
+      <td colspan="2">
+        <app-double-password [doublePasswordGroup]="getGroupControl('doublePasswordGroup')"></app-double-password>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="right-align-text">
+        <button mat-raised-button color="primary" type="submit" [disabled]="!this.form.valid">Register</button>
+      </td>
+    </tr>
+
   </table>
 
-  </form>
-  
+</form>
