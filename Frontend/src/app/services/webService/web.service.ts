@@ -27,11 +27,26 @@ export class WebService
   public post<T>(apiRoute: string, bodyParams?: Map<string, any>, headerParams?: Map<string, string>, urlParams?:Map<string, string>) : Observable<T>
   {
     let urlParamsString = (urlParams == undefined) ? "" : this.generateURLParams(urlParams);
+    let bodyParamsToSend = undefined;
+    if(bodyParams!=undefined)
+    {
+      bodyParamsToSend = this.generateBodyParams(bodyParams);
+    }
     let options = {
       headers: this.generateHttpHeaders(headerParams),
       options: null
     };
-    return this.httpClient.post<T>(`${this.ROOT_URL + apiRoute + urlParamsString}`, bodyParams, options);//.pipe(catchError(this.handleError)); 
+    return this.httpClient.post<T>(`${this.ROOT_URL + apiRoute + urlParamsString}`, bodyParamsToSend, options);//.pipe(catchError(this.handleError)); 
+  }
+  generateBodyParams(bodyParams: Map<string, any>): any
+  {
+    let params = '{';
+    bodyParams.forEach((value:string, key:string) => {
+        params += "\""+ key + "\":\"" + value + "\","
+    });
+    params = params.slice(0,params.length-1);
+    params += "}"
+    return params;
   }
 
   generateHttpHeaders(headerParams?:Map<string, string>): HttpHeaders
@@ -46,12 +61,6 @@ export class WebService
         httpHeaders = httpHeaders.append(key, value);        
       });
     }
-    console.log(httpHeaders);
-    //let token =  this.getAccessToken();
-    // if(token != "")
-    // {
-    //   httpHeaders = httpHeaders.append("accessToken", token);
-    // } 
     return httpHeaders;
   }
 
