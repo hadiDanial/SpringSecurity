@@ -21,6 +21,12 @@ public class UnverifiedUser
 	private String username;
 	private String verificationUUID;
 	private Instant creationTime;
+	
+	
+	public UnverifiedUser()
+	{
+		super();
+	}
 	public UnverifiedUser(String username)
 	{
 		this.username = username;
