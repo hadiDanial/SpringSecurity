@@ -9,4 +9,5 @@ TO DO:
 2. Add restrictions based on the user's role in the frontend (and whether the user is a guest or logged in). Research Guards.
 3. Add content that users can interact with in some way (CRUD) based on their roles and authorities.
 
-~~Add the ability to register a new user and send an email in the backend.
+Done:
+~~Add the ability to register a new user and send an email in the backend.~~
