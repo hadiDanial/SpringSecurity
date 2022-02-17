@@ -63,7 +63,7 @@ public class UserService implements UserDetailsManager
 			UnverifiedUser unverified = new UnverifiedUser(username);
 			unverifiedRepository.save(unverified);
 			emailService.sendSimpleMail(user.getEmail(), "Verify your account - Hadi's Security App",
-					"Please go to " + properties.getAppURL() + "user/verify/" + unverified.getVerificationUUID()
+					"Please go to " + properties.getAppURL() + "user/register/verify/" + unverified.getVerificationUUID()
 							+ " to verify your account.\nThank you for joining us!");
 			response.setMessage("User " + user.getUsername()
 					+ " created successfully. Please check your inbox and verify your e-mail address.");
