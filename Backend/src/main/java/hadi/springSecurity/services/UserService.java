@@ -22,6 +22,7 @@ import hadi.springSecurity.models.entities.Role;
 import hadi.springSecurity.models.entities.Token;
 import hadi.springSecurity.models.entities.UnverifiedUser;
 import hadi.springSecurity.models.entities.User;
+import hadi.springSecurity.models.requests.SignupRequest;
 import hadi.springSecurity.models.responses.MessageBoolResponse;
 import hadi.springSecurity.models.security.SecurityUser;
 import hadi.springSecurity.repositories.UnverifiedUserRepository;
@@ -38,9 +39,9 @@ public class UserService implements UserDetailsManager
 	private final EmailService emailService;
 
 	@Autowired
-	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UnverifiedUserRepository unverifiedRepository,
-			Properties properties, RoleService roleService, EmailService emailService)
 	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+			UnverifiedUserRepository unverifiedRepository, Properties properties, RoleService roleService,
+			EmailService emailService)
 	{
 		super();
 		this.properties = properties;
@@ -62,8 +63,10 @@ public class UserService implements UserDetailsManager
 			UnverifiedUser unverified = new UnverifiedUser(username);
 			unverifiedRepository.save(unverified);
 			emailService.sendSimpleMail(user.getEmail(), "Verify your account - Hadi's Security App",
-					"Please go to " + properties.getAppURL() + "user/verify/"+unverified.getVerificationUUID() + " to verify your account.\nThank you for joining us!");
-			response.setMessage("User " + user.getUsername() + " created successfully. Please check your inbox and verify your e-mail address.");
+					"Please go to " + properties.getAppURL() + "user/verify/" + unverified.getVerificationUUID()
+							+ " to verify your account.\nThank you for joining us!");
+			response.setMessage("User " + user.getUsername()
+					+ " created successfully. Please check your inbox and verify your e-mail address.");
 			response.setResult(true);
 			return new ResponseEntity<MessageBoolResponse>(response, HttpStatus.OK);
 		} catch (Exception e)
@@ -73,30 +76,42 @@ public class UserService implements UserDetailsManager
 			return new ResponseEntity<MessageBoolResponse>(response, HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
+
 	public ResponseEntity<MessageBoolResponse> verifyUser(String verificationUUID)
 	{
-		UnverifiedUser unverified = unverifiedRepository.findUnverifiedUserByVerificationUUID(verificationUUID).get();
-		// TODO: Add expiration to the UUID, if the time limit has passed, the user will need to request another verification code?
+		Optional<UnverifiedUser> optional = unverifiedRepository
+				.findUnverifiedUserByVerificationUUID(verificationUUID);
 		MessageBoolResponse response;
-		if(unverified != null)
+		if (optional.isPresent())
 		{
-			String username = unverified.getUsername();
-			User user = findUserByUsername(username);
-			user.setVerified(true);
-			userRepository.save(user);
-			unverifiedRepository.delete(unverified);
-			response = new MessageBoolResponse("User " + username + " was verified successfully. Welcome aboard!", true);
-			emailService.sendSimpleMail(user.getEmail(), "Account Verified!", "Thank you for verifying your account! Enjoy your stay ;)");
-			return new ResponseEntity<MessageBoolResponse>(response, HttpStatus.OK);
-		}
-		else
+			UnverifiedUser unverified = optional.get();
+			// TODO: Add expiration to the UUID, if the time limit has passed, the user will
+			// need to request another verification code?
+			if (unverified != null)
+			{
+				String username = unverified.getUsername();
+				User user = findUserByUsername(username);
+				user.setVerified(true);
+				userRepository.save(user);
+				unverifiedRepository.delete(unverified);
+				response = new MessageBoolResponse("User " + username + " was verified successfully. Welcome aboard!",
+						true);
+				emailService.sendSimpleMail(user.getEmail(), "Account Verified!",
+						"Thank you for verifying your account! Enjoy your stay ;)");
+				return new ResponseEntity<MessageBoolResponse>(response, HttpStatus.OK);
+			} else
+			{
+				response = new MessageBoolResponse("Verification error.", false);
+				return new ResponseEntity<MessageBoolResponse>(response, HttpStatus.BAD_REQUEST);
+			}
+		} else
 		{
-			response = new MessageBoolResponse("Verification error.", false);
-			return new ResponseEntity<MessageBoolResponse>(response, HttpStatus.BAD_REQUEST);
+			response = new MessageBoolResponse("User either doesn't exist or has already been verified.", false);			
+			return new ResponseEntity<MessageBoolResponse>(response, HttpStatus.NOT_FOUND);
 		}
-		
+
 	}
-	
+
 	public boolean updatePassword(String username, String password)
 	{
 		User user = findUserByUsername(username);
@@ -131,8 +146,7 @@ public class UserService implements UserDetailsManager
 			user.setName(name);
 			userRepository.save(user);
 			return true;
-		} 
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			e.printStackTrace();
 			return false;
@@ -140,21 +154,24 @@ public class UserService implements UserDetailsManager
 	}
 
 	/**
-	 * Returns user by username. Throws <code>UsernameNotFoundException</code> if the username isn't found.
+	 * Returns user by username. Throws <code>UsernameNotFoundException</code> if
+	 * the username isn't found.
+	 * 
 	 * @param username
 	 * @return
 	 */
 	public User findUserByUsername(String username) throws UsernameNotFoundException
 	{
 		Optional<User> optionalUser = userRepository.findUserByUsernameIgnoreCase(username);
-		User user = optionalUser.orElseThrow(()-> new UsernameNotFoundException(username + " not found."));
+		User user = optionalUser.orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
 		return user;
 	}
 
 	private Credential generateCredentials(String password)
 	{
 		String hashedPassword = passwordEncoder.encode(password);
-		return new Credential(hashedPassword, Instant.now().plus(properties.getCredentialExpirationDays(), ChronoUnit.DAYS));
+		return new Credential(hashedPassword,
+				Instant.now().plus(properties.getCredentialExpirationDays(), ChronoUnit.DAYS));
 	}
 
 	private Name generateName(String firstName, String middleName, String lastName)
@@ -169,7 +186,6 @@ public class UserService implements UserDetailsManager
 		}
 		return name;
 	}
-
 
 	public boolean userExists(String username)
 	{
@@ -206,8 +222,7 @@ public class UserService implements UserDetailsManager
 			User user = findUserByUsername(username);
 			user.setEnabled(false);
 			userRepository.save(user);
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			throw new UsernameNotFoundException("Failed to delete " + username);
 		}
@@ -223,43 +238,44 @@ public class UserService implements UserDetailsManager
 		Role role;
 		try
 		{
-			role = roleService.findRoleByName(roleName);			
+			role = roleService.findRoleByName(roleName);
 		} catch (RoleException e)
 		{
 			return new MessageBoolResponse("Role " + roleName + " doesn't exist.", false);
 		}
 		User u = userRepository.findById(user.getId()).get();
 		List<Role> userRoles = u.getRoles();
-		if(userRoles.contains(role))
+		if (userRoles.contains(role))
 		{
-			return new MessageBoolResponse("User " + user.getUsername() +" already has role " + roleName + ".", false);
+			return new MessageBoolResponse("User " + user.getUsername() + " already has role " + roleName + ".", false);
 		}
 		userRoles.add(role);
 		u.setRoles(userRoles);
 		userRepository.save(u);
 		return new MessageBoolResponse("Role " + roleName + " added to " + user.getUsername() + " successfully.", true);
 	}
-	
+
 	public MessageBoolResponse removeRoleFromUser(User user, String roleName)
 	{
 		Role role;
 		try
 		{
-			role = roleService.findRoleByName(roleName);			
+			role = roleService.findRoleByName(roleName);
 		} catch (RoleException e)
 		{
 			return new MessageBoolResponse("Role " + roleName + " doesn't exist.", false);
 		}
 		User u = userRepository.findById(user.getId()).get();
 		List<Role> userRoles = u.getRoles();
-		if(userRoles.contains(role))
+		if (userRoles.contains(role))
 		{
 			userRoles.remove(role);
 			u.setRoles(userRoles);
 			userRepository.save(u);
-			return new MessageBoolResponse("Role " + roleName + " removed from " + user.getUsername() + " successfully.", true);
+			return new MessageBoolResponse(
+					"Role " + roleName + " removed from " + user.getUsername() + " successfully.", true);
 		}
-		return new MessageBoolResponse("User " + user.getUsername() +" doesn't have role " + roleName + ".", false);
+		return new MessageBoolResponse("User " + user.getUsername() + " doesn't have role " + roleName + ".", false);
 	}
 
 	public void updateLastAccessDate(User user)
