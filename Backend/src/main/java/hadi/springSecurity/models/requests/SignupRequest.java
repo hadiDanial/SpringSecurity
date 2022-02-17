@@ -1,25 +1,25 @@
 package hadi.springSecurity.models.requests;
 
-import hadi.springSecurity.models.embeddables.Name;
-
 public class SignupRequest
 {
 	private String username;
 	private String email;
 	private String password;
-	private Name name;
+	private String firstName;
+	private String lastName;
 	public SignupRequest()
 	{
 		super();
 	}
 	
-	public SignupRequest(String username, String email, String password, Name name)
+	public SignupRequest(String username, String email, String password, String firstName, String lastName)
 	{
 		super();
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		this.name = name;
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 
 	public String getUsername()
@@ -52,14 +52,25 @@ public class SignupRequest
 		this.password = password;
 	}
 
-	public Name getName()
+	public String getFirstName()
 	{
-		return name;
+		return firstName;
 	}
 
-	public void setName(Name name)
+	public void setFirstName(String firstName)
 	{
-		this.name = name;
+		this.firstName = firstName;
 	}
+
+	public String getLastName()
+	{
+		return lastName;
+	}
+
+	public void setLastName(String lastName)
+	{
+		this.lastName = lastName;
+	}
+
 	
 }
