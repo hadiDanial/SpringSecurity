@@ -65,7 +65,7 @@ public class StartupConfig implements ApplicationListener<ContextRefreshedEvent>
 			userService.findUserByUsername("John");
 		} catch (UsernameNotFoundException e)
 		{
-			userService.createNewUser("John", "johnnyboy@gmail.com", "MagicalDaddy69", new Name("John", "Constantine"));
+			userService.createNewUser("John", "hadi.dan@me.com", "Magical", new Name("John", "Constantine"));
 			User john = userService.findUserByUsername("John");
 			userService.addRoleToUser(john, "Admin");
 		}
