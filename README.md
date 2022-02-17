@@ -10,4 +10,5 @@ TO DO:
 3. Add content that users can interact with in some way (CRUD) based on their roles and authorities.
 
 Done:
+
 ~~Add the ability to register a new user and send an email in the backend.~~
