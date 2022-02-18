@@ -27,7 +27,14 @@ export class UserService
     this.webService.get<User[]>("user/getAllUsers", new Map<string, any>()).subscribe((users) => { console.log(users) })
   }
 
-  register(firstName: string, lastName: string, username: string, email: string, password: string)
+  setUserAboutMe(text:string) : Observable<MessageBoolResponse>
+  {
+    let map = new Map<string,string>();
+    map.set("about", text);
+    return this.webService.post<MessageBoolResponse>("user/setAboutMe", map);
+  }
+
+  register(firstName: string, lastName: string, username: string, email: string, password: string) : Observable<MessageBoolResponse>
   {
     let map = new Map<string, any>();
     map.set("username", username);
@@ -35,10 +42,7 @@ export class UserService
     map.set("email", email);
     map.set("firstName", firstName);
     map.set("lastName", lastName);
-    this.webService.post<MessageBoolResponse>("user/register", map).subscribe(response =>
-    {
-      console.log(response.result + ": " + response.message);
-    })
+    return this.webService.post<MessageBoolResponse>("user/register", map);
   }
 
 }
