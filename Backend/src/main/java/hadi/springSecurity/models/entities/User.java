@@ -3,6 +3,7 @@ package hadi.springSecurity.models.entities;
 import java.time.Instant;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -13,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -60,6 +63,10 @@ public class User
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private List<Role> roles;
 	
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn
+	private UserProfile profile;
+	
 	public User() {	}
 
 	public User(String username, String email, Name name, Credential credentials)
@@ -73,6 +80,7 @@ public class User
 		this.isLocked = false;
 		this.isEnabled = true;
 		this.isVerified = false;
+		this.profile = new UserProfile();
 	}
 
 	public User(long id, String username, String email, Name name, Credential credentials, boolean isEnabled,
@@ -207,6 +215,15 @@ public class User
 		this.roles = roles;
 	}
 
+	public UserProfile getProfile()
+	{
+		return profile;
+	}
+
+	public void setProfile(UserProfile profile)
+	{
+		this.profile = profile;
+	}
 
 	@Override
 	public int hashCode()
