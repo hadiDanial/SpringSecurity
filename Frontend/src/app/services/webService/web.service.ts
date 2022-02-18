@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { DataService } from '../dataService/data.service';
 
 @Injectable({
@@ -9,7 +10,7 @@ import { DataService } from '../dataService/data.service';
 })
 export class WebService
 {
-  readonly ROOT_URL = "http://localhost:8084/"
+  readonly ROOT_URL = environment.baseURL;
 
   constructor(private httpClient: HttpClient, private dataService: DataService) { }
 
