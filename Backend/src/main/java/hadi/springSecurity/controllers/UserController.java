@@ -83,7 +83,7 @@ public class UserController
 
 	}
 	
-	@PostMapping("/register/verify/{uuid}")
+	@GetMapping("/register/verify/{uuid}")
 	public ResponseEntity<MessageBoolResponse> verify(@PathVariable String uuid)
 	{
 		return userService.verifyUser(uuid);
