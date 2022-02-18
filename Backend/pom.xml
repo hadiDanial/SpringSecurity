@@ -97,6 +97,43 @@
                 <target>11</target>
             </configuration>
         </plugin>
+        <plugin>
+		      <groupId>com.heroku.sdk</groupId>
+		      <artifactId>heroku-maven-plugin</artifactId>
+		      <version>2.0.3</version>
+		      <configuration>
+		          <appName>hadi-spring-security</appName>
+		          <includeTarget>false</includeTarget>
+		          <includes>
+		              <include>target/HadiSpringSecurity-1.0.0.jar</include>
+		          </includes>
+		          <jdkVersion>${java.version}</jdkVersion>
+		          <processTypes>
+		              <web>java $JAVA_OPTS -jar target/HadiSpringSecurity-1.0.0.jar </web>
+		          </processTypes>
+		      </configuration>
+		  </plugin> 
+		  		  			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${build.directory}/classes/static/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>../Frontend/dist/ng-flat-able</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+        
 		</plugins>
 	</build>
 </project>
