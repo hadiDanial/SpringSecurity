@@ -1,14 +1,16 @@
 export class Authority
 {
+	private _id: number;
     private _authorityName: string;
     private _authorityIdentifier: string;
 
-
-	constructor(authorityName: string, authorityIdentifier: string) {
+	
+	constructor(id: number, authorityName: string, authorityIdentifier: string) {
+		this._id = id;
 		this._authorityName = authorityName;
 		this._authorityIdentifier = authorityIdentifier;
 	}
-
+	
 	public get authorityName(): string {
 		return this._authorityName;
 	}
@@ -25,4 +27,7 @@ export class Authority
 		this._authorityIdentifier = value;
 	}
     
+	public get id(): number {
+		return this._id;
+	}
 }
