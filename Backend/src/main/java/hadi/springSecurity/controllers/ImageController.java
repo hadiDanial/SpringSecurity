@@ -15,10 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-
-import hadi.springSecurity.models.entities.DBImage;
-import hadi.springSecurity.repositories.DBImageRespository;
-import hadi.springSecurity.repositories.ProfileImageRepository;
 import hadi.springSecurity.services.ImageService;
 
 @RestController
@@ -35,7 +31,7 @@ public class ImageController
 	}
 	
 	
-	@GetMapping(path = "/uploadImage")
+	@PostMapping(path = "/uploadImage")
 	 public ResponseEntity<Long> uploadImage(@RequestParam MultipartFile multipartImage)
 	{
 		Long id = imageService.uploadImage(multipartImage);
