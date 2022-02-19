@@ -54,6 +54,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .full-width {
   width: 100%;
 }
+.half-width {
+  width: 50%;
+}
 .center
 {
   margin: auto;
@@ -65,6 +68,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   text-align: right;
 }
 .bottom-margin{
+  margin-bottom: 15px;
+}
+.vertical-margin{
+  margin-top: 15px;
   margin-bottom: 15px;
 }
 .absolute{
