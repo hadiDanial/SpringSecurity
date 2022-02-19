@@ -3,6 +3,9 @@ package hadi.springSecurity.models.entities;
 import java.time.Instant;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,7 +16,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Images")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="product_type", discriminatorType = DiscriminatorType.CHAR)
+@DiscriminatorValue("I")
 public class DBImage
 {
 	@Id
@@ -28,6 +33,13 @@ public class DBImage
 	private Instant uploadDate;
 	public DBImage()
 	{
+	}
+	public DBImage(byte[] content, String name)
+	{
+		super();
+		this.content = content;
+		this.name = name;
+		this.uploadDate = Instant.now();
 	}
 	public DBImage(long id, byte[] content, String name, Instant uploadDate)
 	{
