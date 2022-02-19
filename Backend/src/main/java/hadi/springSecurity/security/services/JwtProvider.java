@@ -51,10 +51,6 @@ public class JwtProvider
 		try {
 			jws = Jwts.parser().setSigningKey(properties.getJwtSecret())
 					.parseClaimsJws(token);
-//			System.out.println("JWS Subject: " + jws.getBody().getSubject());
-//			System.out.println("Issued by: " + jws.getBody().getIssuer());
-//			System.out.println("Issued at: " + jws.getBody().getIssuedAt());
-//			System.out.println("Expires: " + jws.getBody().getExpiration());
 			return jws.getBody().getSubject();
 		}
 		catch(JwtException e)
