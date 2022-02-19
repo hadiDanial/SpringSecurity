@@ -2,6 +2,7 @@ package hadi.springSecurity.models.entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -20,8 +21,10 @@ public class UserProfile
 	@Column(name = "user_id")
 	private long id;
 	private String about;
-//	@JsonIgnore
-//	private DBImage profileImage;
+	@JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "image_id")
+	private ProfileImage profileImage;
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	private User user;
