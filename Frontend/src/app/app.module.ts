@@ -21,7 +21,9 @@ import { UserLoginComponent } from './components/user/user-login/user-login.comp
 import { UserSignupComponent } from './components/user/user-signup/user-signup.component';
 import { PasswordComponent } from './components/shared/inputs/forms/password/password.component';
 import { DoublePasswordComponent } from './components/shared/inputs/forms/double-password/double-password.component';
-import { matchingPasswordsValidator } from './components/shared/inputs/forms/double-password/matchingPasswordsValidator'
+import { matchingPasswordsValidator } from './components/shared/inputs/forms/double-password/matchingPasswordsValidator';
+import { UploadFileComponent } from './components/shared/inputs/generic/upload-file/upload-file.component';
+import { DownloadFileComponent } from './components/shared/inputs/generic/download-file/download-file.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +36,8 @@ import { matchingPasswordsValidator } from './components/shared/inputs/forms/dou
     UserSignupComponent,
     PasswordComponent,
     DoublePasswordComponent,
+    UploadFileComponent,
+    DownloadFileComponent,
   ],
   imports: [
     BrowserModule,

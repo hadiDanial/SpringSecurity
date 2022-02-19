@@ -1,0 +1,24 @@
+<input [formControl]="control" [accept]="accepts" type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+<div class="file-upload vertical-margin">
+    <table class="half-width center">
+        <tr>
+            <td>
+                <span>
+                    {{(fileName ? "Selected: " + fileName + "."  : defaultMessage)}}
+                </span>
+                <mat-error *ngIf="control.hasError('fileSize')">
+                    {{maxSizeMessage}}
+                </mat-error>
+            </td>
+            <td>
+                <button mat-mini-fab color="primary" class="upload-btn right-align-text" (click)="fileUpload.click()">
+                    <mat-icon>attach_file</mat-icon>
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+        </tr>
+    </table>
+</div>
