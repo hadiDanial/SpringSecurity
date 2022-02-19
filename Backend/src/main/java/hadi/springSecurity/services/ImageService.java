@@ -18,19 +18,19 @@ public class ImageService
 	@Qualifier(value = "DBImageRespository")
 	private final DBImageRespository dbImageRepository;
 	private final ProfileImageRepository profileImageRepository;
+
 	public ImageService(DBImageRespository dbImageRepository, ProfileImageRepository profileImageRepository)
 	{
 		super();
 		this.dbImageRepository = dbImageRepository;
 		this.profileImageRepository = profileImageRepository;
 	}
+
 	public Long uploadImage(MultipartFile multipartImage)
 	{
-		DBImage dbImage = new DBImage();
-        dbImage.setName(multipartImage.getName());
-        try
+		try
 		{
-			dbImage.setContent(multipartImage.getBytes());
+			DBImage dbImage = new DBImage(multipartImage.getBytes(), multipartImage.getOriginalFilename());
 			return dbImageRepository.save(dbImage).getId();
 		} catch (IOException e)
 		{
@@ -39,16 +39,16 @@ public class ImageService
 		}
 
 	}
+
 	public ByteArrayResource downloadImage(Long imageId)
 	{
 		Optional<DBImage> image = dbImageRepository.findById(imageId);
-		if(image.isPresent())
+		if (image.isPresent())
 		{
 			byte[] imageBytes = image.get().getContent();
 			return new ByteArrayResource(imageBytes);
 		}
 		return null;
 	}
-	
-	
+
 }
