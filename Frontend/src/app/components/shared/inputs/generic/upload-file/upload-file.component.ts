@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
+import { Component, Injector, Input, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { FileService } from 'src/app/services/fileService/file.service';
 import { maxFileSizeValidator } from './maxFileSizeValidator';
 import { ImageFileHandler, FileHandlerBase } from './UploadFileBase';
@@ -12,7 +13,7 @@ import { ImageFileHandler, FileHandlerBase } from './UploadFileBase';
 })
 export class UploadFileComponent implements OnInit
 {
-  constructor(private fileService:FileService) { }
+  constructor(private fileService:FileService, private injector: Injector) { }
   
   @Input()
   autoUpload: boolean = false;
@@ -35,10 +36,11 @@ export class UploadFileComponent implements OnInit
   @Input()
   control = new FormControl();
   @Input()
-  fileHandler:FileHandlerBase<number> = this.fileService.imageHandler;
+  fileHandler:FileHandlerBase<HttpEvent<number>> = new ImageFileHandler(this.injector, this.reset);;
   fileName: string = "";
   accepts: string = "";
-
+  uploadProgress: number = 0;
+  uploadSub: Subscription = new Subscription();
   ngOnInit(): void
   {
     this.generateAcceptsString();
@@ -77,7 +79,25 @@ export class UploadFileComponent implements OnInit
       //this.fileService.uploadFile(this.uploadFunction);
       this.fileHandler.OnFileSelected(formData);
       if(this.autoUpload)
-        this.fileHandler.uploadFile().subscribe((res)=>{alert(res)});
+        this.fileHandler.uploadFile().subscribe((event:HttpEvent<number>)=>{
+          if(event.type == HttpEventType.UploadProgress && event.total != undefined)
+          {
+            this.uploadProgress = Math.round(100*(event.loaded/event.total));
+            console.log(this.uploadProgress);
+          }
+          });
     }
+  }
+
+  cancelUpload()
+  {
+      this.uploadSub.unsubscribe();
+      this.reset();
+  }
+
+  reset()
+  {
+      this.uploadProgress = 0;
+      this.uploadSub = new Subscription();
   }
 }

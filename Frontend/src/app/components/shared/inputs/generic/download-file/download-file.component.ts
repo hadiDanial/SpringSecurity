@@ -1,3 +1,4 @@
+import { HttpEvent } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FileService } from 'src/app/services/fileService/file.service';
 import { FileHandlerBase } from '../upload-file/UploadFileBase';
@@ -12,7 +13,7 @@ export class DownloadFileComponent implements OnInit
   constructor(private fileService: FileService) { }
 
   @Input()
-  fileHandler: FileHandlerBase<number> = this.fileService.imageHandler;
+  fileHandler: FileHandlerBase<HttpEvent<number>> = this.fileService.imageHandler;
   @Input()
   visible = false;
   

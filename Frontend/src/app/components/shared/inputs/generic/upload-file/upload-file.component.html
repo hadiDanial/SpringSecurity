@@ -2,6 +2,19 @@
 <div class="file-upload vertical-margin">
     <table class="half-width center">
         <tr>
+            <td style="width: 10%;">
+                <div class="progress">
+
+                    <mat-progress-bar class="progress-bar" mode="determinate"
+                                      [value]="uploadProgress" *ngIf="uploadProgress">
+                  
+                    </mat-progress-bar>
+                  
+                    <mat-icon class="cancel-upload" (click)="cancelUpload()" 
+                              *ngIf="uploadProgress">delete_forever</mat-icon>
+                  
+                  </div>
+            </td>
             <td>
                 <span>
                     {{(fileName ? "Selected: " + fileName + "."  : defaultMessage)}}
@@ -14,10 +27,6 @@
                 <button mat-mini-fab color="primary" class="upload-btn right-align-text" (click)="fileUpload.click()">
                     <mat-icon>attach_file</mat-icon>
                 </button>
-            </td>
-        </tr>
-        <tr>
-            <td>
             </td>
         </tr>
     </table>
