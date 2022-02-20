@@ -82,7 +82,6 @@ export class UserLoginComponent implements OnInit, OnDestroy
 
   login()
   {
-    console.log(this.username + " " + this.password);
     let req = new LoginRequest(this.username, this.password);
     this.triedToLogin = true;
     this.authService.login(req);
@@ -95,8 +94,6 @@ export class UserLoginComponent implements OnInit, OnDestroy
 
   getAllUsers()
   {
-    console.log("Name: " + this.firstName + " " + this.lastName + ", E-mail: " + this.email);
-
     this.userService.getAllUsers();
   }
 }
