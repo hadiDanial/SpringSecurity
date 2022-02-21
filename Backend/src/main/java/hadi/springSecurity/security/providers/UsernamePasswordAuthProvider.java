@@ -10,7 +10,6 @@ import org.springframework.security.core.AuthenticationException;
 
 import hadi.springSecurity.models.entities.User;
 import hadi.springSecurity.models.requests.LoginRequest;
-import hadi.springSecurity.models.responses.LoginResponse;
 import hadi.springSecurity.models.security.SecurityUser;
 import hadi.springSecurity.security.authentications.UsernamePasswordAuthentication;
 import hadi.springSecurity.services.AuthenticationService;

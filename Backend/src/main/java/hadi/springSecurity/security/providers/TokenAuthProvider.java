@@ -1,7 +1,5 @@
 package hadi.springSecurity.security.providers;
 
-import java.time.Instant;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -11,10 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
 import hadi.springSecurity.models.entities.User;
-import hadi.springSecurity.models.requests.ValidateTokenRequest;
 import hadi.springSecurity.models.security.SecurityUser;
 import hadi.springSecurity.security.authentications.TokenAuthentication;
-import hadi.springSecurity.security.authentications.UsernamePasswordAuthentication;
 import hadi.springSecurity.services.AuthenticationService;
 import hadi.springSecurity.services.UserService;
 
