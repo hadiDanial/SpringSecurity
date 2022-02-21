@@ -1,1 +1,15 @@
-<p>user-profile works!</p>
+<mat-card class="center center-text">
+    <mat-card-title>{{this.user.username}}'s Profile</mat-card-title>
+    <mat-card-content>
+        <app-profile-picture [userId]="this.user.id"></app-profile-picture>
+        {{this.user.name}}
+        <br>
+        <p>{{this.user.profile.about}}</p>
+    </mat-card-content>
+    <mat-card-actions>
+        <div>
+            <app-upload-file [uploadId]="this.user.id" [autoUpload]="true" defaultMessage="Upload a new profile picture" [fileHandler]="profileHandler"></app-upload-file>
+        </div>
+        <button mat-button>Update About Me</button>
+      </mat-card-actions>
+</mat-card>
