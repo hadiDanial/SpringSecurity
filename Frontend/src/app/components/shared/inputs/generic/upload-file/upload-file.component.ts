@@ -36,7 +36,7 @@ export class UploadFileComponent implements OnInit
   @Input()
   control = new FormControl();
   @Input()
-  fileHandler:FileHandlerBase<HttpEvent<number>> = new ImageFileHandler(this.injector, this.reset);;
+  fileHandler:FileHandlerBase<HttpEvent<number>> = new ImageFileHandler(this.injector, "images/", this.reset);;
   fileName: string = "";
   accepts: string = "";
   uploadProgress: number = 0;
