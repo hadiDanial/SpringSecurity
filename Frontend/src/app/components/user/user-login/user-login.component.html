@@ -1,16 +1,23 @@
 
 <div *ngIf="!isLoggedIn">
-
-    <form action="login" method="post">
-        <legend>Sign in</legend>
-        <label>{{currentMessage}}</label><br>
-        <label for="username">Username:</label>
-        <input matInput placeholder="Username" (change)="updateUsername($event)" type="text" name="username">
-        <label for="password">Password:</label>
-        <input matInput placeholder="Password" (change)="updatePassword($event)" type="password" name="password">
+    <br><br>
+    <form class="standard-form center" (ngSubmit)="onSubmit()">
+        <h2>Sign in</h2>
+        <table class="full-width" cellspacing="0">
+            <tr><td>
+                <label>{{currentMessage}}</label><br>
+            </td></tr>
+            <tr><td>
+                <app-input [control]="getFormControl('username')" inputName="Username" placeholder="Enter username" [patternErrorMessage]="disallowedUsernameMessage" ></app-input>
+            </td></tr>
+            <br>
+            <tr><td>
+                <app-password inputName="Password" placeholder="Password" [control]="getFormControl('password')"></app-password>
+            </td></tr>
+            <br>
+            <tr><td class="right-align-text">
+                <button mat-raised-button color="primary" type="submit" [disabled]="!this.form.valid">Login</button>
+            </td></tr>
+        </table>
     </form>
-    <Button (click)="login()">Login</Button>
 </div>
-
-<Button (click)="getAllUsers()">GetAllUsers</Button>
-<Button (click)="logout()">Sign out</Button>
