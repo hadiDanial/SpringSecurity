@@ -4,6 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { UserService } from 'src/app/services/userService/user.service';
 import { User } from 'src/app/models/entities/User';
+import { AuthService } from 'src/app/services/authService/auth.service';
 
 @Component({
   selector: 'app-navigation',
@@ -19,7 +20,7 @@ export class NavigationComponent implements OnInit, OnDestroy{
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, private userService: UserService) {}
+  constructor(private breakpointObserver: BreakpointObserver, private userService: UserService, private authService: AuthService) {}
   
   ngOnInit(): void
   {
@@ -33,4 +34,9 @@ export class NavigationComponent implements OnInit, OnDestroy{
     {
       this.userSubscription.unsubscribe();
     }
+
+    isLoggedIn(): boolean{
+      return this.authService.isLoggedIn();
+    }
+
 }

@@ -1,27 +1,52 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="(isHandset$ | async) === false">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       <a routerLink="home" mat-list-item href="#">Home</a>
       <a routerLink="search" mat-list-item href="#">Search</a>
-      <a routerLink="login" mat-list-item href="#">Login</a>
-      <a routerLink="signup" mat-list-item href="#">Sign Up</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>{{this.currentUser.getName()}}</span>
+      <div>Hadi's Spring Security Site</div>
+      <div class="right-align-text right">
+        <table class="nav-text">
+          <ng-container *ngIf="isLoggedIn(); else loggedOutTemplate">
+            <tr>
+              <td>
+                <span>{{this.currentUser.getName()}}</span>
+              </td>
+              <td>
+                |
+              </td>
+              <td>
+                <a class="nav-link" routerLink="logout">Log Out</a>
+              </td>
+            </tr>
+            
+          </ng-container>
+          <ng-template #loggedOutTemplate>
+            <tr>
+              <td>
+                <a class="nav-link" routerLink="login">Sign In</a>
+              </td>
+              <td>
+                |
+              </td>
+              <td>
+                <a class="nav-link" routerLink="signup">Sign Up</a>
+              </td>
+            </tr>
+
+          </ng-template>
+
+        </table>
+      </div>
     </mat-toolbar>
     <!-- <app-drag-and-drop></app-drag-and-drop> -->
     <app-content></app-content>
