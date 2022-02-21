@@ -2,12 +2,17 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/entities/User';
+import { UserProfile } from 'src/app/models/entities/UserProfile';
+import { Role } from 'src/app/models/entities/Role';
+import { Comment } from 'src/app/models/entities/Comment';
+import { Authority } from 'src/app/models/entities/Authority';
 import { Name } from 'src/app/models/other/Name';
 import { LoginRequest } from 'src/app/models/requests/LoginRequest';
 import { LoginResponse } from 'src/app/models/responses/LoginResponse';
 import { AlertService } from '../alertService/alert.service';
 import { UserService } from '../userService/user.service';
 import { WebService } from '../webService/web.service';
+import { Post } from 'src/app/models/entities/Post';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +45,7 @@ export class AuthService
       localStorage.setItem("refreshToken", response.token.refreshToken);
       localStorage.setItem("tokenExpiration", response.token.expiresAt + '');
       this.isCurrentlyLoggedIn = true;
+      this.router.navigateByUrl("");
 
     }, "Logged in succeessfully.",
       (error: HttpErrorResponse) =>
@@ -93,7 +99,38 @@ export class AuthService
 
   private dataToUser(user: User)
   {
-    return new User(user.id, user.username, user.email, new Name(user.name.firstName, user.name.lastName, user.name.middleName), user.roles);
+    let roles: Role[] = [];
+    for (let i = 0; i < user.roles.length; i++)
+    {
+      const role = user.roles[i];
+      const auths: Authority[] = [];
+      for (let j = 0; j < role.authorities.length; j++)
+      {
+        const authority = role.authorities[j];
+        auths.push(authority);
+      }
+      role.authorities = auths;
+      roles.push(role);
+    }
+    let comments: Comment[] = [];
+    if(user.profile.comments != null)
+    {
+      for (let i = 0; i < user.profile.comments.length; i++)
+      {
+        comments.push(user.profile.comments[i]);
+      }
+    }
+    let posts: Post[] = [];
+    if(user.profile.posts != null)
+    {
+      for (let i = 0; i < user.profile.posts.length; i++)
+      {
+        posts.push(user.profile.posts[i]);
+      }
+    }
+    let profile: UserProfile = new UserProfile(user.profile.about, comments, posts);
+
+    return new User(user.id, user.username, user.email, new Name(user.name.firstName, user.name.lastName, user.name.middleName), roles, profile);
   }
 
   /**
@@ -127,10 +164,10 @@ export class AuthService
   }
   isLoggedIn(): boolean
   {
-    if(this.isCurrentlyLoggedIn == undefined)
+    if (this.isCurrentlyLoggedIn == undefined)
     {
       let date = localStorage.getItem("tokenExpiration");
-      let token  = localStorage.getItem("token");
+      let token = localStorage.getItem("token");
       return (token != undefined) && (date != undefined) && ((new Date(date)).getTime() > Date.now());
     }
     return this.isCurrentlyLoggedIn;
