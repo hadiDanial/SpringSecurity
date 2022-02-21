@@ -1,7 +1,10 @@
 package hadi.springSecurity.models.entities;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -10,6 +13,11 @@ public class Comment extends Content
 {
 	@ManyToOne
 	private Post post;
+
+	@ManyToOne
+	private Comment replyTo;
+	@OneToMany(mappedBy = "replyTo")
+	private List<Comment> replies;
 
 	public Comment()
 	{
@@ -20,8 +28,47 @@ public class Comment extends Content
 		super(title, text, markdown, profile);
 	}
 
+	public Comment(String title, String text, String markdown, UserProfile profile, Post post, Comment replyTo, List<Comment> replies)
+	{
+		super(title, text, markdown, profile);
+		this.post = post;
+		this.replyTo = replyTo;
+		this.replies = replies;
+	}
+
 	public Post getPost()
 	{
 		return post;
+	}
+
+	public Comment getReplyTo()
+	{
+		return replyTo;
+	}
+
+	public void setReplyTo(Comment replyTo)
+	{
+		this.replyTo = replyTo;
+	}
+
+	public List<Comment> getReplies()
+	{
+		return replies;
+	}
+
+	public void setReplies(List<Comment> replies)
+	{
+		this.replies = replies;
+	}
+
+	public void setPost(Post post)
+	{
+		this.post = post;
+	}
+	
+	public void addToRepliesList(Comment reply)
+	{
+		this.replies.add(reply);
+		reply.setReplyTo(this);
 	}
 }
