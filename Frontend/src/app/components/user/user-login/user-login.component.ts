@@ -70,7 +70,6 @@ export class UserLoginComponent implements OnInit, OnDestroy
 
   onSubmit()
   {
-    console.log(this.form)
     if(this.form.valid)
     {
       let req = new LoginRequest(this.form.value["username"],this.form.value["password"]);
