@@ -15,6 +15,15 @@ export class UserService
   user: User = User.getDefaultUser();
   private userSource = new BehaviorSubject<User>(this.user);
   currentUser = this.userSource.asObservable();
+  minInputLen: number = 2;
+  maxInputLen: number = 30;
+  minUsernameLen: number = 3;
+  maxUsernameLen: number = 20;
+  minPassLen: number = 6;
+  maxPassLen: number = 20;
+  allowedNamePattern: string = '[a-zA-Z ]*';
+  passwordPattern = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(.+?[#?!@$%^&*-]*).{' + (this.minPassLen-1) + ',' + this.maxPassLen + '}$';
+  allowedUsernamePattern: string = '^[a-zA-Z][a-zA-Z0-9]*$';
 
   changeUser(user: User)
   {
