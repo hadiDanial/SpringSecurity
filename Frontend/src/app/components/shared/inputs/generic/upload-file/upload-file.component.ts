@@ -13,8 +13,9 @@ import { ImageFileHandler, FileHandlerBase } from './UploadFileBase';
 })
 export class UploadFileComponent implements OnInit
 {
-  constructor(private fileService:FileService, private injector: Injector) { }
-  
+  constructor(private fileService: FileService, private injector: Injector) { }
+  @Input()
+  uploadId: number = 1;
   @Input()
   autoUpload: boolean = false;
   @Input()
@@ -36,7 +37,7 @@ export class UploadFileComponent implements OnInit
   @Input()
   control = new FormControl();
   @Input()
-  fileHandler:FileHandlerBase<HttpEvent<number>> = new ImageFileHandler(this.injector, "images/", this.reset);;
+  fileHandler: FileHandlerBase<HttpEvent<number>> = new ImageFileHandler(this.injector, "images/", this.reset);;
   fileName: string = "";
   accepts: string = "";
   uploadProgress: number = 0;
@@ -78,26 +79,27 @@ export class UploadFileComponent implements OnInit
       formData.append(this.formDataName, file);
       //this.fileService.uploadFile(this.uploadFunction);
       this.fileHandler.OnFileSelected(formData);
-      if(this.autoUpload)
-        this.fileHandler.uploadFile().subscribe((event:HttpEvent<number>)=>{
-          if(event.type == HttpEventType.UploadProgress && event.total != undefined)
+      if (this.autoUpload)
+        this.fileHandler.uploadFile(this.uploadId).subscribe((event: HttpEvent<number>) =>
+        {
+          if (event.type == HttpEventType.UploadProgress && event.total != undefined)
           {
-            this.uploadProgress = Math.round(100*(event.loaded/event.total));
+            this.uploadProgress = Math.round(100 * (event.loaded / event.total));
             console.log(this.uploadProgress);
           }
-          });
+        });
     }
   }
 
   cancelUpload()
   {
-      this.uploadSub.unsubscribe();
-      this.reset();
+    this.uploadSub.unsubscribe();
+    this.reset();
   }
 
   reset()
   {
-      this.uploadProgress = 0;
-      this.uploadSub = new Subscription();
+    this.uploadProgress = 0;
+    this.uploadSub = new Subscription();
   }
 }

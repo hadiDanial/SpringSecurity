@@ -18,7 +18,7 @@ export abstract class FileHandlerBase<T>
     }
     formData: FormData = new FormData();
     OnFileSelected(formData: FormData) { this.formData = formData }
-    abstract uploadFile(): Observable<T>;
+    abstract uploadFile(param?:number): Observable<T>;
     downloadFile(fileId: number, save: boolean = true) : Observable<Blob>
     {
         let obs: Observable<Blob> = new Observable(subscriber => {
