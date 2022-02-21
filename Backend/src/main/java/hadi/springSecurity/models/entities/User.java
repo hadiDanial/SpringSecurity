@@ -80,7 +80,7 @@ public class User
 		this.isLocked = false;
 		this.isEnabled = true;
 		this.isVerified = false;
-		this.profile = new UserProfile();
+		this.profile = new UserProfile(this);
 	}
 
 	public User(long id, String username, String email, Name name, Credential credentials, boolean isEnabled,
@@ -97,6 +97,7 @@ public class User
 		this.creationDate = creationDate;
 		this.lastLoginDate = lastAccessDate;
 		this.roles = roles;
+		this.profile = new UserProfile(this);
 	}
 
 

@@ -26,12 +26,14 @@ import hadi.springSecurity.models.requests.SignupRequest;
 import hadi.springSecurity.models.responses.MessageBoolResponse;
 import hadi.springSecurity.models.security.SecurityUser;
 import hadi.springSecurity.repositories.UnverifiedUserRepository;
+import hadi.springSecurity.repositories.UserProfileRepository;
 import hadi.springSecurity.repositories.UserRepository;
 
 @Service
 public class UserService implements UserDetailsManager
 {
 	private final UserRepository userRepository;
+	private final UserProfileRepository userProfileRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final UnverifiedUserRepository unverifiedRepository;
 	private final Properties properties;
@@ -39,13 +41,14 @@ public class UserService implements UserDetailsManager
 	private final EmailService emailService;
 
 	@Autowired
-	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-			UnverifiedUserRepository unverifiedRepository, Properties properties, RoleService roleService,
-			EmailService emailService)
+	public UserService(UserRepository userRepository, UserProfileRepository userProfileRepository,
+			PasswordEncoder passwordEncoder, UnverifiedUserRepository unverifiedRepository, 
+			Properties properties, RoleService roleService,	EmailService emailService)
 	{
 		super();
 		this.properties = properties;
 		this.userRepository = userRepository;
+		this.userProfileRepository = userProfileRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.roleService = roleService;
 		this.unverifiedRepository = unverifiedRepository;
@@ -59,13 +62,14 @@ public class UserService implements UserDetailsManager
 		MessageBoolResponse response = new MessageBoolResponse();
 		try
 		{
-			userRepository.save(user);
+			User savedUser = userRepository.save(user);
+			userProfileRepository.save(savedUser.getProfile());
 			UnverifiedUser unverified = new UnverifiedUser(username);
 			unverifiedRepository.save(unverified);
-			emailService.sendSimpleMail(user.getEmail(), "Verify your account - Hadi's Security App",
-					"Please go to " + properties.getAppURL() + "user/register/verify/" + unverified.getVerificationUUID()
+			emailService.sendSimpleMail(savedUser.getEmail(), "Verify your account - Hadi's Security App",
+					"Greetings, " + savedUser.getName().toString() + "!\nPlease go to " + properties.getAppURL() + "user/register/verify/" + unverified.getVerificationUUID()
 							+ " to verify your account.\nThank you for joining us!");
-			response.setMessage("User " + user.getUsername()
+			response.setMessage("User " + savedUser.getUsername()
 					+ " created successfully. Please check your inbox and verify your e-mail address.");
 			response.setResult(true);
 			return new ResponseEntity<MessageBoolResponse>(response, HttpStatus.OK);

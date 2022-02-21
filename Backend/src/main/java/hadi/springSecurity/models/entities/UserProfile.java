@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -21,12 +22,16 @@ public class UserProfile
 	@Column(name = "user_id")
 	private long id;
 	private String about;
+	
 	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "image_id")
 	private ProfileImage profileImage;
+	
+	@MapsId
 	@OneToOne
 	@JoinColumn(name = "user_id")
+	@JsonIgnore
 	private User user;
 	
 	@OneToMany(mappedBy = "profile")
@@ -42,6 +47,7 @@ public class UserProfile
 	{
 		super();
 		this.user = user;
+		this.id = user.getId();
 	}
 	public UserProfile(String about, User user)
 	{
