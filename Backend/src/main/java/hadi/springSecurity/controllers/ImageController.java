@@ -41,10 +41,31 @@ public class ImageController
         
     }
 	
+	@PostMapping(path = "profile-pictures/uploadImage/{userId}")
+	public ResponseEntity<Long> uploadProfileImage(@RequestParam MultipartFile multipartImage, @PathVariable Long userId)
+	{
+		if(userId == null)
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);		
+		Long id = imageService.uploadProfileImage(multipartImage, userId);
+		if(id == null)
+			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED);
+		return new ResponseEntity<Long>(id, HttpStatus.CREATED);		
+	}
+	
 	@GetMapping(path = "/{imageId}",produces = MediaType.IMAGE_JPEG_VALUE)
 	public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId)
 	{
 		ByteArrayResource image = imageService.downloadImage(imageId);
+		if(image == null)
+		{
+			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED);
+		}
+		return new ResponseEntity<Resource>(image, HttpStatus.OK);
+	}
+	@GetMapping(path = "profile-pictures/{userId}",produces = MediaType.IMAGE_JPEG_VALUE)
+	public ResponseEntity<Resource> downloadProfilePicture(@PathVariable Long userId)
+	{
+		ByteArrayResource image = imageService.downloadProfileImage(userId);
 		if(image == null)
 		{
 			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED);
