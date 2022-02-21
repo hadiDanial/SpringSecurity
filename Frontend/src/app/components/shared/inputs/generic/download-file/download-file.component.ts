@@ -15,11 +15,13 @@ export class DownloadFileComponent implements OnInit
   @Input()
   fileHandler: FileHandlerBase<HttpEvent<number>> = this.fileService.imageHandler;
   @Input()
-  fileId:number = 1;
+  fileId: number = 1;
   @Input()
   visible = false;
   @Input()
   autodownload = false;
+  @Input()
+  waitBeforeDownload = true;
   @Input()
   saveFile = false;
   @Output()
@@ -29,16 +31,21 @@ export class DownloadFileComponent implements OnInit
 
   ngOnInit(): void
   {
-    if(this.autodownload && this.fileId != 0)
+    if (this.autodownload)
     {
-      this.downloadFile()
+      setTimeout(() =>
+      {
+        this.downloadFile()
+      }, this.waitBeforeDownload ? 5 : 0);
     }
   }
   downloadFile()
   {
-    this.fileHandler.downloadFile(this.fileId, this.saveFile).subscribe(blob=>{
+    this.fileHandler.downloadFile(this.fileId, this.saveFile).subscribe(blob =>
+    {
       this.blobEmitter.emit(blob);
-    }, error => {
+    }, error =>
+    {
       this.errorEmitter.emit(error);
     });
   }
