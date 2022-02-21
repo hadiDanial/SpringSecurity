@@ -1,7 +1,6 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@use '~@angular/material' as mat;
+@use "~@angular/material" as mat;
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -20,13 +19,15 @@ $Frontend-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$Frontend-theme: mat.define-light-theme((
-  color: (
-    primary: $Frontend-primary,
-    accent: $Frontend-accent,
-    warn: $Frontend-warn,
+$Frontend-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $Frontend-primary,
+      accent: $Frontend-accent,
+      warn: $Frontend-warn,
+    ),
   )
-));
+);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
@@ -35,15 +36,19 @@ $Frontend-theme: mat.define-light-theme((
 
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-.fill
-{
-    height: 100%;
-    width: 100%;
-    //background-color: aqua;
+html,
+body {
+  height: 100%;
 }
-
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.fill {
+  height: 100%;
+  width: 100%;
+  //background-color: aqua;
+}
 
 .standard-form {
   min-width: 30px;
@@ -57,39 +62,42 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .half-width {
   width: 50%;
 }
-.center
-{
+.center {
   margin: auto;
 }
-.center-text{
+.center-text {
   text-align: center;
 }
-.right-align-text{
+.right-align-text {
   text-align: right;
 }
-.bottom-margin{
+.right{
+  margin-right: 0;
+  margin-left: auto
+}
+.bottom-margin {
   margin-bottom: 15px;
 }
-.vertical-margin{
+.vertical-margin {
   margin-top: 15px;
   margin-bottom: 15px;
 }
-.absolute{
+.absolute {
   position: absolute;
 }
-.inner-icon{
+.inner-icon {
   position: absolute;
   right: 2.5%;
-  top:-25%;
+  top: -25%;
 }
-.inner-icon:hover{
+.inner-icon:hover {
   transition-timing-function: ease-in;
   transition-duration: 0.1s;
   transform: scale(1.075);
-  filter:brightness(150%);
+  filter: brightness(150%);
   opacity: 0.8;
 }
-.smaller{
+.smaller {
   font-size: smaller;
 }
 
@@ -97,7 +105,15 @@ td {
   padding-right: 8px;
 }
 
-textarea{
+textarea {
   min-height: 25px;
   max-height: 500px;
+}
+
+.nav-link{
+  color: white;
+  text-decoration: none;
+}
+.nav-text{
+  font-size: smaller;
 }
