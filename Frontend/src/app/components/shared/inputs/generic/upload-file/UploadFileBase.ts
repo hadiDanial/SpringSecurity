@@ -10,7 +10,7 @@ export abstract class FileHandlerBase<T>
     controllerURL: string = "/";
     type: string = "";
     defaultFileName: string = "file";
-    resetFunc: Function = ()=>{console.log("reset")};
+    resetFunc: Function = () => { console.log("reset") };
     constructor(injector: Injector, resetFunc?: Function)
     {
         this.httpClient = injector.get(HttpClient);
@@ -19,33 +19,49 @@ export abstract class FileHandlerBase<T>
     formData: FormData = new FormData();
     OnFileSelected(formData: FormData) { this.formData = formData }
     abstract uploadFile(): Observable<T>;
-    downloadFile(fileId: number) 
+    downloadFile(fileId: number, save: boolean = true) : Observable<Blob>
     {
-        this.httpClient.get(environment.baseURL + this.controllerURL + fileId, { responseType: 'arraybuffer' }).subscribe((res) =>
-        {
-            var blob = new Blob([res], { type: this.type });
-            var link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = this.defaultFileName;
-            link.click();
-            link.remove();
-        }, error => { console.log("Error! " + error) })
+        let obs: Observable<Blob> = new Observable(subscriber => {
+            this.httpClient.get(environment.baseURL + this.controllerURL + fileId, { responseType: 'arraybuffer' }).subscribe((res) =>
+            {
+                var blob = new Blob([res], { type: this.type });
+                if (save)
+                {
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = this.defaultFileName;
+                    link.click();
+                    link.remove();
+                }
+                subscriber.next(blob);
+            }, error => { 
+                subscriber.error(error);
+                console.log("Error! " + error);
+             })
+
+        });
+        return obs;
     }
 
 }
 
 export class ImageFileHandler extends FileHandlerBase<HttpEvent<number>>
 {
-    constructor(injector: Injector, resetFunc?: Function)
+    constructor(injector: Injector, controllerURL: string, resetFunc?: Function)
     {
         super(injector, resetFunc)
-        this.controllerURL = "images/";
+        this.controllerURL = controllerURL;
         this.type = "image/*"
         this.defaultFileName = "image.png"
     }
-    uploadFile(): Observable<HttpEvent<number>>
+    uploadFile(param?:number): Observable<HttpEvent<number>>
     {
-        return this.httpClient.post<number>(environment.baseURL + this.controllerURL + "uploadImage", this.formData,
+        let mapping = "uploadImage";
+        if(param != undefined)
+        {
+            mapping += "/" + param;
+        }
+        return this.httpClient.post<number>(environment.baseURL + this.controllerURL + mapping, this.formData,
             { reportProgress: true, observe: 'events' }).pipe(finalize(() => this.resetFunc()));
     }
 
