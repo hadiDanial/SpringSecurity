@@ -28,6 +28,7 @@ import { DragAndDropComponent } from './components/drag-and-drop/drag-and-drop.c
 import { LogoutComponent } from './components/user/logout/logout.component';
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
 import { SearchComponent } from './components/general/search/search.component';
+import { ProfilePictureComponent } from './components/user/profile-picture/profile-picture.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,7 +46,8 @@ import { SearchComponent } from './components/general/search/search.component';
     DragAndDropComponent,
     LogoutComponent,
     UserProfileComponent,
-    SearchComponent
+    SearchComponent,
+    ProfilePictureComponent
   ],
   imports: [
     BrowserModule,
