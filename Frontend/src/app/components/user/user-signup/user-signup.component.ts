@@ -7,6 +7,7 @@ import { AlertService } from 'src/app/services/alertService/alert.service';
 import { UserService } from 'src/app/services/userService/user.service';
 import { WebService } from 'src/app/services/webService/web.service';
 import { ExistingValueValidator } from '../../shared/inputs/forms/checkExistingAsyncValidator';
+
 @Component({
   selector: 'app-user-signup',
   templateUrl: './user-signup.component.html',
@@ -21,31 +22,24 @@ export class UserSignupComponent implements OnInit
   firstName = "";
   lastName = "";
   email = "";
-  minInputLen: number = 2;
-  maxInputLen: number = 30;
-  minUsernameLen: number = 3;
-  maxUsernameLen: number = 20;
-  minPassLen: number = 6;
-  maxPassLen: number = 20;
-  allowedNamePattern: string = '[a-zA-Z ]*';
   disallowedNameMessage:string = 'Name must only contain letters.'
-  allowedUsernamePattern: string = '^[a-zA-Z][a-zA-Z0-9]*$';
   disallowedUsernameMessage:string = 'Username must start with a letter and only contain letters and numbers.'
-  passwordPattern = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(.+?[#?!@$%^&*-]*).{' + (this.minPassLen-1) + ',' + this.maxPassLen + '}$';
   form = new FormGroup({});
+
   ngOnInit(): void
   {
     this.form = this.formBuilder.group(
       {
-        firstName: ["", [Validators.required, Validators.pattern(this.allowedNamePattern), Validators.minLength(this.minInputLen), Validators.maxLength(this.maxInputLen)]],
-        lastName: ["", [Validators.required, Validators.pattern(this.allowedNamePattern), Validators.minLength(this.minInputLen), Validators.maxLength(this.maxInputLen)]],
-        username: ["", {validators:[Validators.required, Validators.pattern(this.allowedUsernamePattern), Validators.minLength(this.minUsernameLen), Validators.maxLength(this.maxUsernameLen)],
+        fileUpload: ["", Validators.required],
+        firstName: ["", [Validators.required, Validators.pattern(this.userService.allowedNamePattern), Validators.minLength(this.userService.minInputLen), Validators.maxLength(this.userService.maxInputLen)]],
+        lastName: ["", [Validators.required, Validators.pattern(this.userService.allowedNamePattern), Validators.minLength(this.userService.minInputLen), Validators.maxLength(this.userService.maxInputLen)]],
+        username: ["", {validators:[Validators.required, Validators.pattern(this.userService.allowedUsernamePattern), Validators.minLength(this.userService.minUsernameLen), Validators.maxLength(this.userService.maxUsernameLen)],
                        asyncValidators:[ExistingValueValidator.checkExistingAsyncValidator("user/register/exists", "username", this.webService)], updateOn:'blur'}],
         email: ["", [Validators.required, Validators.email]],
         doublePasswordGroup: this.formBuilder.group(
           {
-            password: ["", [Validators.required, Validators.pattern(this.passwordPattern), Validators.minLength(this.minPassLen), Validators.maxLength(this.maxPassLen)]],
-            confirmPassword: ["", [Validators.required, Validators.pattern(this.passwordPattern), Validators.minLength(this.minPassLen), Validators.maxLength(this.maxPassLen)]]
+            password: ["", [Validators.required, Validators.pattern(this.userService.passwordPattern), Validators.minLength(this.userService.minPassLen), Validators.maxLength(this.userService.maxPassLen)]],
+            confirmPassword: ["", [Validators.required, Validators.pattern(this.userService.passwordPattern), Validators.minLength(this.userService.minPassLen), Validators.maxLength(this.userService.maxPassLen)]]
           }
         )
       }
