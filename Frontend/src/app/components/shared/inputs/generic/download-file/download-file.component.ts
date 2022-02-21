@@ -29,14 +29,14 @@ export class DownloadFileComponent implements OnInit
 
   ngOnInit(): void
   {
-    if(this.autodownload)
+    if(this.autodownload && this.fileId != 0)
     {
-      this.downloadFile(this.fileId)
+      this.downloadFile()
     }
   }
-  downloadFile(fileId: number)
+  downloadFile()
   {
-    this.fileHandler.downloadFile(fileId, this.saveFile).subscribe(blob=>{
+    this.fileHandler.downloadFile(this.fileId, this.saveFile).subscribe(blob=>{
       this.blobEmitter.emit(blob);
     }, error => {
       this.errorEmitter.emit(error);
