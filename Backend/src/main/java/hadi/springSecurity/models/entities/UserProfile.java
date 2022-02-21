@@ -43,11 +43,18 @@ public class UserProfile
 		super();
 		this.user = user;
 	}
-	public UserProfile(String about, User user) //, DBImage profileImage
+	public UserProfile(String about, User user)
 	{
 		super();
 		this.about = about;
-//		this.profileImage = profileImage;
+		this.user = user;
+	}
+
+	public UserProfile(String about, ProfileImage profileImage, User user)
+	{
+		super();
+		this.about = about;
+		this.profileImage = profileImage;
 		this.user = user;
 	}
 
@@ -61,15 +68,16 @@ public class UserProfile
 		this.about = about;
 	}
 
-//	public DBImage getProfileImage()
-//	{
-//		return profileImage;
-//	}
-//
-//	public void setProfileImage(DBImage profileImage)
-//	{
-//		this.profileImage = profileImage;
-//	}
+
+	public ProfileImage getProfileImage()
+	{
+		return profileImage;
+	}
+
+	public void setProfileImage(ProfileImage profileImage)
+	{
+		this.profileImage = profileImage;
+	}
 
 	public List<Comment> getComments()
 	{
