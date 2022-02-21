@@ -1,19 +1,22 @@
 import { Name } from "../other/Name";
+import { Role } from "./Role";
 
 export class User
 {
-    private static defaultUser = new User(0, "Guest", "",new Name("Guest",""));
+    private static defaultUser = new User(0, "Guest", "",new Name("Guest",""), []);
     private _id: number;
     private _username: string;
     private _email: string;
     private _name: Name;
-    
-    constructor(id: number, username: string, email: string, name: Name) 
+    private _roles: Role[];
+
+    constructor(id: number, username: string, email: string, name: Name, roles: Role[]) 
     {
         this._id = id;
         this._username = username;
         this._email = email;
         this._name = name;
+        this._roles = roles;
     }
     public get id(): number
     {
@@ -58,6 +61,15 @@ export class User
     {
         return this.name.toString();
     }
+
+	public get roles(): Role[]  {
+		return this._roles;
+	}
+
+	public set roles(value: Role[] ) {
+		this._roles = value;
+	}
+
     static getDefaultUser(): User
     {
       return this.defaultUser;
