@@ -24,6 +24,10 @@ import { DoublePasswordComponent } from './components/shared/inputs/forms/double
 import { matchingPasswordsValidator } from './components/shared/inputs/forms/double-password/matchingPasswordsValidator';
 import { UploadFileComponent } from './components/shared/inputs/generic/upload-file/upload-file.component';
 import { DownloadFileComponent } from './components/shared/inputs/generic/download-file/download-file.component'
+import { DragAndDropComponent } from './components/drag-and-drop/drag-and-drop.component';
+import { LogoutComponent } from './components/user/logout/logout.component';
+import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
+import { SearchComponent } from './components/general/search/search.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,6 +42,10 @@ import { DownloadFileComponent } from './components/shared/inputs/generic/downlo
     DoublePasswordComponent,
     UploadFileComponent,
     DownloadFileComponent,
+    DragAndDropComponent,
+    LogoutComponent,
+    UserProfileComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
