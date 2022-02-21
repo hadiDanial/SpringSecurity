@@ -29,6 +29,7 @@ import hadi.springSecurity.models.responses.MessageBoolResponse;
 import hadi.springSecurity.models.responses.TokenResponse;
 import hadi.springSecurity.services.AuthenticationService;
 import hadi.springSecurity.services.UserService;
+import io.jsonwebtoken.JwtException;
 
 @RestController
 @RequestMapping(path = "/auth")
@@ -66,10 +67,16 @@ public class AuthenticationController
 		{			
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
-		User user = authService.getUserFromAccessToken(Authorization);
-		if(user != null)
-			return new ResponseEntity<User>(user, HttpStatus.OK);
-		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		try
+		{
+			User user = authService.getUserFromAccessToken(Authorization);
+			if(user != null)
+				return new ResponseEntity<User>(user, HttpStatus.OK);
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);			
+		} catch (JwtException e)
+		{
+			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+		}
 	}
 	
 	@PostMapping("/logout")
