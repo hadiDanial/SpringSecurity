@@ -36,6 +36,7 @@ import { EditPostComponent } from './components/posts/edit-post/edit-post.compon
 import { CommentComponent } from './components/comments/comment/comment.component';
 import { CommentPreviewComponent } from './components/comments/comment-preview/comment-preview.component';
 import { AddCommentComponent } from './components/comments/add-comment/add-comment.component';
+import { PostsComponent } from './components/posts/posts/posts.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,7 +62,8 @@ import { AddCommentComponent } from './components/comments/add-comment/add-comme
     EditPostComponent,
     CommentComponent,
     CommentPreviewComponent,
-    AddCommentComponent
+    AddCommentComponent,
+    PostsComponent
   ],
   imports: [
     BrowserModule,

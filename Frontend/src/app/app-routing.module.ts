@@ -9,6 +9,7 @@ import { NavigationComponent } from './components/shared/navigation/navigation.c
 import { LogoutComponent } from './components/user/logout/logout.component';
 import { SearchComponent } from './components/general/search/search.component';
 import { CreatePostComponent } from './components/posts/create-post/create-post.component';
+import { PostsComponent } from './components/posts/posts/posts.component';
 
 const routes: Routes = [
   {
@@ -31,12 +32,19 @@ const routes: Routes = [
     canActivate: [LoggedOutGuard]
   },
   {
-    path:'new-post',
-    component: CreatePostComponent,
-    canActivate: [LoginGuard]
+    path: 'posts',
+    children: [{
+      path: 'new-post',
+      component: CreatePostComponent,
+      canActivate: [LoginGuard]
+    },
+    {
+      path: 'get-all-posts',
+      component: PostsComponent
+    }]
   },
   {
-    path:'search',
+    path: 'search',
     component: SearchComponent
   },
   {
