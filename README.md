@@ -12,5 +12,7 @@ TO DO:
 Done:
 
 ~~Add the ability to register a new user and send an email in the backend.~~
+
 ~~Finish creating forms to sign up and sign in (with validation).~~
+
 ~~Add restrictions based on the user's role in the frontend (and whether the user is a guest or logged in). Research Guards.~~
