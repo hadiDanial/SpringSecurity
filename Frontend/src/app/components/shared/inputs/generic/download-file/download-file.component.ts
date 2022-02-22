@@ -35,7 +35,7 @@ export class DownloadFileComponent implements OnInit
     {
       setTimeout(() =>
       {
-        this.downloadFile()
+        this.downloadFile();
       }, this.waitBeforeDownload ? 5 : 0);
     }
   }
@@ -48,5 +48,11 @@ export class DownloadFileComponent implements OnInit
     {
       this.errorEmitter.emit(error);
     });
+  }
+
+  downloadFileWithId(id:number)
+  {
+    this.fileId = id;
+    this.downloadFile();
   }
 }
