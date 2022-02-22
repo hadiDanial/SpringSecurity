@@ -1,7 +1,7 @@
 <mat-form-field class="full-width" appearance="fill">
     <mat-label>{{inputName}}</mat-label>
     <textarea matInput [readonly]="readonly" [maxlength]="max" [minlength]="min" [required]="required" [rows]="rows" 
-    [(ngModel)]="value" (ngModelChange)="onChange.emit(value)" [placeholder]="placeholder" [formControl]="control"></textarea>
+    [placeholder]="placeholder" [formControl]="control"></textarea>
     <mat-error *ngIf="(control.errors?.minlength) || (control.errors?.maxlength)">
         {{inputName}} must be {{min}}-{{max}} characters.
       </mat-error>

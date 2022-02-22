@@ -30,6 +30,5 @@ export class TextAreaComponent{
   control: FormControl = new FormControl('', [Validators.minLength(this.min), Validators.maxLength(this.max)]);
   @Input()
   value : string = "";
-  @Output()
-  onChange : EventEmitter<string> = new EventEmitter();
+
 }
