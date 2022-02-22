@@ -29,6 +29,13 @@ import { LogoutComponent } from './components/user/logout/logout.component';
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
 import { SearchComponent } from './components/general/search/search.component';
 import { ProfilePictureComponent } from './components/user/profile-picture/profile-picture.component';
+import { PostComponent } from './components/posts/post/post.component';
+import { PostPreviewComponent } from './components/posts/post-preview/post-preview.component';
+import { CreatePostComponent } from './components/posts/create-post/create-post.component';
+import { EditPostComponent } from './components/posts/edit-post/edit-post.component';
+import { CommentComponent } from './components/comments/comment/comment.component';
+import { CommentPreviewComponent } from './components/comments/comment-preview/comment-preview.component';
+import { AddCommentComponent } from './components/comments/add-comment/add-comment.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,7 +54,14 @@ import { ProfilePictureComponent } from './components/user/profile-picture/profi
     LogoutComponent,
     UserProfileComponent,
     SearchComponent,
-    ProfilePictureComponent
+    ProfilePictureComponent,
+    PostComponent,
+    PostPreviewComponent,
+    CreatePostComponent,
+    EditPostComponent,
+    CommentComponent,
+    CommentPreviewComponent,
+    AddCommentComponent
   ],
   imports: [
     BrowserModule,
