@@ -47,7 +47,7 @@ public class TokenAuthProvider implements AuthenticationProvider
 				{
 					throw new DisabledException(securityUser.getUsername() + " is disabled.");
 				}
-				Authentication auth = new TokenAuthentication(securityUser.getUsername(),securityUser.getPassword(), securityUser.getAuthorities());
+				Authentication auth = new TokenAuthentication(securityUser,securityUser.getPassword(), securityUser.getAuthorities());
 				userService.updateLastAccessDate(user);
 				return auth;				
 			}

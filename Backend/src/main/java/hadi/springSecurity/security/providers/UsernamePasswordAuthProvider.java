@@ -42,7 +42,7 @@ public class UsernamePasswordAuthProvider implements AuthenticationProvider
 			{
 				throw new DisabledException(user.getUsername() + " is disabled.");
 			}
-			Authentication auth = new UsernamePasswordAuthentication(securityUser.getUsername(),securityUser.getPassword(), securityUser.getAuthorities());
+			Authentication auth = new UsernamePasswordAuthentication(securityUser,securityUser.getPassword(), securityUser.getAuthorities());
 			return auth;
 		} 
 		catch (Exception e)
