@@ -1,21 +1,79 @@
 <mat-card class="center center-text">
+    <br>
     <mat-card-title>{{this.user.username}}'s Profile</mat-card-title>
+    
     <mat-card-content>
-        <app-profile-picture [showUploadButton]="true"  [userId]="this.user.id"></app-profile-picture>
+        <mat-card class="center center-text horizontal-margin">
+            <mat-card-content>
+                <table class="full-width center">
+                    <tr style="vertical-align: top;">
+                        <td style="width: 40%;">
+                            <br>
+                            <app-profile-picture [showUploadButton]="true" [userId]="this.user.id">
+                            </app-profile-picture>
+                            <br>
+                            <h2>
+                                {{this.user.name}}
+                            </h2>
+                        </td>
+                        <td style="text-align: left;">
+                            <br>
+                            <h2>About {{this.user.username}}:</h2>
+                            <ng-container *ngIf="isEditing; else elseTemplate">
+                                <form class="full-width center" (ngSubmit)="onSubmit()">
+                                    <app-text-area [value]="this.user.profile.about" [min]="5" [max]="500"
+                                        [control]="control"></app-text-area>
+                                    <button mat-raised-button (click)="this.isEditing=false">Cancel</button>
+                                    <button mat-raised-button type="submit" [disabled]="!control.valid">Update</button>
+                                </form>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                                <table class="full-width">
+                                    <tr>
+                                        <td style="width: 90%;">
+                                            <div>
+                                                <p>{{this.user.profile.about || "No details."}}</p>                                            
+                                            </div>
+                                        </td>
+                                        <td style="width: 10%;">
+                                            <button *ngIf="isLoggedInUser()" (click)="editAboutMe()" mat-mini-fab color="primary"
+                                                aria-label="Edit About Me">
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </ng-template>
+
+
+                            <!-- <mat-card>
+                            <mat-card-actions>
+                                
+                            </mat-card-actions>
+                        </mat-card> -->
+
+                        </td>
+                    </tr>
+                </table>
+            </mat-card-content>
+        </mat-card>
         <br>
-        <h2>
-            {{this.user.name}}
-        </h2>
+        <mat-card class="center center-text horizontal-margin">
+            <mat-card-title>{{this.user.username}}'s Posts</mat-card-title>
+            <mat-card-content></mat-card-content>
+        </mat-card>
         <br>
-        <p>{{this.user.profile.about}}</p>
+        <mat-card class="center center-text horizontal-margin">
+            <mat-card-title>{{this.user.username}}'s Comments</mat-card-title>
+            <mat-card-content></mat-card-content>
+        </mat-card>
     </mat-card-content>
     <mat-card-actions>
         <table>
             <tr>
                 <td>
-                    <button mat-raised-button>Update About Me</button>
                 </td>
             </tr>
         </table>
-      </mat-card-actions>
+    </mat-card-actions>
 </mat-card>

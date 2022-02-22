@@ -10,7 +10,7 @@ export abstract class FileHandlerBase<T>
     controllerURL: string = "/";
     type: string = "";
     defaultFileName: string = "file";
-    resetFunc: Function = () => { console.log("reset") };
+    resetFunc: Function = () => { };
     constructor(injector: Injector, resetFunc?: Function)
     {
         this.httpClient = injector.get(HttpClient);

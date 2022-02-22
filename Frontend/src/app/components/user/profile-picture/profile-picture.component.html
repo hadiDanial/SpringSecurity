@@ -1,4 +1,4 @@
-<app-download-file [fileHandler]="profilePicHandler" [fileId]="userId" [autodownload]="true" (blobEmitter)="onGetImage($event)" (errorEmitter)="onError()"></app-download-file>
+<app-download-file [fileHandler]="profilePicHandler" [fileId]="userId" [autodownload]="false" (blobEmitter)="onGetImage($event)" (errorEmitter)="onError()"></app-download-file>
 <div [style]="width" class="center">
 
     <ng-container *ngIf="this.loading; else notLoading">
@@ -7,11 +7,11 @@
     <ng-template #notLoading>
         <ng-container *ngIf="!this.hasError; else downloadError">
             <img class="border-color-primary" [style]="style" [src]="imageSrc"/>    
-            <app-upload-file *ngIf="showUploadButton" (onUploadComplete)="onUploadComplete()" (onUploadStart)="onUploadStart()" [style]="uploadStyle" [uploadId]="this.userId" [autoUpload]="true" [fileHandler]="profilePicHandler"></app-upload-file>
         </ng-container>
         <ng-template #downloadError>
             <img [style]="fit+width" src="assets/images/defaultIcon.svg"/>    
         </ng-template>
+        <app-upload-file *ngIf="showUploadButton" (onUploadComplete)="onUploadComplete()" (onUploadStart)="onUploadStart()" [style]="uploadStyle" [uploadId]="this.userId" [autoUpload]="true" [fileHandler]="profilePicHandler"></app-upload-file>
         
     </ng-template>
     

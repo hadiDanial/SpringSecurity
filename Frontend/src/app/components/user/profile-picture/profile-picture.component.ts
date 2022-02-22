@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FileService } from 'src/app/services/fileService/file.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DownloadFileComponent } from 'src/app/components/shared/inputs/generic/download-file/download-file.component'
@@ -7,14 +7,9 @@ import { DownloadFileComponent } from 'src/app/components/shared/inputs/generic/
   templateUrl: './profile-picture.component.html',
   styleUrls: ['./profile-picture.component.scss']
 })
-export class ProfilePictureComponent implements OnInit, AfterViewInit
+export class ProfilePictureComponent implements OnInit, AfterViewInit, OnChanges
 {
-
   constructor(private fileService: FileService, private sanitizer: DomSanitizer) { }
-  ngAfterViewInit(): void
-  {
-    
-  }
 
   @ViewChild(DownloadFileComponent)
   downloadFileComponent!: DownloadFileComponent;
@@ -48,6 +43,16 @@ export class ProfilePictureComponent implements OnInit, AfterViewInit
   {
     this.style = this.fit + this.width + this.borderRadius + ((this.useBorder) ? this.borderWidth + this.borderStyle : "");
   }
+  ngOnChanges(changes: SimpleChanges): void
+  {
+    this.getPicture();
+  }
+
+  ngAfterViewInit(): void
+  {
+    this.getPicture();
+  }
+
   onGetImage(blob: Blob)
   {
     this.blobData = blob;
@@ -70,12 +75,18 @@ export class ProfilePictureComponent implements OnInit, AfterViewInit
 
   onUploadStart()
   {
-    //this.loading = true;
+    this.loading = true;
   }
 
   onUploadComplete()
   {
-    this.downloadFileComponent.downloadFile();
-    this.loading = false;
+    this.getPicture();
+  }
+  private getPicture()
+  {
+    if (this.downloadFileComponent != undefined && this.userId != undefined && this.userId != 0)
+    {
+      this.downloadFileComponent.downloadFileWithId(this.userId);
+    }
   }
 }
