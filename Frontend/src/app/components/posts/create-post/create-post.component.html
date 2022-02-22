@@ -1,1 +1,15 @@
-<p>create-post works!</p>
+<form class="standard-form center" (ngSubmit)="onSubmit()">
+    <br>
+    <br>
+    <h2>
+        Submit a new post:
+    </h2>
+    <app-input inputName="Title" [control]="this.getFormControl('title')" [min]="minTitleLen" [max]="maxTitleLen"></app-input>
+    <br>
+    <br>
+    <app-text-area inputName="Post" [control]="this.getFormControl('text')" [min]="minPostLen" [max]="maxPostLen"></app-text-area>
+    <div class="right-align-text">
+        <!-- <button mat-button (click)="savePost()">Save</button> -->
+        <button mat-button [disabled]="!this.form.valid" type="submit">Publish</button>
+    </div>
+</form>

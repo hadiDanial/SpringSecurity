@@ -8,6 +8,7 @@ import { LoginGuard } from './guards/login.guard';
 import { NavigationComponent } from './components/shared/navigation/navigation.component';
 import { LogoutComponent } from './components/user/logout/logout.component';
 import { SearchComponent } from './components/general/search/search.component';
+import { CreatePostComponent } from './components/posts/create-post/create-post.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,11 @@ const routes: Routes = [
     path: 'signup',
     component: UserSignupComponent,
     canActivate: [LoggedOutGuard]
+  },
+  {
+    path:'new-post',
+    component: CreatePostComponent,
+    canActivate: [LoginGuard]
   },
   {
     path:'search',
