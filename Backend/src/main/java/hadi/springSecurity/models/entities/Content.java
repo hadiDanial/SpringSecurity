@@ -25,7 +25,9 @@ public abstract class Content
 	@Column(name = "content_id")
 	private long id;
 	protected String title;
+	@Column(length = 10000)
 	protected String text;
+	@Column(length = 10000)
 	protected String markdown;
 	@JsonIgnore
 	protected Instant creationDate;

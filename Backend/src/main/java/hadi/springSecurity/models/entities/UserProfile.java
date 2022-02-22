@@ -1,5 +1,6 @@
 package hadi.springSecurity.models.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -99,6 +100,8 @@ public class UserProfile
 	
 	public boolean addComment(Comment comment)
 	{
+		if(comments == null) 
+			comments = new ArrayList<Comment>();
 		if(comments.contains(comment))
 			return false;
 		comments.add(comment);
@@ -107,6 +110,8 @@ public class UserProfile
 	
 	public boolean deleteComment(Comment comment)
 	{
+		if(comments == null) 
+			return false;
 		if(comments.contains(comment))
 		{
 			comments.remove(comment);
@@ -127,6 +132,8 @@ public class UserProfile
 	
 	public boolean addPost(Post post)
 	{
+		if(posts == null) 
+			posts = new ArrayList<Post>();
 		if(posts.contains(post))
 			return false;
 		posts.add(post);
@@ -135,6 +142,8 @@ public class UserProfile
 	
 	public boolean deletePost(Post post)
 	{
+		if(posts == null) 
+			return false;
 		if(posts.contains(post))
 		{
 			posts.remove(post);

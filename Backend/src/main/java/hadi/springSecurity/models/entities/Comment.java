@@ -1,8 +1,10 @@
 package hadi.springSecurity.models.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -68,6 +70,8 @@ public class Comment extends Content
 	
 	public void addToRepliesList(Comment reply)
 	{
+		if(replies == null)
+			replies = new ArrayList<Comment>();
 		this.replies.add(reply);
 		reply.setReplyTo(this);
 	}
