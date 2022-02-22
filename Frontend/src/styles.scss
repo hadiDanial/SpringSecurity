@@ -75,12 +75,20 @@ body {
   margin-right: 0;
   margin-left: auto
 }
+.bottom{
+  margin-bottom: 0;
+  margin-top: auto;
+}
 .bottom-margin {
   margin-bottom: 15px;
 }
 .vertical-margin {
   margin-top: 15px;
   margin-bottom: 15px;
+}
+.horizontal-margin{
+  margin-left: 20px;
+  margin-right: 20px;
 }
 .absolute {
   position: absolute;
