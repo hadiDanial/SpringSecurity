@@ -40,7 +40,7 @@ export class UserService
   {
     let map = new Map<string,string>();
     map.set("about", text);
-    return this.webService.post<MessageBoolResponse>("user/setAboutMe", map);
+    return this.webService.post<MessageBoolResponse>("profile/updateAboutMe", map);
   }
 
   register(firstName: string, lastName: string, username: string, email: string, password: string) : Observable<MessageBoolResponse>
