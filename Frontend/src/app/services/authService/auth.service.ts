@@ -85,7 +85,7 @@ export class AuthService
       this.removeTokenDataFromStorage();
       this.isCurrentlyLoggedIn = false;
       this.router.navigateByUrl("");
-    }, "Logged out successfully", () => { },//this.removeTokenDataFromStorage();  // Probably a bad idea to delete locally without deleting from the server as well...
+    }, "Logged out successfully", () => { this.removeTokenDataFromStorage(); }, // Probably a bad idea to delete locally without deleting from the server as well...
       "Failed to log out, please try again.");
   }
 
