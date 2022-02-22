@@ -26,11 +26,10 @@ export class TextAreaComponent{
   minHeight = "50px";
   @Input()
   required = true;
-
+  @Input()
+  control: FormControl = new FormControl('', [Validators.minLength(this.min), Validators.maxLength(this.max)]);
+  @Input()
   value : string = "";
   @Output()
   onChange : EventEmitter<string> = new EventEmitter();
-
-  inputFormControl = new FormControl('', [Validators.minLength(this.min), Validators.maxLength(this.max)]);
-
 }
