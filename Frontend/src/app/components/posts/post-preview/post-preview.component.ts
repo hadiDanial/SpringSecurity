@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Post } from 'src/app/models/entities/Post';
 
 @Component({
   selector: 'app-post-preview',
@@ -8,7 +9,8 @@ import { Component, OnInit } from '@angular/core';
 export class PostPreviewComponent implements OnInit {
 
   constructor() { }
-
+  @Input()
+  post: Post = Post.getEmptyPost();
   ngOnInit(): void {
   }
 
