@@ -21,6 +21,7 @@ import hadi.springSecurity.models.embeddables.Name;
 import hadi.springSecurity.models.entities.Role;
 import hadi.springSecurity.models.entities.UnverifiedUser;
 import hadi.springSecurity.models.entities.User;
+import hadi.springSecurity.models.entities.UserProfile;
 import hadi.springSecurity.models.responses.MessageBoolResponse;
 import hadi.springSecurity.models.security.SecurityUser;
 import hadi.springSecurity.repositories.UnverifiedUserRepository;
@@ -290,5 +291,14 @@ public class UserService implements UserDetailsManager
 	{
 		user.setLastLoginDate(Instant.now());
 		userRepository.save(user);
+	}
+
+	public MessageBoolResponse updateAboutMe(String about)
+	{
+		User user = AuthenticationUserMatcher.getAuthenticatedUser();
+		UserProfile profile = user.getProfile();
+		profile.setAbout(about);
+		userProfileRepository.save(profile);
+		return new MessageBoolResponse("Updated About Me successfully.", true);		
 	}
 }
