@@ -11,6 +11,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -21,6 +22,7 @@ public class UserProfile
 	@Id
 	@Column(name = "user_id")
 	private long id;
+	@Column(length = 1000)
 	private String about;
 	
 	@JsonIgnore
