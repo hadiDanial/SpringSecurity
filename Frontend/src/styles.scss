@@ -117,3 +117,9 @@ textarea {
 .nav-text{
   font-size: smaller;
 }
+
+.border-color-primary{
+  border-color: mat.get-color-from-palette($Frontend-primary, 'darker');
+  color: mat.get-color-from-palette($Frontend-primary, 'darker');
+  // filter:drop-shadow(0 0 0.05rem mat.get-color-from-palette($Frontend-primary, 'darker'));
+}

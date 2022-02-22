@@ -1,5 +1,5 @@
-import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
-import { Component, Injector, Input, OnInit } from '@angular/core';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
+import { Component, EventEmitter, Injector, Input, OnInit, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { FileService } from 'src/app/services/fileService/file.service';
@@ -27,6 +27,10 @@ export class UploadFileComponent implements OnInit
   @Input()
   acceptsVideo = false;
   @Input()
+  showUploadProgress = false;
+  @Input()
+  showMessage = false;
+  @Input()
   fileExtensions = "";
   @Input()
   defaultMessage = "Select a file to upload.";
@@ -42,6 +46,10 @@ export class UploadFileComponent implements OnInit
   accepts: string = "";
   uploadProgress: number = 0;
   uploadSub: Subscription = new Subscription();
+  @Output()
+  onUploadStart: EventEmitter<boolean> = new EventEmitter();
+  @Output()
+  onUploadComplete: EventEmitter<boolean> = new EventEmitter();
   ngOnInit(): void
   {
     this.generateAcceptsString();
@@ -80,14 +88,21 @@ export class UploadFileComponent implements OnInit
       //this.fileService.uploadFile(this.uploadFunction);
       this.fileHandler.OnFileSelected(formData);
       if (this.autoUpload)
+      {
+        this.onUploadStart.emit(true);
         this.fileHandler.uploadFile(this.uploadId).subscribe((event: HttpEvent<number>) =>
         {
           if (event.type == HttpEventType.UploadProgress && event.total != undefined)
           {
             this.uploadProgress = Math.round(100 * (event.loaded / event.total));
+            if(this.uploadProgress == 100)
+            {
+              this.onUploadComplete.emit(true);
+            }
             console.log(this.uploadProgress);
           }
         });
+      }
     }
   }
 

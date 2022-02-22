@@ -2,7 +2,7 @@
 <div class="file-upload vertical-margin">
     <table class="half-width center">
         <tr>
-            <td style="width: 10%;">
+            <td style="width: 10%;" *ngIf="showUploadProgress">
                 <div class="progress">
 
                     <mat-progress-bar class="progress-bar" mode="determinate"
@@ -15,7 +15,7 @@
                   
                   </div>
             </td>
-            <td>
+            <td *ngIf="showMessage">
                 <span>
                     {{(fileName ? "Selected: " + fileName + "."  : defaultMessage)}}
                 </span>
@@ -24,6 +24,9 @@
                 </mat-error>
             </td>
             <td>
+                <mat-error *ngIf="!showMessage && control.hasError('fileSize')">
+                    {{maxSizeMessage}}
+                </mat-error>
                 <button mat-mini-fab color="primary" class="upload-btn right-align-text" (click)="fileUpload.click()">
                     <mat-icon>attach_file</mat-icon>
                 </button>

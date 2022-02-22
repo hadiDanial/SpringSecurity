@@ -1,16 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FileService } from 'src/app/services/fileService/file.service';
 import { DomSanitizer } from '@angular/platform-browser';
-
+import { DownloadFileComponent } from 'src/app/components/shared/inputs/generic/download-file/download-file.component'
 @Component({
   selector: 'app-profile-picture',
   templateUrl: './profile-picture.component.html',
   styleUrls: ['./profile-picture.component.scss']
 })
-export class ProfilePictureComponent implements OnInit
+export class ProfilePictureComponent implements OnInit, AfterViewInit
 {
 
   constructor(private fileService: FileService, private sanitizer: DomSanitizer) { }
+  ngAfterViewInit(): void
+  {
+    
+  }
+
+  @ViewChild(DownloadFileComponent)
+  downloadFileComponent!: DownloadFileComponent;
+
   @Input()
   userId: number = 0;
   blobData: Blob = new Blob();
@@ -18,13 +26,18 @@ export class ProfilePictureComponent implements OnInit
   loading = true;
   profilePicHandler = this.fileService.profileImageHandler;
   @Input()
-  size: string = "100";
+  size: number = 100;
+  @Input()
+  showUploadButton: boolean = false;
+  uploadStyle: string = "position: absolute;  transform: translate(-35px, 50px);"
+  @Input()
+  useBorder: boolean = false;
   @Input()
   borderRadius = "border-radius: 50%;"
   @Input()
   borderWidth = "border-width: 5px;"
   @Input()
-  borderStyle = "border-style: solid;"
+  borderStyle = "border-style: ridge;"
   @Input()
   fit = "object-fit: cover;"
   width = "width: " + this.size + "px; height: " + this.size + "px;";
@@ -33,7 +46,7 @@ export class ProfilePictureComponent implements OnInit
 
   ngOnInit(): void
   {
-    this.style = this.fit + this.width + this.borderRadius + this.borderWidth + this.borderStyle;
+    this.style = this.fit + this.width + this.borderRadius + ((this.useBorder) ? this.borderWidth + this.borderStyle : "");
   }
   onGetImage(blob: Blob)
   {
@@ -53,5 +66,16 @@ export class ProfilePictureComponent implements OnInit
   {
     let objectURL = URL.createObjectURL(image);
     this.imageSrc = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+  }
+
+  onUploadStart()
+  {
+    //this.loading = true;
+  }
+
+  onUploadComplete()
+  {
+    this.downloadFileComponent.downloadFile();
+    this.loading = false;
   }
 }

@@ -6,7 +6,8 @@
     </ng-container>
     <ng-template #notLoading>
         <ng-container *ngIf="!this.hasError; else downloadError">
-            <img [style]="style" [src]="imageSrc"/>    
+            <img class="border-color-primary" [style]="style" [src]="imageSrc"/>    
+            <app-upload-file *ngIf="showUploadButton" (onUploadComplete)="onUploadComplete()" (onUploadStart)="onUploadStart()" [style]="uploadStyle" [uploadId]="this.userId" [autoUpload]="true" [fileHandler]="profilePicHandler"></app-upload-file>
         </ng-container>
         <ng-template #downloadError>
             <img [style]="fit+width" src="assets/images/defaultIcon.svg"/>    
