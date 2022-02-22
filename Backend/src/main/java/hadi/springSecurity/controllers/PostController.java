@@ -1,5 +1,6 @@
 package hadi.springSecurity.controllers;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,12 @@ public class PostController
 		Post post = postService.getPostById(postId);
 		return (post == null) ? ResponseEntity.notFound().build():
 								new ResponseEntity<Post>(post, HttpStatus.OK);
+	}
+	@GetMapping(path = "getAllPosts")
+	public ResponseEntity<List<Post>> getAllPosts()
+	{
+		List<Post> posts = postService.getAllPosts();
+		return (posts == null) ? ResponseEntity.notFound().build():
+			new ResponseEntity<List<Post>>(posts, HttpStatus.OK);
 	}
 }
