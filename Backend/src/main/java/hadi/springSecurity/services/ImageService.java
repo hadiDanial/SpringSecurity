@@ -62,10 +62,13 @@ public class ImageService
 		{
 			User user = userRepository.findById(userId).get();
 			UserProfile profile = user.getProfile();
+			ProfileImage oldProfileImage = profile.getProfileImage(); 
 			ProfileImage profileImage = new ProfileImage(multipartImage.getBytes(), multipartImage.getOriginalFilename(), profile);
 			profile.setProfileImage(profileImage);
 			Long id = profileImageRepository.save(profileImage).getId();
 			userRepository.save(user);
+			if(oldProfileImage != null)
+				profileImageRepository.delete(oldProfileImage);
 			return id;
 		} catch (IOException e)
 		{
