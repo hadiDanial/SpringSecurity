@@ -37,8 +37,10 @@ public class UserProfile
 	@JsonIgnore
 	private User user;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "profile")
 	private List<Comment> comments;
+	@JsonIgnore
 	@OneToMany(mappedBy = "profile")
 	private List<Post> posts;
 	
