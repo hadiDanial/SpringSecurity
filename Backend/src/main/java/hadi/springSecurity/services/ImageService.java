@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +14,7 @@ import hadi.springSecurity.models.entities.DBImage;
 import hadi.springSecurity.models.entities.ProfileImage;
 import hadi.springSecurity.models.entities.User;
 import hadi.springSecurity.models.entities.UserProfile;
+import hadi.springSecurity.models.security.SecurityUser;
 import hadi.springSecurity.repositories.DBImageRespository;
 import hadi.springSecurity.repositories.ProfileImageRepository;
 import hadi.springSecurity.repositories.UserRepository;
@@ -58,6 +61,10 @@ public class ImageService
 
 	public Long uploadProfileImage(MultipartFile multipartImage, Long userId)
 	{
+		if(!AuthenticationUserMatcher.idMatchesAuthenticatedUser(userId)) 
+		{
+			return null;
+		}
 		try
 		{
 			User user = userRepository.findById(userId).get();
@@ -76,6 +83,8 @@ public class ImageService
 			return null;
 		}
 	}
+
+
 
 	public ByteArrayResource downloadProfileImage(Long userId)
 	{
