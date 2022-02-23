@@ -5,8 +5,7 @@ This project is a learning exercise for Spring Security and JWT authentication. 
 The project currently supports token based authentication using JWTs.
 
 TO DO:
-1. Add content that users can interact with in some way (CRUD) based on their roles and authorities.
-2. Add ability to add posts and comments
+1. Add ability to add ~~posts~~ and comments
 3. Allow admins/moderators to lock/delete posts
 
 Done:
