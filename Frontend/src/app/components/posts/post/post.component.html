@@ -1,1 +1,25 @@
-<p>post works!</p>
+<mat-card>
+    <mat-card-title>{{post.title}}</mat-card-title>
+    <mat-card-subtitle>by {{post.profile.user}} | {{post.releaseDate | date}}</mat-card-subtitle>
+    <mat-card-content>
+        <article>
+            {{post.text}}
+        </article>
+    </mat-card-content>
+    <mat-card-actions>
+        <div class="right-align-text">
+            <button mat-button>Comment</button>
+        </div>
+    </mat-card-actions>
+</mat-card>
+
+<mat-card>
+    <mat-card-title>Comments</mat-card-title>
+    <mat-card-content>
+        <div *ngFor="let comment of post.comments">
+            <mat-card>
+                <mat-card-title>comment.title</mat-card-title>
+            </mat-card>
+        </div>
+    </mat-card-content>
+</mat-card>
