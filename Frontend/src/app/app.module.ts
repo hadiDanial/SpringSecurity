@@ -37,6 +37,7 @@ import { CommentComponent } from './components/comments/comment/comment.componen
 import { CommentPreviewComponent } from './components/comments/comment-preview/comment-preview.component';
 import { AddCommentComponent } from './components/comments/add-comment/add-comment.component';
 import { PostsComponent } from './components/posts/posts/posts.component';
+import { PostPreviewPipe } from './pipes/postPreviewPipe/post-preview.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -63,7 +64,8 @@ import { PostsComponent } from './components/posts/posts/posts.component';
     CommentComponent,
     CommentPreviewComponent,
     AddCommentComponent,
-    PostsComponent
+    PostsComponent,
+    PostPreviewPipe
   ],
   imports: [
     BrowserModule,
