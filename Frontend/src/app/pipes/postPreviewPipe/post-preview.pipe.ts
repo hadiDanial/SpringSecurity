@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class PostPreviewPipe implements PipeTransform
 {
 
-  maxLength = 100;
+  maxLength = 500;
   transform(value: string, ...args: unknown[]): string
   {
     if (value.length <= this.maxLength)
