@@ -25,4 +25,9 @@ export class PostService {
   {
     return this.webService.get<Post[]>("posts/getAllPosts");
   }
+  getUserPosts(id: number): Observable<Post[]>
+  {
+    return this.webService.get<Post[]>("posts/getUserPosts/"+id);
+  }
+
 }
