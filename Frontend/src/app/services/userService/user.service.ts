@@ -28,6 +28,7 @@ export class UserService
   changeUser(user: User)
   {
     this.user = user;
+    this.user.profile.user = this.user;
     this.userSource.next(user);
   }
 
