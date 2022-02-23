@@ -60,5 +60,9 @@ public class PostService
 	{
 		return postRepository.findAll();
 	}
+	
+	public List<Post> getUserPosts(long userId){
+		return userProfileRepository.findById(userId).get().getPosts();
+	}
 
 }

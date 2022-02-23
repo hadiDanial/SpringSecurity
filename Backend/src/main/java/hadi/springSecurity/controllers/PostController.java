@@ -46,6 +46,13 @@ public class PostController
 		return (post == null) ? ResponseEntity.notFound().build():
 								new ResponseEntity<Post>(post, HttpStatus.OK);
 	}
+	@GetMapping(path = "getUserPosts/{userId}")
+	public ResponseEntity<List<Post>> getUserPost(@PathVariable long userId)
+	{
+		List<Post> posts = postService.getUserPosts(userId);
+		return (posts == null || posts.size() == 0) ? ResponseEntity.notFound().build():
+			new ResponseEntity<List<Post>>(posts, HttpStatus.OK);
+	}
 	@GetMapping(path = "getAllPosts")
 	public ResponseEntity<List<Post>> getAllPosts()
 	{
