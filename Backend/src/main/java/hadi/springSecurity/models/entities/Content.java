@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -25,9 +26,9 @@ public abstract class Content
 	@Column(name = "content_id")
 	private long id;
 	protected String title;
-	@Column(length = 10000)
+	@Lob
 	protected String text;
-	@Column(length = 10000)
+	@Lob
 	protected String markdown;
 	@JsonIgnore
 	protected Instant creationDate;
@@ -37,6 +38,7 @@ public abstract class Content
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	protected UserProfile profile;
+	protected String authorName;
 	public Content()
 	{
 	}
@@ -48,8 +50,10 @@ public abstract class Content
 		this.text = text;
 		this.markdown = markdown;
 		this.creationDate = Instant.now();
+		this.releaseDate = creationDate;
 		this.hasBeenEdited = false;
 		this.profile = profile;
+		this.authorName = profile.getUser().getName().toString();
 	}
 
 	private void updateLastEditDate()
@@ -134,6 +138,16 @@ public abstract class Content
 	public UserProfile getProfile()
 	{
 		return profile;
+	}
+
+	public String getAuthorName()
+	{
+		return authorName;
+	}
+
+	public void setAuthorName(String authorName)
+	{
+		this.authorName = authorName;
 	}
 
 	@Override
