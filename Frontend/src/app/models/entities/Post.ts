@@ -9,15 +9,15 @@ export class Post extends Content
     private _comments: Comment[];
 
     constructor(id: number, title: string, text: string, markdown: string, releaseDate: Date, lastEditDate: Date,
-        hasBeenEdited: boolean, profile: UserProfile, comments: Comment[]) 
+        hasBeenEdited: boolean, profile: UserProfile, authorName: string, comments: Comment[]) 
     {
-        super(id, title, text, markdown, releaseDate, lastEditDate, hasBeenEdited, profile);
+        super(id, title, text, markdown, releaseDate, lastEditDate, hasBeenEdited, profile, authorName);
         this._comments = comments;
     }
     static getEmptyPost(): Post
     {
         let date = new Date();
-        return new Post(0, "Test", "This is my test text", "This is my **test** text", date, date, false, User.getDefaultUser().profile, []);
+        return new Post(0, "Test", "This is my test text", "This is my **test** text", date, date, false, User.getDefaultUser().profile, "Guest", []);
     }
 
     /**

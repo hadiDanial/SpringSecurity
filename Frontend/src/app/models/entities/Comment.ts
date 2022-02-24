@@ -10,9 +10,9 @@ export class Comment extends Content
 
 
     constructor(id: number, title: string, text: string, markdown: string, releaseDate: Date, lastEditDate: Date,
-        hasBeenEdited: boolean, profile: UserProfile, post: Post, replyTo: Comment, replies: Comment[])
+        hasBeenEdited: boolean, profile: UserProfile, authorName: string, post: Post, replyTo: Comment, replies: Comment[])
     {
-        super(id, title, text, markdown, releaseDate, lastEditDate, hasBeenEdited, profile);
+        super(id, title, text, markdown, releaseDate, lastEditDate, hasBeenEdited, profile, authorName);
         this._post = post;
         this._replyTo = replyTo;
         this._replies = replies;
