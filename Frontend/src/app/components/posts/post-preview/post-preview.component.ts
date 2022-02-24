@@ -16,7 +16,9 @@ export class PostPreviewComponent implements OnInit {
   i: number = 0;
   @Input()
   user: User = User.getDefaultUser();
+  postLink = "/posts/" + this.post.id;
   ngOnInit(): void {
+    this.postLink = "/posts/" + this.post.id;
   }
 
 }
