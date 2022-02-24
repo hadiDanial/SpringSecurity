@@ -1,13 +1,13 @@
 <mat-card class="left-align-text ninety-percent center">
     <mat-card-title>
-            <a [href]="postLink">{{post.title}}</a> 
+            <a [href]="postLink">{{content.title}}</a> 
     </mat-card-title>
     <mat-card-subtitle>
-            by {{post.authorName}} | {{post.releaseDate | date}}      
+            by {{content.authorName}} | {{content.releaseDate | date}}      
     </mat-card-subtitle>
     <mat-card-content>
         <article>
-            {{post.text | postPreview}}
+            {{content.text | postPreview}}
         </article>
     </mat-card-content>
 </mat-card>

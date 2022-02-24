@@ -1,7 +1,13 @@
+import { User } from "./User";
 import { UserProfile } from "./UserProfile";
 
 export class Content
 {
+  static getEmptyContent(): Content
+  {
+    let date = new Date();
+    return new Content(0, "Test", "This is my test text", "This is my **test** text", date, date, false, User.getDefaultUser().profile, "Guest");
+  }
     private _id: number;
     private _title: string;
     private _text: string;
