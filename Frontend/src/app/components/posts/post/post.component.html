@@ -1,25 +1,53 @@
 <mat-card>
-    <mat-card-title>{{post.title}}</mat-card-title>
-    <mat-card-subtitle>by {{post.profile.user}} | {{post.releaseDate | date}}</mat-card-subtitle>
-    <mat-card-content>
-        <article>
-            {{post.text}}
-        </article>
-    </mat-card-content>
-    <mat-card-actions>
-        <div class="right-align-text">
-            <button mat-button>Comment</button>
-        </div>
-    </mat-card-actions>
+
+    <ng-container *ngIf="!isLoading; else postLoadingTemplate">
+        <mat-card-title>{{post.title}}</mat-card-title>
+        <mat-card-subtitle>by {{post.authorName}} | {{post.releaseDate | date}}</mat-card-subtitle>
+        <mat-card-content>
+            <article>
+                {{post.text}}
+            </article>
+        </mat-card-content>
+        <mat-card-actions>
+            <div class="right-align-text">
+                <button mat-button>Comment</button>
+            </div>
+        </mat-card-actions>
+    </ng-container>
+
+    <ng-template #postLoadingTemplate>
+        <mat-card-title>Loading...</mat-card-title>
+        <mat-card-content>
+            <mat-spinner class="center" [diameter]="50"></mat-spinner>
+        </mat-card-content>
+    </ng-template>
+
 </mat-card>
 
-<mat-card>
+<br><br>
+
+<mat-card class="left-align-text center">
     <mat-card-title>Comments</mat-card-title>
     <mat-card-content>
-        <div *ngFor="let comment of post.comments">
-            <mat-card>
-                <mat-card-title>comment.title</mat-card-title>
-            </mat-card>
-        </div>
+        <ng-container *ngIf="!isLoading; else commentLoadingTemplate">
+            <ng-container *ngIf="hasComments; else elseTemplate">
+                <div *ngFor="let comment of post.comments">
+                    <mat-card>
+                        <mat-card-title>comment.title</mat-card-title>
+                    </mat-card>
+                </div>
+            </ng-container>
+            <ng-template #elseTemplate>
+                <div>
+                    <br>
+                    No comments yet.
+                    <br>
+                </div>
+            </ng-template>
+        </ng-container>
+        <ng-template #commentLoadingTemplate>
+            <mat-spinner class="center" [diameter]="50"></mat-spinner>
+        </ng-template>
+
     </mat-card-content>
 </mat-card>
