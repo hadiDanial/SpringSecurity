@@ -62,7 +62,7 @@
             <mat-card-title>{{this.user.username}}'s Posts</mat-card-title>
             <mat-card-content>
                 <ul>
-                    <li *ngFor="let post of user.profile.posts, let i=index"><app-post-preview [i]="i" [user]="this.user" [post]="post"></app-post-preview><br></li>
+                    <li *ngFor="let post of user.profile.posts, let i=index"><app-post-preview [i]="i" [user]="this.user" [content]="post"></app-post-preview><br></li>
                 </ul>
             </mat-card-content>
         </mat-card>

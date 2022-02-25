@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Content } from 'src/app/models/entities/Content';
 import { Post } from 'src/app/models/entities/Post';
 import { User } from 'src/app/models/entities/User';
 
@@ -11,14 +12,25 @@ export class PostPreviewComponent implements OnInit {
 
   constructor() { }
   @Input()
-  post: Post = Post.getEmptyPost();
+  content: Content = Content.getEmptyContent();
   @Input()
   i: number = 0;
   @Input()
   user: User = User.getDefaultUser();
-  postLink = "/posts/" + this.post.id;
+  postLink = "/posts/" + this.content.id;
+  @Input()
+  isComment: boolean = false;
+  post: Post = Post.getEmptyPost();
   ngOnInit(): void {
-    this.postLink =  "/posts/" + this.post.underscoredTitle;
+    if(this.isComment)
+    {
+      this.postLink =  "/posts/" + this.content.id;
+    }
+    else
+    {
+      this.post = this.content as Post;
+      this.postLink =  "/posts/" + this.post.underscoredTitle;
+    }
   }
 
 }
