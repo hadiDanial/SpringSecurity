@@ -10,6 +10,7 @@ import { LogoutComponent } from './components/user/logout/logout.component';
 import { SearchComponent } from './components/general/search/search.component';
 import { CreatePostComponent } from './components/posts/create-post/create-post.component';
 import { PostsComponent } from './components/posts/posts/posts.component';
+import { PostComponent } from './components/posts/post/post.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,16 @@ const routes: Routes = [
     {
       path: 'get-all-posts',
       component: PostsComponent
+    },
+    {
+      path: ':id',
+      component: PostComponent,
+      children: [
+        {
+          path: '**',
+          redirectTo: 'post',
+        }
+      ]
     }]
   },
   {
