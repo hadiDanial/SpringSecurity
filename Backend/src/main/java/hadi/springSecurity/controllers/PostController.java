@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hadi.springSecurity.models.entities.Post;
@@ -46,6 +47,7 @@ public class PostController
 		return (post == null) ? ResponseEntity.notFound().build():
 								new ResponseEntity<Post>(post, HttpStatus.OK);
 	}
+	
 	@GetMapping(path = "getUserPosts/{userId}")
 	public ResponseEntity<List<Post>> getUserPost(@PathVariable long userId)
 	{
@@ -53,11 +55,28 @@ public class PostController
 		return (posts == null || posts.size() == 0) ? ResponseEntity.notFound().build():
 			new ResponseEntity<List<Post>>(posts, HttpStatus.OK);
 	}
+	
 	@GetMapping(path = "getAllPosts")
 	public ResponseEntity<List<Post>> getAllPosts()
 	{
 		List<Post> posts = postService.getAllPosts();
 		return (posts == null) ? ResponseEntity.notFound().build():
 			new ResponseEntity<List<Post>>(posts, HttpStatus.OK);
+	}
+	
+	@GetMapping(path = "getPostById/{postId}")
+	public ResponseEntity<Post> getPostById(@PathVariable long postId)
+	{
+		Post post = postService.getPostById(postId);
+		return (post == null) ? ResponseEntity.notFound().build():
+			new ResponseEntity<Post>(post, HttpStatus.OK);
+	}
+	
+	@GetMapping(path = "getPostByTitle")
+	public ResponseEntity<Post> getPostByTitle(@RequestParam String title)
+	{
+		Post post  = postService.getPostByTitle(title);
+		return (post == null) ? ResponseEntity.notFound().build():
+			new ResponseEntity<Post>(post, HttpStatus.OK);
 	}
 }

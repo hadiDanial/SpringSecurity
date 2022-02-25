@@ -14,7 +14,7 @@ public class Post extends Content
 {
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 	private List<Comment> comments;
-
+	private String underscoredTitle;
 	public Post()
 	{
 	}
@@ -22,6 +22,7 @@ public class Post extends Content
 	public Post(String title, String text, String markdown, UserProfile profile)
 	{
 		super(title, text, markdown, profile);
+		this.underscoredTitle = title.replace(" ", "_");
 	}
 
 	public List<Comment> getComments()
@@ -50,5 +51,15 @@ public class Post extends Content
 			return true;
 		}
 		return false;
+	}
+
+	public String getUnderscoredTitle()
+	{
+		return underscoredTitle;
+	}
+
+	public void setUnderscoredTitle(String underscoredTitle)
+	{
+		this.underscoredTitle = underscoredTitle;
 	}
 }

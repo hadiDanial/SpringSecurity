@@ -29,5 +29,14 @@ export class PostService {
   {
     return this.webService.get<Post[]>("posts/getUserPosts/"+id);
   }
-
+  getPostById(value: number): Observable<Post>
+  {
+    return this.webService.get<Post>("posts/getPostById/" + value);
+  }
+  getPostByTitle(value: string): Observable<Post>
+  {
+    let map = new Map<string, string>();
+    map.set("title", value);
+    return this.webService.get<Post>("posts/getPostByTitle", undefined, map);
+  }
 }

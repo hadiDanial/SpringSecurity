@@ -47,6 +47,15 @@ public class PostService
 		}
 	}
 
+	public List<Post> getAllPosts()
+	{
+		return postRepository.findAll();
+	}
+	
+	public List<Post> getUserPosts(long userId){
+		return userProfileRepository.findById(userId).get().getPosts();
+	}
+
 	public Post getPostById(long postId)
 	{
 		Optional<Post> post = postRepository.findById(postId);
@@ -56,13 +65,13 @@ public class PostService
 			return null;
 	}
 
-	public List<Post> getAllPosts()
+	public Post getPostByTitle(String title)
 	{
-		return postRepository.findAll();
-	}
-	
-	public List<Post> getUserPosts(long userId){
-		return userProfileRepository.findById(userId).get().getPosts();
+		Optional<Post> post = postRepository.findByUnderscoredTitle(title);
+		if (post.isPresent())
+			return post.get();
+		else
+			return null;
 	}
 
 }
