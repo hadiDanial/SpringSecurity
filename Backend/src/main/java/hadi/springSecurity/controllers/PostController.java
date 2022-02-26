@@ -49,7 +49,7 @@ public class PostController
 	}
 	
 	@GetMapping(path = "getUserPosts/{userId}")
-	public ResponseEntity<List<Post>> getUserPost(@PathVariable long userId)
+	public ResponseEntity<List<Post>> getUserPosts(@PathVariable long userId)
 	{
 		List<Post> posts = postService.getUserPosts(userId);
 		return (posts == null || posts.size() == 0) ? ResponseEntity.notFound().build():

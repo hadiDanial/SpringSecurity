@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import hadi.springSecurity.models.entities.Comment;
 import hadi.springSecurity.models.entities.Post;
 import hadi.springSecurity.models.entities.User;
 import hadi.springSecurity.models.entities.UserProfile;
@@ -72,6 +73,35 @@ public class PostService
 			return post.get();
 		else
 			return null;
+	}
+
+	public boolean addCommentToPost(String title, String text)
+	{
+		try
+		{
+			UserProfile profile = AuthenticationUserMatcher.getAuthenticatedUser().getProfile();
+			Comment comment = new Comment(title, text, text, profile);
+			commentRepository.save(comment);
+			profile.addComment(comment);
+			userProfileRepository.save(profile);
+			return true;			
+		} catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
+
+	public List<Comment> getPostComments(Long postId)
+	{
+		try
+		{
+			Post post = postRepository.getById(postId);
+			return post.getComments();			
+		} catch (Exception e)
+		{
+			return null;
+		}
 	}
 
 }
