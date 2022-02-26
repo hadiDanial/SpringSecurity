@@ -1,7 +1,7 @@
 <mat-card class="center center-text">
     <br>
     <mat-card-title>{{this.user.username}}'s Profile</mat-card-title>
-    
+
     <mat-card-content>
         <mat-card class="center center-text horizontal-margin">
             <mat-card-content>
@@ -32,12 +32,12 @@
                                     <tr>
                                         <td style="width: 90%;">
                                             <div>
-                                                <p>{{this.user.profile.about || "No details."}}</p>                                            
+                                                <p>{{this.user.profile.about || "No details."}}</p>
                                             </div>
                                         </td>
                                         <td style="width: 10%;">
-                                            <button *ngIf="isLoggedInUser()" (click)="editAboutMe()" mat-mini-fab color="primary"
-                                                aria-label="Edit About Me">
+                                            <button *ngIf="isLoggedInUser()" (click)="editAboutMe()" mat-mini-fab
+                                                color="primary" aria-label="Edit About Me">
                                                 <mat-icon>edit</mat-icon>
                                             </button>
                                         </td>
@@ -61,15 +61,37 @@
         <mat-card class="center center-text horizontal-margin">
             <mat-card-title>{{this.user.username}}'s Posts</mat-card-title>
             <mat-card-content>
-                <ul>
-                    <li *ngFor="let post of user.profile.posts, let i=index"><app-post-preview [i]="i" [user]="this.user" [content]="post"></app-post-preview><br></li>
-                </ul>
+                <ng-container *ngIf="hasPosts; else noPostsTemplate">
+                    <ul>
+                        <li *ngFor="let post of user.profile.posts, let i=index">
+                            <app-post-preview [i]="i" [user]="this.user" [content]="post"></app-post-preview><br>
+                        </li>
+                    </ul>
+                </ng-container>
+                <ng-template #noPostsTemplate>
+                    No posts yet.
+                </ng-template>
             </mat-card-content>
         </mat-card>
         <br>
         <mat-card class="center center-text horizontal-margin">
             <mat-card-title>{{this.user.username}}'s Comments</mat-card-title>
-            <mat-card-content></mat-card-content>
+            <mat-card-content>
+                <ng-container *ngIf="hasComments; else noCommentsTemplate">
+                    <ul>
+                        <li *ngFor="let comment of user.profile.comments, let i=index">
+                            <app-post-preview [i]="i" [user]="this.user" [content]="comment"></app-post-preview><br>
+                        </li>
+                    </ul>
+                </ng-container>
+                <ng-template #noCommentsTemplate>
+                    <div>
+                        <br>
+                        No comments yet.
+                        <br>
+                    </div>
+                </ng-template>
+            </mat-card-content>
         </mat-card>
     </mat-card-content>
     <mat-card-actions>
