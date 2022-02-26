@@ -1,9 +1,14 @@
 <mat-card class="left-align-text center">
     <mat-card-title>
-            <a [href]="postLink">{{content.title}}</a> 
+        <a [href]="postLink">{{content.title}}</a>
     </mat-card-title>
     <mat-card-subtitle>
-            by {{content.authorName}} | {{content.releaseDate | date}}      
+        <div style="display: inline-block;">
+            <app-profile-picture style="float: left;" [size]="30" [userId]="user.id"></app-profile-picture>
+            <div style="float: right;">
+                by {{content.authorName}} | {{content.releaseDate | date}}
+            </div>
+        </div>
     </mat-card-subtitle>
     <mat-card-content>
         <article>
