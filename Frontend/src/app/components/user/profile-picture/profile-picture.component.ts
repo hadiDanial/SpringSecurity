@@ -41,10 +41,16 @@ export class ProfilePictureComponent implements OnInit, AfterViewInit, OnChanges
 
   ngOnInit(): void
   {
+    this.generateStyle();
+  }
+  private generateStyle()
+  {
     this.style = this.fit + this.width + this.borderRadius + ((this.useBorder) ? this.borderWidth + this.borderStyle : "");
   }
+  
   ngOnChanges(changes: SimpleChanges): void
   {
+    this.generateStyle();
     this.getPicture();
   }
 
