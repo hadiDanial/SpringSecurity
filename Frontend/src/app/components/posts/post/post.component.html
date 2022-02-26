@@ -30,6 +30,8 @@
     <mat-card-title>Comments</mat-card-title>
     <mat-card-content>
         <ng-container *ngIf="!isLoading; else commentLoadingTemplate">
+            <br>
+            <app-add-comment [post]="post"></app-add-comment>
             <ng-container *ngIf="hasComments; else elseTemplate">
                 <div *ngFor="let comment of post.comments">
                     <mat-card>

@@ -39,19 +39,33 @@ export class PostComponent implements OnInit
       this.value = id;
       this.urlIsTitle = false;
       obs = this.postService.getPostById(this.value);
+      this.getPostComments(this.value);
     }
     console.log(this.value + ", is title: " + this.urlIsTitle);
     obs.subscribe(post =>
     {
       this.post = post;
       this.isLoading = false;
+      if (this.urlIsTitle)
+      {
+        this.getPostComments(this.post.id);
+      }
       this.hasComments = this.post.comments.length > 0;
     }, error =>
     {
-      this.alertService.alertWithCallback("Failed to GET post", 1500, false, ()=>{
+      this.alertService.alertWithCallback("Failed to GET post", 1500, false, () =>
+      {
         this.router.navigateByUrl('');
       }, 'center', 'error');
     })
   }
 
+
+  private getPostComments(postId: number)
+  {
+    this.commentService.getPostComments(postId).subscribe(comments =>
+    {
+      this.post.comments = comments;
+    });
+  }
 }
