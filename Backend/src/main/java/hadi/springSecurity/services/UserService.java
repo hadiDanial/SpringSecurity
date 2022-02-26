@@ -18,6 +18,7 @@ import hadi.springSecurity.configuration.Properties;
 import hadi.springSecurity.exceptions.RoleException;
 import hadi.springSecurity.models.embeddables.Credential;
 import hadi.springSecurity.models.embeddables.Name;
+import hadi.springSecurity.models.entities.Comment;
 import hadi.springSecurity.models.entities.Role;
 import hadi.springSecurity.models.entities.UnverifiedUser;
 import hadi.springSecurity.models.entities.User;
@@ -300,5 +301,11 @@ public class UserService implements UserDetailsManager
 		profile.setAbout(about);
 		userProfileRepository.save(profile);
 		return new MessageBoolResponse("Updated About Me successfully.", true);		
+	}
+
+	public List<Comment> getUserComments(Long userId)
+	{
+		User user = userRepository.getById(userId);
+		return user.getProfile().getComments();
 	}
 }
