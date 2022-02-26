@@ -1,1 +1,17 @@
-<p>add-comment works!</p>
+<mat-card class="ninety-percent center">
+    <mat-card-content>
+        <form class="center" (ngSubmit)="onSubmit()">
+            <h3>
+                Add a new comment:
+            </h3>
+            <app-input inputName="Title" [control]="this.getFormControl('title')" [min]="minTitleLen"
+                [max]="maxTitleLen"></app-input>
+            <br>
+            <app-text-area inputName="Comment" [control]="this.getFormControl('text')" [min]="minCommentLen"
+                [max]="maxCommentLen"></app-text-area>
+            <div class="right-align-text">
+                <button mat-button [disabled]="!this.form.valid" type="submit">Publish</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
