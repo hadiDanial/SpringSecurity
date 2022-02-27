@@ -1,6 +1,12 @@
 <mat-card class="left-align-text center">
     <mat-card-title>
-        <a [href]="postLink">{{content.title}}</a>
+        <ng-container *ngIf="isComment; else postLink">
+            <a [href]="postLink">{{comment.post.title}}</a>
+        </ng-container>
+        <ng-template #postLink> 
+            <a [href]="postLink">{{content.title}}</a>
+        </ng-template>
+        
     </mat-card-title>
     <mat-card-subtitle>
         <div style="display: inline-block;">

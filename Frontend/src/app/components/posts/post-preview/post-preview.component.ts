@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Content } from 'src/app/models/entities/Content';
 import { Post } from 'src/app/models/entities/Post';
+import { Comment } from 'src/app/models/entities/Comment';
 import { User } from 'src/app/models/entities/User';
 
 @Component({
@@ -21,10 +22,12 @@ export class PostPreviewComponent implements OnInit {
   @Input()
   isComment: boolean = false;
   post: Post = Post.getEmptyPost();
+  comment: Comment = Comment.getEmptyComment();
   ngOnInit(): void {
     if(this.isComment)
     {
-      this.postLink =  "/posts/" + this.content.id;
+      this.comment = this.content as Comment;
+      this.postLink =  "/posts/" + this.comment.post.underscoredTitle;
     }
     else
     {
