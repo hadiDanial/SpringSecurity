@@ -28,7 +28,7 @@ export class CommentService
     let map = new Map<string, any>();
     map.set("title", title);
     map.set("text", text);
-    map.set("postId", postId);
+    map.set("postId", postId + "");
     return this.webService.post<boolean>("comments/addCommentToPost", map);
   }
 }

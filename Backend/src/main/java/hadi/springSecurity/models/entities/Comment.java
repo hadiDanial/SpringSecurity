@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Table(name = "Comments")
 public class Comment extends Content
 {
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Post post;
 
 	@ManyToOne

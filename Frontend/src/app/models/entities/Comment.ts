@@ -1,27 +1,35 @@
 import { Content } from "./Content";
 import { Post } from "./Post";
+import { User } from "./User";
 import { UserProfile } from "./UserProfile";
 
 export class Comment extends Content
 {
     private _post: Post;
-    private _replyTo: Comment;
+    private _replyTo: Comment | undefined;
     private _replies: Comment[];
 
 
     constructor(id: number, title: string, text: string, markdown: string, releaseDate: Date, lastEditDate: Date,
-        hasBeenEdited: boolean, profile: UserProfile, authorName: string, post: Post, replyTo: Comment, replies: Comment[])
+        hasBeenEdited: boolean, profile: UserProfile, authorName: string, post: Post, replyTo?: Comment, replies?: Comment[])
     {
         super(id, title, text, markdown, releaseDate, lastEditDate, hasBeenEdited, profile, authorName);
         this._post = post;
         this._replyTo = replyTo;
-        this._replies = replies;
+        if (replies != undefined)
+            this._replies = replies;
+        else
+            this._replies = [];
     }
 
+    static getEmptyComment(): Comment
+    {
+        return new Comment(0, "Comment", "Text1234", "Text1234", new Date(), new Date(), false, User.getDefaultUser().profile, "User", Post.getEmptyPost(), undefined, [])
+    }
     /**
-     * Getter post
-     * @return {Post}
-     */
+ * Getter post
+ * @return {Post}
+ */
     public get post(): Post
     {
         return this._post;
@@ -42,6 +50,8 @@ export class Comment extends Content
      */
     public get replyTo(): Comment
     {
+        if (this._replyTo == undefined)
+            return Comment.getEmptyComment();
         return this._replyTo;
     }
 

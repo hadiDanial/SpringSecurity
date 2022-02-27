@@ -80,7 +80,7 @@
                 <ng-container *ngIf="hasComments; else noCommentsTemplate">
                     <ul>
                         <li *ngFor="let comment of user.profile.comments, let i=index">
-                            <app-post-preview [i]="i" [user]="this.user" [content]="comment"></app-post-preview><br>
+                            <app-post-preview [i]="i" [user]="this.user" [content]="comment" [isComment]="true"></app-post-preview><br>
                         </li>
                     </ul>
                 </ng-container>

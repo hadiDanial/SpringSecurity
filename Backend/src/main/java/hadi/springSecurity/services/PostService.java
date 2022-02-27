@@ -75,14 +75,19 @@ public class PostService
 			return null;
 	}
 
-	public boolean addCommentToPost(String title, String text)
+	public boolean addCommentToPost(String title, String text, String postId)
 	{
 		try
 		{
 			UserProfile profile = AuthenticationUserMatcher.getAuthenticatedUser().getProfile();
 			Comment comment = new Comment(title, text, text, profile);
-			commentRepository.save(comment);
+			Long id = Long.parseLong(postId);
+			Post post = postRepository.getById(id);
+			comment.setPost(post);
+			comment = commentRepository.save(comment);
+			post.addComment(comment);
 			profile.addComment(comment);
+			postRepository.save(post);
 			userProfileRepository.save(profile);
 			return true;			
 		} catch (Exception e)

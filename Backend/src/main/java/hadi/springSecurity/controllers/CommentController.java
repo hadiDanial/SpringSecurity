@@ -51,7 +51,7 @@ public class CommentController
 	@PostMapping(path = "addCommentToPost")
 	public ResponseEntity<Boolean> addCommentToPost(@RequestBody Map<String, String> map)
 	{
-		boolean res = postService.addCommentToPost(map.get("title"), map.get("text"));
+		boolean res = postService.addCommentToPost(map.get("title"), map.get("text"), map.get("postId"));
 		return new ResponseEntity<Boolean>(res, HttpStatus.OK);
 	}
 }
