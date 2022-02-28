@@ -18,21 +18,23 @@ export class PostPreviewComponent implements OnInit {
   i: number = 0;
   @Input()
   user: User = User.getDefaultUser();
-  postLink = "/posts/" + this.content.id;
+  link:string = "";
   @Input()
   isComment: boolean = false;
   post: Post = Post.getEmptyPost();
   comment: Comment = Comment.getEmptyComment();
+  postURL = "/posts/";
   ngOnInit(): void {
     if(this.isComment)
     {
       this.comment = this.content as Comment;
-      this.postLink =  "/posts/" + this.comment.post.underscoredTitle;
+      this.link =  this.postURL + this.comment.post.underscoredTitle;
     }
     else
     {
       this.post = this.content as Post;
-      this.postLink =  "/posts/" + this.post.underscoredTitle;
+      this.link =   this.postURL + this.post.underscoredTitle;
+      console.log(this.link);
     }
   }
 

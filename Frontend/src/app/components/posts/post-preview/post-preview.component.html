@@ -1,10 +1,10 @@
 <mat-card class="left-align-text center">
     <mat-card-title>
         <ng-container *ngIf="isComment; else postLink">
-            <a [href]="postLink">{{comment.post.title}}</a>
+            <a [routerLink]="link">{{comment.post.title}}</a>
         </ng-container>
         <ng-template #postLink> 
-            <a [href]="postLink">{{content.title}}</a>
+            <a [routerLink]="link">{{content.title}}</a>
         </ng-template>
         
     </mat-card-title>
