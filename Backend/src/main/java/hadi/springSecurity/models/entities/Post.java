@@ -3,6 +3,7 @@ package hadi.springSecurity.models.entities;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -14,6 +15,7 @@ public class Post extends Content
 {
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 	private List<Comment> comments;
+	@Column(unique = true)
 	private String underscoredTitle;
 	public Post()
 	{
